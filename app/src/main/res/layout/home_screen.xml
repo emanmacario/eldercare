@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/HomeText"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="111dp"
+        android:layout_marginStart="111dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:inputType="none"
+        android:text="@string/HomeText"
+        android:textAlignment="center"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/ProfileButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/ProfileButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/HomeText" />
+
+    <Button
+        android:id="@+id/MapButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/MapButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ProfileButton" />
+
+    <Button
+        android:id="@+id/EventsButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/EventsButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/MapButton" />
+
+    <Button
+        android:id="@+id/UserSearchButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/UserSearchButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/EventsButton" />
+
+    <Button
+        android:id="@+id/MessagesButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/MessagesButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/HomeText" />
+
+    <Button
+        android:id="@+id/FriendsListButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/FriendsListButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/MessagesButton" />
+
+    <Button
+        android:id="@+id/FrequentContactsButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/FrequentContactsButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/FriendsListButton" />
+
+    <Button
+        android:id="@+id/SettingsButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/SettingsButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/FrequentContactsButton" />
+</android.support.constraint.ConstraintLayout>

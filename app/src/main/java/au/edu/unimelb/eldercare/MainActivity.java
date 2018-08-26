@@ -1,5 +1,6 @@
 package au.edu.unimelb.eldercare;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -26,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
                     return true;
+                case R.id.navigation_home_screen:
+                    mTextMessage.setText(R.string.HomeText);
+                    startActivity(new Intent(MainActivity.this, HomeScreen.class));
             }
             return false;
         }
@@ -34,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Sets the screen on open
         setContentView(R.layout.activity_main);
 
         mTextMessage = (TextView) findViewById(R.id.message);

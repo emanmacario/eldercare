@@ -92,6 +92,7 @@
         android:layout_marginEnd="70dp"
         android:layout_marginTop="20dp"
         android:text="@string/FrequentContactsButton"
+        android:onClick="openFrequentContacts"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/FriendsListButton" />
 

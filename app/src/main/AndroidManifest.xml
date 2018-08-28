@@ -28,6 +28,11 @@
             android:name="SettingsUI"
             android:label="@string/SettingsHeading">
         </activity>
+
+        <activity
+            android:name="FrequentContactsUI"
+            android:label="@string/SettingsHeading">
+        </activity>
     </application>
 
 </manifest>

@@ -24,4 +24,9 @@ public class HomeScreen extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void openFrequentContacts(View view){
+        Intent intent = new Intent(HomeScreen.this, FrequentContactsUI.class);
+        startActivity(intent);
+    }
+
 }

@@ -12,4 +12,9 @@
     <string name="FriendsListButton">Friends List</string>
     <string name="FrequentContactsButton">Frequent Contacts</string>
     <string name="SettingsButton">Settings</string>
+    <!-- User Profile UI Strings -->
+    <string name="name_placeholder">Name Placeholder</string>
+    <string name="UserAboutButton">About</string>
+    <string name="UserProfilePhotosButton">Photos</string>
+    <string name="add_friend_button_user_profile">Add Friend</string>
 </resources>

@@ -17,4 +17,8 @@ public class HomeScreen extends AppCompatActivity {
         mTextMessage = findViewById(R.id.message);
     }
 
+    public void openUserProfileUI(){
+        
+    }
+
 }

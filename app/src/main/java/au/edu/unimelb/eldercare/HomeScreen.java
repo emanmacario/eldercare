@@ -1,7 +1,9 @@
 package au.edu.unimelb.eldercare;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 
 public class HomeScreen extends AppCompatActivity {
@@ -17,8 +19,9 @@ public class HomeScreen extends AppCompatActivity {
         mTextMessage = findViewById(R.id.message);
     }
 
-    public void openUserProfileUI(){
-        
+    public void openUserProfileUI(View view){
+        Intent intent = new Intent(HomeScreen.this, UserProfileUI.class);
+        startActivity(intent);
     }
 
 }

@@ -16,6 +16,8 @@
     <!-- Settings Page Strings -->
     <string name="SettingsHeading">Settings Heading</string>
     <string name="Setting01">Setting 1</string>
+    <string name="Setting02">Text Size</string>
+
     <!-- Frequent Contacts Page Strings -->
     <string name="frequentContactsHeading">Frequent Contacts</string>
     <string name="frequent_contact_1_button">Frequent Contact 1</string>
@@ -23,4 +25,7 @@
     <string name="frequent_contact_4_button">Frequent Contact 4</string>
     <string name="frequent_contact_3_button">Frequent Contact 3</string>
     <string name="frequent_contact_2_button">Frequent Contact 2</string>
+    <string name="SettingsSmallText">Small</string>
+    <string name="SettingsMediumText">Medium</string>
+    <string name="SettingsLargeText">Large</string>
 </resources>

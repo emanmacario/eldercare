@@ -12,7 +12,7 @@ public class SettingsUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Sets the screen on open
-        setContentView(R.layout.settings_page);
+        setContentView(R.layout.settings_ui);
 
         mTextMessage = findViewById(R.id.message);
     }

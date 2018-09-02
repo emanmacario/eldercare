@@ -14,6 +14,9 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
+/**
+ * Provides authentication and authorisation services for ElderCare
+ */
 public class AuthenticationService {
     private static final String TAG_AUTHENTICATION = "ElderCare_Authentication";
 
@@ -28,6 +31,10 @@ public class AuthenticationService {
 
     private static AuthenticationService instance;
 
+    /**
+     * Get (and initialise, if required) the singleton Authentication Service
+     * @return The singleton Authentication Service
+     */
     public static AuthenticationService getAuthenticationService() {
         if (instance == null) {
             instance = new AuthenticationService();
@@ -37,6 +44,12 @@ public class AuthenticationService {
 
     private FirebaseUser user;
 
+    /**
+     * Gets the authenticated user or, if no user has authenticated,
+     * commence the authentication sequence
+     * @param sender The sending component
+     * @return The authenticated user, or null if no user has authenticated yet
+     */
     public FirebaseUser getUser(Authenticator sender) {
         if (user == null) {
             startAuthentication(sender);

@@ -21,6 +21,18 @@ public class HomeScreen extends AppCompatActivity {
 
     public void openUserProfileUI(View view){
         Intent intent = new Intent(HomeScreen.this, UserProfileUI.class);
+    	startActivity(intent);
+    }
+
+    //When Settings button is clicked, this opens the settings page
+    public void openSettings(View view){
+        Intent intent = new Intent(HomeScreen.this, SettingsUI.class);
+        startActivity(intent);
+    }
+
+    //When Frequent Contacts button is clicked, this opens the frequent contacts page
+    public void openFrequentContacts(View view){
+        Intent intent = new Intent(HomeScreen.this, FrequentContactsUI.class);
         startActivity(intent);
     }
 

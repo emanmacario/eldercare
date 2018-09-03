@@ -26,7 +26,17 @@
 
         <activity
             android:name="UserProfileUI"
-            android:label="@string/app_name">
+            android:label="@string/UserProfileUIHeading">
+	</activity>
+	
+	<activity>
+            android:name="SettingsUI"
+            android:label="@string/SettingsHeading">
+        </activity>
+
+        <activity
+            android:name="FrequentContactsUI"
+            android:label="@string/FrequentContactsUIHeading">
         </activity>
     </application>
 

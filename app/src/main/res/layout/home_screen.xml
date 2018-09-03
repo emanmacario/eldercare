@@ -92,6 +92,7 @@
         android:layout_marginEnd="70dp"
         android:layout_marginTop="20dp"
         android:text="@string/FrequentContactsButton"
+        android:onClick="openFrequentContacts"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/FriendsListButton" />
 
@@ -102,6 +103,7 @@
         android:layout_marginEnd="70dp"
         android:layout_marginTop="20dp"
         android:text="@string/SettingsButton"
+        android:onClick="openSettings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/FrequentContactsButton" />
 </android.support.constraint.ConstraintLayout>

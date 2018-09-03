@@ -13,13 +13,13 @@
     <string name="FriendsListButton">Friends List</string>
     <string name="FrequentContactsButton">Frequent Contacts</string>
     <string name="SettingsButton">Settings</string>
-
+<<<<<<< HEAD
     <!-- User Profile UI Strings -->
     <string name="name_placeholder">Name Placeholder</string>
     <string name="UserAboutButton">About</string>
     <string name="UserProfilePhotosButton">Photos</string>
     <string name="add_friend_button_user_profile">Add Friend</string>
-
+=======
     <!-- Settings Page Strings -->
     <string name="SettingsHeading">Settings Heading</string>
     <string name="Setting01">Setting 1</string>
@@ -35,4 +35,5 @@
     <string name="SettingsSmallText">Small</string>
     <string name="SettingsMediumText">Medium</string>
     <string name="SettingsLargeText">Large</string>
+>>>>>>> refs/remotes/origin/master
 </resources>

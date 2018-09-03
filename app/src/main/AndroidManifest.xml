@@ -26,17 +26,17 @@
 
         <activity
             android:name="UserProfileUI"
-            android:label="@string/UserProfileUIHeading">
-	</activity>
+            android:label="@string/name_placeholder">
+	    </activity>
 	
-	<activity>
+	    <activity
             android:name="SettingsUI"
             android:label="@string/SettingsHeading">
         </activity>
 
         <activity
             android:name="FrequentContactsUI"
-            android:label="@string/FrequentContactsUIHeading">
+            android:label="@string/frequentContactsHeading">
         </activity>
     </application>
 

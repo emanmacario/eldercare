@@ -4,13 +4,17 @@ public class Message {
 
     private String id;
     private String name;
-    private String text;
+    private String message;
     private String photoUrl;
     private String imageUrl;
 
-    public Message(String name, String text, String imageUrl, String photoUrl) {
+    // Default constructor needed for Firebase
+    public Message() {
+    }
+
+    public Message(String name, String message, String imageUrl, String photoUrl) {
         this.name = name;
-        this.text = text;
+        this.message = message;
         this.imageUrl = imageUrl;
         this.photoUrl = photoUrl;
     }
@@ -23,8 +27,8 @@ public class Message {
         this.id = id;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getName() {
@@ -39,8 +43,8 @@ public class Message {
         return photoUrl;
     }
 
-    public String getText() {
-        return text;
+    public String getMessage() {
+        return message;
     }
 
     public void setPhotoUrl(String photoUrl) {

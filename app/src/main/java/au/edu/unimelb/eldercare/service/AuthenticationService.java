@@ -1,4 +1,4 @@
-package au.edu.unimelb.eldercare;
+package au.edu.unimelb.eldercare.service;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -50,7 +50,7 @@ public class AuthenticationService {
      * @param sender The sending component
      * @return The authenticated user, or null if no user has authenticated yet
      */
-    public FirebaseUser getUser(Authenticator sender) {
+    public FirebaseUser getUser(AppCompatActivity sender) {
         if (user == null) {
             startAuthentication(sender);
             return null;
@@ -59,7 +59,7 @@ public class AuthenticationService {
         }
     }
 
-    public void startAuthentication(Authenticator sender) {
+    public void startAuthentication(AppCompatActivity sender) {
         sender.startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()

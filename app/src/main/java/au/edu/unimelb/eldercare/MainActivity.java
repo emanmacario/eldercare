@@ -6,20 +6,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
-import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.IdpResponse;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import au.edu.unimelb.eldercare.service.AuthenticationService;
 
-import java.util.Arrays;
-import java.util.List;
+import static au.edu.unimelb.eldercare.service.AuthenticationService.RC_SIGN_IN;
 
-import static au.edu.unimelb.eldercare.AuthenticationService.RC_SIGN_IN;
-
-public class MainActivity extends AppCompatActivity implements Authenticator {
+public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
 

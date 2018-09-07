@@ -47,12 +47,10 @@ public class AuthenticationService {
     /**
      * Gets the authenticated user or, if no user has authenticated,
      * commence the authentication sequence
-     * @param sender The sending component
      * @return The authenticated user, or null if no user has authenticated yet
      */
-    public FirebaseUser getUser(AppCompatActivity sender) {
+    public FirebaseUser getUser() {
         if (user == null) {
-            startAuthentication(sender);
             return null;
         } else {
             return user;
@@ -68,17 +66,19 @@ public class AuthenticationService {
                 RC_SIGN_IN);
     }
 
-    public void handleAuthenticationRequestCallback(int resultCode, @Nullable Intent data) {
+    public void handleAuthenticationRequestCallback(int resultCode, @Nullable Intent data, AuthenticationListener sender) {
         IdpResponse response = IdpResponse.fromResultIntent(data);
 
         if (resultCode == RESULT_OK && (user = FirebaseAuth.getInstance().getCurrentUser()) != null) {
             Log.i(TAG_AUTHENTICATION, String.format("User %s (id %s) signed in ", user.getDisplayName(), user.getUid()));
+            sender.userAuthenticated(user);
         } else {
             if (response == null || response.getError() == null) {
                 Log.w(TAG_AUTHENTICATION, "User cancelled authentication");
             } else {
                 Log.w(TAG_AUTHENTICATION, String.format("Authentication failed with error %s", response.getError().getErrorCode()), response.getError());
             }
+            sender.authenticationFailed(response);
         }
     }
 

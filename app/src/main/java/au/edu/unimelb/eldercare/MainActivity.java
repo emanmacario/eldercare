@@ -35,6 +35,9 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
                     return true;
+                case R.id.navigation_home_screen:
+                    mTextMessage.setText(R.string.HomeText);
+                    startActivity(new Intent(MainActivity.this, HomeScreen.class));
             }
             return false;
         }
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Sets the screen on open
         setContentView(R.layout.activity_main);
 
         mTextMessage = findViewById(R.id.message);

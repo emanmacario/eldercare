@@ -25,18 +25,18 @@
         </activity>
 
         <activity
+<<<<<<< HEAD
             android:name="UserProfileUI"
-            android:label="@string/name_placeholder">
-	    </activity>
-	
-	    <activity
+            android:label="@string/app_name">
+=======
             android:name="SettingsUI"
             android:label="@string/SettingsHeading">
         </activity>
 
         <activity
             android:name="FrequentContactsUI"
-            android:label="@string/frequentContactsHeading">
+            android:label="@string/SettingsHeading">
+>>>>>>> refs/remotes/origin/master
         </activity>
     </application>
 

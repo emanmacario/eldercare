@@ -35,4 +35,6 @@
     <string name="SettingsSmallText">Small</string>
     <string name="SettingsMediumText">Medium</string>
     <string name="SettingsLargeText">Large</string>
+
+    <string name="GoogleMapsAPIKey">AIzaSyAzYCvAu0vFGpHuQMw52XXfyNYh2kHsZ4I</string>
 </resources>

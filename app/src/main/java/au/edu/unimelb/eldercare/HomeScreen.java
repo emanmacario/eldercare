@@ -36,4 +36,10 @@ public class HomeScreen extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //When Map button is clicked, this opens the Map page
+    public void openMap(View view){
+        Intent intent = new Intent(HomeScreen.this, MapActivity.class);
+        startActivity(intent);
+    }
+
 }

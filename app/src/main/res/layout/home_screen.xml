@@ -37,12 +37,13 @@
         app:layout_constraintTop_toBottomOf="@+id/HomeText" />
 
     <Button
-        android:id="@+id/MapButton"
+        android:id="@+id/mapBtn"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="20dp"
         android:text="@string/MapButton"
+        android:onClick="openMap"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ProfileButton" />
 
@@ -54,7 +55,7 @@
         android:layout_marginTop="20dp"
         android:text="@string/EventsButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/MapButton" />
+        app:layout_constraintTop_toBottomOf="@+id/mapBtn" />
 
     <Button
         android:id="@+id/UserSearchButton"

@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,10 +53,12 @@ public class MessagingActivity extends AppCompatActivity {
 
     // Static variables and constants
     private static final String TAG = "MessagingActivity";
+    private static final int VIEW_TYPE_MESSAGE_SENT = 1;
+    private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
 
     // Firebase instance variables
     private DatabaseReference mDatabaseReference;
-    private FirebaseRecyclerAdapter<Message, MessageViewHolder> mFirebaseAdapter;
+    private FirebaseRecyclerAdapter<Message, RecyclerView.ViewHolder> mFirebaseAdapter;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 
@@ -73,13 +76,31 @@ public class MessagingActivity extends AppCompatActivity {
     private ImageView mAddMessageImageView;
 
 
-    public static class MessageViewHolder extends RecyclerView.ViewHolder {
-        TextView messageTextView;
-        ImageView messageImageView;
-        TextView messengerTextView;
+    public static class SentMessageViewHolder extends RecyclerView.ViewHolder {
+        TextView messageText;
+        TextView timeText;
+        TextView nameText;
 
-        public MessageViewHolder(View view) {
+        public SentMessageViewHolder(View view) {
             super(view);
+            this.messageText = (TextView) view.findViewById(R.id.text_message_body);
+            this.timeText = (TextView) view.findViewById(R.id.text_message_time);
+            this.nameText = (TextView) view.findViewById(R.id.text_message_name);
+        }
+    }
+
+    public static class ReceivedMessageViewHolder extends RecyclerView.ViewHolder {
+        TextView messageText;
+        TextView timeText;
+        TextView nameText;
+        ImageView profileImage;
+
+        public ReceivedMessageViewHolder(View view) {
+            super(view);
+            this.messageText = (TextView) view.findViewById(R.id.text_message_body);
+            this.timeText = (TextView) view.findViewById(R.id.text_message_time);
+            this.nameText = (TextView) view.findViewById(R.id.text_message_name);
+            this.profileImage = (ImageView) view.findViewById(R.id.image_message_profile);
         }
     }
 
@@ -130,21 +151,41 @@ public class MessagingActivity extends AppCompatActivity {
                         .build();
 
         // Create the Firebase Recycler Adapter
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(options) {
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, RecyclerView.ViewHolder>(options) {
 
             @Override
-            protected void onBindViewHolder(@NonNull MessageViewHolder holder, int position, @NonNull Message model) {
+            protected void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position,
+                                            @NonNull Message message) {
                 // Bind the Message object to the MessageViewHolder
+                if (getItemViewType(message) == VIEW_TYPE_MESSAGE_SENT) {
 
+                    SentMessageViewHolder sentHolder = (SentMessageViewHolder) holder;
+
+                } else {
+
+                    ReceivedMessageViewHolder receivedHolder = (ReceivedMessageViewHolder) holder;
+
+                }
             }
 
             @NonNull
             @Override
-            public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 // Create a new instance of the MessageViewHolder. In this case, we
                 // will use a custom layout called R.layout.message for each item
-                // TODO: Finish implementing how MessageViewHolder will be inflated
-                return null;
+                LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+
+                if (viewType == VIEW_TYPE_MESSAGE_RECEIVED) {
+                    View view = inflater.inflate(R.layout.item_message_received, parent, false);
+                    return new ReceivedMessageViewHolder(view);
+                } else {
+                    View view = inflater.inflate(R.layout.item_message_received, parent, false);
+                    return new SentMessageViewHolder(view);
+                }
+            }
+
+            private int getItemViewType(Message message) {
+                if (message.getId())
             }
         };
     }

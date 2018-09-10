@@ -1,31 +1,35 @@
 package au.edu.unimelb.eldercare;
 
+import com.google.firebase.database.DatabaseReference;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 class Event {
 
-    private final int eventId;
-    private String eventName;
-    private String eventDescription;
-    private Long startingTime;
-    //private someType location;   //TODO: fix location
-    private ArrayList<Integer> registeredUserId;
-    private int maxUser;
+    public int eventId;
+    public String eventName;
+    public String eventDescription;
+    public Long startingTime;
+    public HashMap<String, Double> location;
+    public ArrayList<Integer> registeredUserId;
+    public int maxUser;
 
-    //TODO: add location to param
-    public Event(String eventName, Long startingTime){
+
+    public Event(String eventName, Long startingTime, HashMap<String, Double> location){
         this.eventId = 0;  //TODO: find a way to get current max
         this.eventName = eventName;
         this.startingTime = startingTime;
-        //this.location = location;  //TODO: fix location
+        this.location = location;
     }
 
     public Event(String jsonEventData) throws JSONException{
         this(new JSONObject(jsonEventData));
     }
+
 
     public Event(JSONObject jsonEventData) throws JSONException{
         this.eventId = jsonEventData.getInt("event_id");
@@ -37,6 +41,7 @@ class Event {
         this.maxUser = jsonEventData.getInt("max_user");
     }
 
+    /*
     public JSONObject toJSON() throws JSONException{
         JSONObject jsonEventData = new JSONObject();
         jsonEventData.put("event_id", this.eventId);
@@ -47,7 +52,7 @@ class Event {
         jsonEventData.put("registered_user_id", this.registeredUserId);
         jsonEventData.put("max_user", this.maxUser);
         return jsonEventData;
-    }
+    }*/
 
     public boolean registerUser(int userId){
         return this.registeredUserId.add(userId);
@@ -57,11 +62,10 @@ class Event {
         return this.registeredUserId.remove(Integer.valueOf(userId));
     }
 
-    //TODO: fix location
     /*
-    public void changeLocation(someType location){
+    public ArrayList<Double>  changeLocation(ArrayList<Double>  location){
         this.location = location
-    }*/
+    }
 
     public Long changeStartingTime(Long startingTime){
         this.startingTime = startingTime;
@@ -76,5 +80,16 @@ class Event {
     public String changeEventDescription(String eventDescription){
         this.eventDescription = eventDescription;
         return eventDescription;
+    }*/
+
+    public void uploadEvent(DatabaseReference eventDB){
+        DatabaseReference thisEvent = eventDB.child(Integer.toString(this.eventId));
+        thisEvent.child("event_id").setValue(this.eventId);
+        thisEvent.child("event_name").setValue(this.eventName);
+        thisEvent.child("event_description").setValue(this.eventDescription);
+        thisEvent.child("starting_time").setValue(this.startingTime);
+        thisEvent.child("location").setValue(this.location);
+        thisEvent.child("registered_user_id").setValue(this.registeredUserId);
+        thisEvent.child("max_user").setValue(this.maxUser);
     }
 }

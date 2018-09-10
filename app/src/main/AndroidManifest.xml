@@ -28,7 +28,7 @@
             android:name="UserProfileUI"
             android:label="@string/name_placeholder">
 	    </activity>
-	
+
 	    <activity
             android:name="SettingsUI"
             android:label="@string/SettingsHeading">
@@ -37,6 +37,16 @@
         <activity
             android:name="FrequentContactsUI"
             android:label="@string/frequentContactsHeading">
+        </activity>
+
+        <activity
+            android:name="EventsUI"
+            android:label="Events">
+        </activity>
+
+        <activity
+            android:name="AddEventActivity"
+            android:label="AddEvent">
         </activity>
     </application>
 

@@ -39,4 +39,10 @@
     <string name="SettingsSmallText">Small</string>
     <string name="SettingsMediumText">Medium</string>
     <string name="SettingsLargeText">Large</string>
+
+    <!-- Event Page Strings -->
+    <string name="events">EVENTS</string>
+    <string name="view_events">VIEW EVENTS</string>
+    <string name="edit_event">EDIT EVENT</string>
+    <string name="add_event">ADD EVENT</string>
 </resources>

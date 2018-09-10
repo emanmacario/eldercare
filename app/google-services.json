@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "284617603329",
+    "firebase_url": "https://comp30022colombia.firebaseio.com",
+    "project_id": "comp30022colombia",
+    "storage_bucket": "comp30022colombia.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:284617603329:android:603ca2918d076e93",
+        "android_client_info": {
+          "package_name": "au.edu.unimelb.eldercare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "284617603329-o6laqctudg2prgmdsfnv4o2lvjo696h6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCE4Fi-3Xtcw6ZPQdMSHXy-buUI9Gt38GQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

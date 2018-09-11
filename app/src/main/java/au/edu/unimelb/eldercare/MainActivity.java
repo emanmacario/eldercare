@@ -12,8 +12,11 @@ import au.edu.unimelb.eldercare.service.AuthenticationListener;
 import au.edu.unimelb.eldercare.service.AuthenticationService;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import static au.edu.unimelb.eldercare.service.AuthenticationService.RC_SIGN_IN;
 
@@ -72,10 +75,26 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
     }
 
     @Override
-    public void userAuthenticated(FirebaseUser user) {
+    public void userAuthenticated(final FirebaseUser user) {
         this.user = user;
-        //Once a user is authenticated, create a new user on the database
-        writeNewUser(this.user.getUid(), this.user.getDisplayName(), this.user.getEmail());
+        //Note, have to check if the user already exists so that their data doesn't get overridden
+        //every time they login
+        DatabaseReference userRef = mDatabase.child("users").child(this.user.getUid());
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    //Once a user is authenticated and they don't already exist,
+                    //create a new user on the database
+                    writeNewUser(user.getUid(), user.getDisplayName(), user.getEmail());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        };
+        userRef.addListenerForSingleValueEvent(eventListener);
+
 
         //Open Home Screen once user is authenticated and logged in
         Intent intent = new Intent(MainActivity.this, HomeScreen.class);
@@ -99,4 +118,5 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
 
         mDatabase.child("users").child(userId).setValue(user);
     }
+
 }

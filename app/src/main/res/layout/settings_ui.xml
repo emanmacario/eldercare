@@ -22,24 +22,47 @@
                 android:textAlignment="center"
                 android:textSize="30dp"
                 android:textColor="#000000" />
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:orientation="horizontal">
+                android:layout_height="30dp"
+                android:orientation="horizontal"
+                android:gravity="top">
 
                 <TextView
-                    android:id="@+id/Setting01"
+                    android:id="@+id/displayNameSetting"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="@string/Setting01"
-                    android:textAlignment="viewStart"
+                    android:text="@string/displayNameSettings"
                     android:textSize="20dp"
-                    android:textColor="#000000"/>
+                    android:textColor="#000000"
+                    android:gravity="start"/>
 
-                <Switch
+                <TextView
+                    android:id="@+id/currentDisplayName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="@string/currentDisplayName"
+                    android:gravity="end"
+                    android:textSize="15dp"/>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/changeDisplayNameSetting"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:inputType="text"
+                    android:text="Change Display Name"
+                    android:textSize="15dp"/>
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"

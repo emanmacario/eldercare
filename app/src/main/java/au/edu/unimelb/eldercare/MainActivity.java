@@ -12,6 +12,8 @@ import au.edu.unimelb.eldercare.service.AuthenticationListener;
 import au.edu.unimelb.eldercare.service.AuthenticationService;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import static au.edu.unimelb.eldercare.service.AuthenticationService.RC_SIGN_IN;
 
@@ -19,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
 
     private TextView mTextMessage;
     private FirebaseUser user;
+    private DatabaseReference mDatabase;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -49,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
         //Sets the screen on open
         setContentView(R.layout.activity_main);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         mTextMessage = findViewById(R.id.message);
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -70,6 +74,9 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
     @Override
     public void userAuthenticated(FirebaseUser user) {
         this.user = user;
+        //Once a user is authenticated, create a new user on the database
+        writeNewUser(this.user.getUid(), this.user.getDisplayName(), this.user.getEmail());
+
         //Open Home Screen once user is authenticated and logged in
         Intent intent = new Intent(MainActivity.this, HomeScreen.class);
         startActivity(intent);
@@ -78,5 +85,18 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
     @Override
     public void authenticationFailed(IdpResponse response) {
         AuthenticationService.getAuthenticationService().startAuthentication(this);
+    }
+
+
+    /**
+     * Function creates a new User and creates the user on the realtime database
+     * @param userId
+     * @param name
+     * @param email
+     */
+    private void writeNewUser(String userId, String name, String email){
+        User user = new User(name, email);
+
+        mDatabase.child("users").child(userId).setValue(user);
     }
 }

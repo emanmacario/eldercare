@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
         <activity
             android:name=".HomeScreen"
             android:label="@string/HomeText">
@@ -23,14 +23,15 @@
         </activity>
         <activity
             android:name=".UserProfileUI"
-            android:label="@string/name_placeholder"></activity>
+            android:label="@string/name_placeholder" />
         <activity
             android:name=".SettingsUI"
-            android:label="@string/SettingsHeading"></activity>
+            android:label="@string/SettingsHeading" />
         <activity
             android:name=".FrequentContactsUI"
-            android:label="@string/frequentContactsHeading"></activity>
-        <activity android:name=".MessagingActivity"></activity>
+            android:label="@string/frequentContactsHeading" />
+        <activity
+            android:name=".MessagingActivity" />
     </application>
 
 </manifest>

@@ -36,4 +36,9 @@ public class HomeScreen extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void openMessaging(View view) {
+        Intent intent = new Intent(HomeScreen.this, MessagingActivity.class);
+        startActivity(intent);
+    }
+
 }

@@ -1,5 +1,6 @@
 package au.edu.unimelb.eldercare;
 
+import com.bumptech.glide.Glide;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -49,6 +50,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 
+import android.text.format.DateUtils;
+
+
 public class MessagingActivity extends AppCompatActivity {
 
     // Static variables and constants
@@ -87,6 +91,12 @@ public class MessagingActivity extends AppCompatActivity {
             this.timeText = (TextView) view.findViewById(R.id.text_message_time);
             this.nameText = (TextView) view.findViewById(R.id.text_message_name);
         }
+
+        public void bind(Message message) {
+            this.messageText.setText(message.getText());
+            this.timeText.setText(((Long) message.getTime()).toString()); // TODO: Add method for formatting UNIX time into local time
+            this.nameText.setText(message.getSenderDisplayName());
+        }
     }
 
     public static class ReceivedMessageViewHolder extends RecyclerView.ViewHolder {
@@ -102,6 +112,12 @@ public class MessagingActivity extends AppCompatActivity {
             this.nameText = (TextView) view.findViewById(R.id.text_message_name);
             this.profileImage = (ImageView) view.findViewById(R.id.image_message_profile);
         }
+
+        public void bind(Message message) {
+            this.messageText.setText(message.getText());
+            this.timeText.setText("11:05pm");
+            this.nameText.setText(message.getSenderDisplayName());
+        }
     }
 
 
@@ -114,15 +130,16 @@ public class MessagingActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
-        // Set reference to the Firebase database
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-
         // Check if user is authenticated
         if (mFirebaseUser == null) {
+            /*
             // Not signed in, return to login activity
             Intent intent = new Intent(this, HomeScreen.class); // TODO: Replace HomeScreen activity with SignInActivity
             startActivity(intent);
             finish();
+            */
+            mUsername = "anonymous";
+            mPhotoUrl = null;
         } else {
             // Signed in, get user information
             mUsername = mFirebaseUser.getDisplayName();
@@ -130,6 +147,14 @@ public class MessagingActivity extends AppCompatActivity {
                 mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
             }
         }
+
+
+        mMessageRecyclerView = (RecyclerView) findViewById(R.id.reyclerview_message_list);
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mLinearLayoutManager.setStackFromEnd(true);
+
+        // Set reference to the Firebase database
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         // Create a parser to parse new messages in the database into a Message object
         SnapshotParser<Message> parser = new SnapshotParser<Message>() {
@@ -158,13 +183,11 @@ public class MessagingActivity extends AppCompatActivity {
                                             @NonNull Message message) {
                 // Bind the Message object to the MessageViewHolder
                 if (getItemViewType(message) == VIEW_TYPE_MESSAGE_SENT) {
-
                     SentMessageViewHolder sentHolder = (SentMessageViewHolder) holder;
-
+                    sentHolder.bind(message);
                 } else {
-
                     ReceivedMessageViewHolder receivedHolder = (ReceivedMessageViewHolder) holder;
-
+                    receivedHolder.bind(message);
                 }
             }
 
@@ -184,19 +207,67 @@ public class MessagingActivity extends AppCompatActivity {
                 }
             }
 
+            /**
+             * Returns the item view type for a message
+             * @param message
+             * @return view type
+             */
             private int getItemViewType(Message message) {
-                if (message.getId())
+                if (message.getSenderId().equals(mFirebaseUser.getUid())) {
+                    return VIEW_TYPE_MESSAGE_SENT;
+                }
+                return VIEW_TYPE_MESSAGE_RECEIVED;
             }
         };
+
+        mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                int friendlyMessageCount = mFirebaseAdapter.getItemCount();
+                int lastVisiblePosition = mLinearLayoutManager.findLastCompletelyVisibleItemPosition();
+                // If the recycler view is initially being loaded or the user is at the bottom of the list, scroll
+                // to the bottom of the list to show the newly added message.
+                if (lastVisiblePosition == -1 ||
+                        (positionStart >= (friendlyMessageCount - 1) && lastVisiblePosition == (positionStart - 1))) {
+                    mMessageRecyclerView.scrollToPosition(positionStart);
+                }
+            }
+        });
+
+        mMessageRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mMessageRecyclerView.setAdapter(mFirebaseAdapter);
+        mMessageEditText = (EditText) findViewById(R.id.edittext_chatbox);
+        mSendButton = (Button) findViewById(R.id.button_chatbox_send);
+
+        mSendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Get user's input text message
+                String text = mMessageEditText.getText().toString();
+
+                // Get current UNIX time
+                long time = System.currentTimeMillis() / 1000L;
+
+                // Create the message and push it to the database
+                Message message = new Message("1234", mUsername, text, null, mPhotoUrl, time);
+                mDatabaseReference.child("messages").push().setValue(message);
+
+                // Clear the input field
+                mMessageEditText.setText("");
+            }
+        });
     }
 
 
-    /**
+    /*
      * https://stackoverflow.com/questions/50467814/tasksnapshot-getdownloadurl-is-deprecated
      * @param storageReference reference to the Firebase real-time database
      * @param uri the URI storing the image to upload
      * @param key the key
      */
+
+    /*
     private void storeImage(final StorageReference storageReference, Uri uri, final String key) {
 
         // Create new task to aynchronously upload from content URI to this storage reference
@@ -226,6 +297,7 @@ public class MessagingActivity extends AppCompatActivity {
             }
         });
     }
+    */
 
     // Set event listener to monitor changes to the Firebase query
     @Override

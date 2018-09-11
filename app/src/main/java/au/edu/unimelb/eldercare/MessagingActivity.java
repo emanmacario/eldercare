@@ -62,7 +62,7 @@ public class MessagingActivity extends AppCompatActivity {
 
     // Firebase instance variables
     private DatabaseReference mDatabaseReference;
-    private FirebaseRecyclerAdapter<Message, RecyclerView.ViewHolder> mFirebaseAdapter;
+    private FirebaseRecyclerAdapter<Message, SentMessageViewHolder> mFirebaseAdapter;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 
@@ -148,10 +148,15 @@ public class MessagingActivity extends AppCompatActivity {
             }
         }
 
-
         mMessageRecyclerView = (RecyclerView) findViewById(R.id.reyclerview_message_list);
+        mMessageRecyclerView.setHasFixedSize(false);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
+        //mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+
+        mMessageRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mMessageEditText = (EditText) findViewById(R.id.edittext_chatbox);
+        mSendButton = (Button) findViewById(R.id.button_chatbox_send);
 
         // Set reference to the Firebase database
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -169,19 +174,56 @@ public class MessagingActivity extends AppCompatActivity {
             }
         };
 
+        // TODO: Make static constants for magic strings
+        DatabaseReference messagesReference = mDatabaseReference.child("messages");
+
         // Configure the Firebase Recycler Adapter
         FirebaseRecyclerOptions<Message> options =
                 new FirebaseRecyclerOptions.Builder<Message>()
-                        .setQuery(mDatabaseReference.child("messages"), parser) // TODO: Make static constants for magic strings
+                        .setQuery(messagesReference, parser)
+                        // .setLifecycleOwner(this)
                         .build();
 
         // Create the Firebase Recycler Adapter
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, RecyclerView.ViewHolder>(options) {
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, SentMessageViewHolder>(options) {
+            @NonNull
+            @Override
+            public SentMessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+                Log.w(TAG, "onCreateViewHolder called");
+
+                // Create a new instance of the MessageViewHolder. In this case, we
+                // will use a custom layout called R.layout.message for each item
+                LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+                View view = inflater.inflate(R.layout.item_message_received, parent, false);
+                return new SentMessageViewHolder(view);
+
+                /*
+                if (viewType == VIEW_TYPE_MESSAGE_RECEIVED) {
+                    View view = inflater.inflate(R.layout.item_message_received, parent, false);
+                    return new ReceivedMessageViewHolder(view);
+                } else {
+                    View view = inflater.inflate(R.layout.item_message_received, parent, false);
+                    return new SentMessageViewHolder(view);
+                }*/
+
+            }
 
             @Override
-            protected void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position,
+            protected void onBindViewHolder(@NonNull SentMessageViewHolder holder, int position,
                                             @NonNull Message message) {
+
+                Log.w(TAG, "onBindViewHolder called");
+
+                // Hide the progress bar
+                //mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+
                 // Bind the Message object to the MessageViewHolder
+                holder.bind(message);
+                holder.messageText.setVisibility(TextView.VISIBLE);
+                holder.timeText.setVisibility(TextView.VISIBLE);
+                holder.nameText.setVisibility(TextView.VISIBLE);
+                /*
                 if (getItemViewType(message) == VIEW_TYPE_MESSAGE_SENT) {
                     SentMessageViewHolder sentHolder = (SentMessageViewHolder) holder;
                     sentHolder.bind(message);
@@ -189,36 +231,25 @@ public class MessagingActivity extends AppCompatActivity {
                     ReceivedMessageViewHolder receivedHolder = (ReceivedMessageViewHolder) holder;
                     receivedHolder.bind(message);
                 }
+                */
             }
 
-            @NonNull
             @Override
-            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                // Create a new instance of the MessageViewHolder. In this case, we
-                // will use a custom layout called R.layout.message for each item
-                LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-
-                if (viewType == VIEW_TYPE_MESSAGE_RECEIVED) {
-                    View view = inflater.inflate(R.layout.item_message_received, parent, false);
-                    return new ReceivedMessageViewHolder(view);
-                } else {
-                    View view = inflater.inflate(R.layout.item_message_received, parent, false);
-                    return new SentMessageViewHolder(view);
-                }
+            public void onDataChanged() {
+                Log.w(TAG, "ADDED MESSAGE TO DATABASE");
             }
 
-            /**
-             * Returns the item view type for a message
-             * @param message
-             * @return view type
-             */
+            /*
             private int getItemViewType(Message message) {
                 if (message.getSenderId().equals(mFirebaseUser.getUid())) {
                     return VIEW_TYPE_MESSAGE_SENT;
                 }
                 return VIEW_TYPE_MESSAGE_RECEIVED;
             }
+            */
         };
+
+        Log.w(TAG, "SIZE OF SNAPSHOTS ARRAY: " + mFirebaseAdapter.getItemCount());
 
         mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -235,10 +266,10 @@ public class MessagingActivity extends AppCompatActivity {
             }
         });
 
-        mMessageRecyclerView.setLayoutManager(mLinearLayoutManager);
+        assert(mFirebaseAdapter != null);
         mMessageRecyclerView.setAdapter(mFirebaseAdapter);
-        mMessageEditText = (EditText) findViewById(R.id.edittext_chatbox);
-        mSendButton = (Button) findViewById(R.id.button_chatbox_send);
+
+
 
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -250,7 +281,7 @@ public class MessagingActivity extends AppCompatActivity {
                 long time = System.currentTimeMillis() / 1000L;
 
                 // Create the message and push it to the database
-                Message message = new Message("1234", mUsername, text, null, mPhotoUrl, time);
+                Message message = new Message("1234", mUsername, text, "fakeimageurl", "fakephotourl", time);
                 mDatabaseReference.child("messages").push().setValue(message);
 
                 // Clear the input field
@@ -302,13 +333,29 @@ public class MessagingActivity extends AppCompatActivity {
     // Set event listener to monitor changes to the Firebase query
     @Override
     protected void onStart() {
-        super.onStart();
+        Log.w(TAG, "STARTED LISTENING");
         mFirebaseAdapter.startListening();
+        super.onStart();
     }
 
     @Override
     protected void onStop() {
-        super.onStop();
+        Log.w(TAG, "STOPPED LISTENING");
         mFirebaseAdapter.stopListening();
+        super.onStop();
+    }
+
+    @Override
+    public void onPause() {
+        Log.w(TAG, "STOPPED LISTENING");
+        mFirebaseAdapter.stopListening();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        Log.w(TAG, "STARTED LISTENING");
+        mFirebaseAdapter.startListening();
+        super.onResume();
     }
 }

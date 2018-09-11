@@ -1,22 +1,28 @@
 package au.edu.unimelb.eldercare;
 
+
 public class Message {
 
     private String id;
-    private String name;
-    private String message;
+    private String senderId;
+    private String senderDisplayName;
+    private String text;
     private String photoUrl;
     private String imageUrl;
+    private long time;
 
     // Default constructor needed for Firebase
     public Message() {
     }
 
-    public Message(String name, String message, String imageUrl, String photoUrl) {
-        this.name = name;
-        this.message = message;
+    public Message(String senderId, String senderDisplayName, String text, String imageUrl,
+                   String photoUrl, long time) {
+        this.senderId = senderId;
+        this.senderDisplayName = senderDisplayName;
+        this.text = text;
         this.imageUrl = imageUrl;
         this.photoUrl = photoUrl;
+        this.time = time;
     }
 
     public String getId() {
@@ -27,24 +33,32 @@ public class Message {
         this.id = id;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public String getSenderId() {
+        return this.senderId;
     }
 
-    public String getName() {
-        return name;
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getSenderDisplayName() {
+        return senderDisplayName;
+    }
+
+    public void setSenderDisplayName(String senderDisplayName) {
+        this.senderDisplayName = senderDisplayName;
     }
 
     public String getPhotoUrl() {
         return photoUrl;
     }
 
-    public String getMessage() {
-        return message;
+    public String getText() {
+        return this.text;
     }
 
     public void setPhotoUrl(String photoUrl) {
@@ -57,5 +71,13 @@ public class Message {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public long getTime() {
+        return this.time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 }

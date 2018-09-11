@@ -70,6 +70,9 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
     @Override
     public void userAuthenticated(FirebaseUser user) {
         this.user = user;
+        //Open Home Screen once user is authenticated and logged in
+        Intent intent = new Intent(MainActivity.this, HomeScreen.class);
+        startActivity(intent);
     }
 
     @Override

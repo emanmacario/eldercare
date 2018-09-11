@@ -59,7 +59,6 @@ public class AddEventActivity extends AppCompatActivity {
         String eventName = ((EditText) findViewById(R.id.eventNameTextbox)).getText().toString();
         DatabaseReference newEventRef = mDatabase.child("events").push();
 
-        Log.e("AddEventActivity", eventDate + " " + eventTime);
         Timestamp startingTime = Timestamp.valueOf(eventDate + " " + eventTime);
         //HashMap<String, Double> location = getLocationFromView(); //TODO: write getLocationFromView
         HashMap<String, Double> location = new HashMap<>();
@@ -74,6 +73,8 @@ public class AddEventActivity extends AppCompatActivity {
         newEvent.maxUser = Integer.parseInt( ( (EditText) findViewById(R.id.maxUserTextbox) ).getText().toString() );
 
         newEventRef.setValue(newEvent);
+
+        finish();
     }
 
     public void onClickDate(View view){

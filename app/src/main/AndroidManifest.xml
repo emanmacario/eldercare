@@ -48,6 +48,7 @@
             android:name="AddEventActivity"
             android:label="AddEvent">
         </activity>
+        <activity android:name=".ViewEventsActivity" />
     </application>
 
 </manifest>

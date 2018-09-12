@@ -41,4 +41,8 @@
     <string name="SettingsMediumText">Medium</string>
     <string name="SettingsLargeText">Large</string>
 
+    <!-- Updating Display Name Page Strings -->
+    <string name="changeDNameHeading">Change Display Name</string>
+    <string name="new_display_name">New Display Name</string>
+
 </resources>

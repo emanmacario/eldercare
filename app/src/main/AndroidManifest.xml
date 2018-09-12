@@ -38,6 +38,11 @@
             android:name="FrequentContactsUI"
             android:label="@string/frequentContactsHeading">
         </activity>
+
+        <activity
+            android:name="ChangeDNameActivity"
+            android:label="@string/changeDNameHeading">
+        </activity>
     </application>
 
 </manifest>

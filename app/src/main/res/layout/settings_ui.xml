@@ -50,17 +50,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="top"
+                android:gravity="top|end"
                 android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/changeDisplayNameSetting"
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/ChangeDisplayNameButton"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:inputType="text"
+                    android:gravity="center"
                     android:text="Change Display Name"
-                    android:textSize="15dp"/>
+                    android:onClick="openChangeDNameActivity"/>
             </LinearLayout>
 
 

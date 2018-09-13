@@ -1,39 +1,29 @@
 package au.edu.unimelb.eldercare;
 
-import com.bumptech.glide.Glide;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import java.util.Calendar;
-import java.util.TimeZone;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.constraint.solver.widgets.Snapshot;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.InputFilter;
-import android.text.Layout;
 import android.text.TextWatcher;
+import android.text.format.DateUtils;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
-
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -45,15 +35,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-
-import android.text.format.DateUtils;
-import android.text.format.DateFormat;
 import java.util.Date;
 
 public class MessagingActivity extends AppCompatActivity {
 
     // Static variables and constants
     private static final String TAG = "MessagingActivity";
+    private static final String MESSAGES_CHILD = "messages";
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
 
@@ -66,7 +54,6 @@ public class MessagingActivity extends AppCompatActivity {
     // Instance variables
     private String mUsername;
     private String mPhotoUrl;
-    private SharedPreferences mSharedPreferences;
 
     private Button mSendButton;
     private RecyclerView mMessageRecyclerView;
@@ -129,20 +116,17 @@ public class MessagingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messaging);
 
-        // Initialise Firebase Auth
+        // Initialise Firebase instance variables
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         // Check if user is authenticated
         if (mFirebaseUser == null) {
-            /*
             // Not signed in, return to login activity
-            Intent intent = new Intent(this, MainActivity.class); // TODO: Replace HomeScreen activity with SignInActivity
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
-            */
-            mUsername = "Emmanuel Macario";
-            mPhotoUrl = null;
         } else {
             // Signed in, get user information
             mUsername = mFirebaseUser.getDisplayName();
@@ -151,18 +135,33 @@ public class MessagingActivity extends AppCompatActivity {
             }
         }
 
-        mMessageRecyclerView = (RecyclerView) findViewById(R.id.reyclerview_message_list);
-        mMessageRecyclerView.setHasFixedSize(false);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
-        //mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
+        mMessageRecyclerView = (RecyclerView) findViewById(R.id.reyclerview_message_list);
+        mMessageRecyclerView.setHasFixedSize(false);
         mMessageRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mMessageEditText = (EditText) findViewById(R.id.edittext_chatbox);
-        mSendButton = (Button) findViewById(R.id.button_chatbox_send);
 
-        // Set reference to the Firebase database
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mSendButton = (Button) findViewById(R.id.button_chatbox_send);
+        mMessageEditText = (EditText) findViewById(R.id.edittext_chatbox);
+        mMessageEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.toString().trim().length() > 0) {
+                    mSendButton.setEnabled(true);
+                } else {
+                    mSendButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
 
         // Create a parser to parse new messages in the database into a Message object
         SnapshotParser<Message> parser = new SnapshotParser<Message>() {
@@ -177,8 +176,8 @@ public class MessagingActivity extends AppCompatActivity {
             }
         };
 
-        // TODO: Make static constants for magic strings
-        DatabaseReference messagesReference = mDatabaseReference.child("messages");
+
+        DatabaseReference messagesReference = mDatabaseReference.child(MESSAGES_CHILD);
 
         // Configure the Firebase Recycler Adapter
         FirebaseRecyclerOptions<Message> options =
@@ -222,7 +221,7 @@ public class MessagingActivity extends AppCompatActivity {
             public int getItemViewType(int position) {
 
                 String senderId = getItem(position).getSenderId();
-                String mFirebaseUserId = "5678";
+                String mFirebaseUserId = mFirebaseUser.getUid();
 
                 if (senderId.equals(mFirebaseUserId)) {
                     return VIEW_TYPE_MESSAGE_SENT;
@@ -231,39 +230,35 @@ public class MessagingActivity extends AppCompatActivity {
             }
         };
 
-        // Log.d(TAG, "SIZE OF SNAPSHOTS ARRAY: " + mFirebaseAdapter.getItemCount());
 
         mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
+
                 int friendlyMessageCount = mFirebaseAdapter.getItemCount();
                 int lastVisiblePosition = mLinearLayoutManager.findLastCompletelyVisibleItemPosition();
-                // If the recycler view is initially being loaded or the user is at the bottom of the list, scroll
-                // to the bottom of the list to show the newly added message.
-                if (lastVisiblePosition == -1 ||
-                        (positionStart >= (friendlyMessageCount - 1) && lastVisiblePosition == (positionStart - 1))) {
+
+                // If the recycler view is initially being loaded or the user is
+                // at the bottom of the list, scroll to the bottom of the list
+                // to show the newly added message.
+                if (lastVisiblePosition == -1 || (positionStart >= (friendlyMessageCount - 1)
+                        && lastVisiblePosition == (positionStart - 1))) {
                     mMessageRecyclerView.scrollToPosition(positionStart);
                 }
             }
         });
-
-        assert(mFirebaseAdapter != null);
         mMessageRecyclerView.setAdapter(mFirebaseAdapter);
-
-
 
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Get user's input text message
+                // Get user's input text message and current time in UNIX time
                 String text = mMessageEditText.getText().toString();
-
-                // Get current UNIX time
                 long time = System.currentTimeMillis() / 1000L;
 
                 // Create the message and push it to the database
-                Message message = new Message("5678", mUsername, text, "fakeimageurl", "fakephotourl", time);
+                Message message = new Message("5678", mUsername, text, null, mPhotoUrl, time);
                 mDatabaseReference.child("messages").push().setValue(message);
 
                 // Clear the input field
@@ -272,6 +267,7 @@ public class MessagingActivity extends AppCompatActivity {
         });
     }
 
+    // TODO: Complete this method in next iteration to send images
     private void storeImage(final StorageReference storageReference, Uri uri, final String key) {
 
         // Create new task to aynchronously upload from content URI to this storage reference
@@ -329,6 +325,7 @@ public class MessagingActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    // TODO: Refactor this and store in a utility sub-package
     private static String createTimeString(long time) {
         String timeString;
         time *= 1000L;

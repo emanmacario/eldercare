@@ -64,7 +64,7 @@ public class MessagingActivity extends AppCompatActivity {
 
     public abstract static class MessageViewHolder extends RecyclerView.ViewHolder {
 
-        public abstract void bind(Message messsage);
+        public abstract void bind(Message message);
 
         public MessageViewHolder(View view) {
             super(view);
@@ -184,13 +184,10 @@ public class MessagingActivity extends AppCompatActivity {
             }
         };
 
-
-        DatabaseReference messagesReference = mDatabaseReference.child(MESSAGES_CHILD);
-
         // Configure the Firebase Recycler Adapter
         FirebaseRecyclerOptions<Message> options =
                 new FirebaseRecyclerOptions.Builder<Message>()
-                        .setQuery(messagesReference, parser)
+                        .setQuery(mDatabaseReference.child(MESSAGES_CHILD), parser)
                         .build();
 
         // Create the Firebase Recycler Adapter
@@ -244,13 +241,13 @@ public class MessagingActivity extends AppCompatActivity {
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
 
-                int friendlyMessageCount = mFirebaseAdapter.getItemCount();
+                int messageCount = mFirebaseAdapter.getItemCount();
                 int lastVisiblePosition = mLinearLayoutManager.findLastCompletelyVisibleItemPosition();
 
                 // If the recycler view is initially being loaded or the user is
                 // at the bottom of the list, scroll to the bottom of the list
                 // to show the newly added message.
-                if (lastVisiblePosition == -1 || (positionStart >= (friendlyMessageCount - 1)
+                if (lastVisiblePosition == -1 || (positionStart >= (messageCount - 1)
                         && lastVisiblePosition == (positionStart - 1))) {
                     mMessageRecyclerView.scrollToPosition(positionStart);
                 }
@@ -267,7 +264,7 @@ public class MessagingActivity extends AppCompatActivity {
 
                 // Create the message and push it to the database
                 Message message = new Message(mFirebaseUser.getUid(), mUsername, text, null, mPhotoUrl, time);
-                mDatabaseReference.child("messages").push().setValue(message);
+                mDatabaseReference.child(MESSAGES_CHILD).push().setValue(message);
 
                 // Clear the input field
                 mMessageEditText.setText("");
@@ -297,7 +294,7 @@ public class MessagingActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
                     Message message = new Message(); // TODO: Complete proper message object instantiation
-                    mDatabaseReference.child("messages").child(key).setValue(message);
+                    mDatabaseReference.child(MESSAGES_CHILD).child(key).setValue(message);
                 } else {
                     Log.w(TAG, "Image upload task was not successful", task.getException());
                 }
@@ -307,21 +304,21 @@ public class MessagingActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        Log.w(TAG, "Started listening");
+        Log.d(TAG, "Started listening");
         mFirebaseAdapter.startListening();
         super.onStart();
     }
 
     @Override
     protected void onStop() {
-        Log.w(TAG, "Stopped listening");
+        Log.d(TAG, "Stopped listening");
         mFirebaseAdapter.stopListening();
         super.onStop();
     }
 
     @Override
     public void onPause() {
-        Log.w(TAG, "Stopped listening");
+        Log.d(TAG, "Stopped listening");
         mFirebaseAdapter.stopListening();
         super.onPause();
     }

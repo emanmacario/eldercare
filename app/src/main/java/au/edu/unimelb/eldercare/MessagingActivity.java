@@ -27,7 +27,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,19 +34,14 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -65,7 +59,7 @@ public class MessagingActivity extends AppCompatActivity {
 
     // Firebase instance variables
     private DatabaseReference mDatabaseReference;
-    private FirebaseRecyclerAdapter<Message, SentMessageViewHolder> mFirebaseAdapter;
+    private FirebaseRecyclerAdapter<Message, MessageViewHolder> mFirebaseAdapter;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 
@@ -73,36 +67,42 @@ public class MessagingActivity extends AppCompatActivity {
     private String mUsername;
     private String mPhotoUrl;
     private SharedPreferences mSharedPreferences;
-    private GoogleApiClient mGoogleApiClient;
 
     private Button mSendButton;
     private RecyclerView mMessageRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
-    private ProgressBar mProgressBar;
     private EditText mMessageEditText;
     private ImageView mAddMessageImageView;
 
+    public abstract static class MessageViewHolder extends RecyclerView.ViewHolder {
 
-    public static class SentMessageViewHolder extends RecyclerView.ViewHolder {
+        public abstract void bind(Message messsage);
+
+        public MessageViewHolder(View view) {
+            super(view);
+        }
+    }
+
+    public static class SentMessageViewHolder extends MessageViewHolder {
+
         TextView messageText;
         TextView timeText;
-        TextView nameText;
 
         public SentMessageViewHolder(View view) {
             super(view);
             this.messageText = (TextView) view.findViewById(R.id.text_message_body);
             this.timeText = (TextView) view.findViewById(R.id.text_message_time);
-            this.nameText = (TextView) view.findViewById(R.id.text_message_name);
         }
 
+        @Override
         public void bind(Message message) {
             this.messageText.setText(message.getText());
-            this.nameText.setText(message.getSenderDisplayName());
             this.timeText.setText(createTimeString(message.getTime()));
         }
     }
 
-    public static class ReceivedMessageViewHolder extends RecyclerView.ViewHolder {
+    public static class ReceivedMessageViewHolder extends MessageViewHolder {
+
         TextView messageText;
         TextView timeText;
         TextView nameText;
@@ -116,13 +116,13 @@ public class MessagingActivity extends AppCompatActivity {
             this.profileImage = (ImageView) view.findViewById(R.id.image_message_profile);
         }
 
+        @Override
         public void bind(Message message) {
             this.messageText.setText(message.getText());
             this.nameText.setText(message.getSenderDisplayName());
             this.timeText.setText(createTimeString(message.getTime()));
         }
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,11 +137,11 @@ public class MessagingActivity extends AppCompatActivity {
         if (mFirebaseUser == null) {
             /*
             // Not signed in, return to login activity
-            Intent intent = new Intent(this, HomeScreen.class); // TODO: Replace HomeScreen activity with SignInActivity
+            Intent intent = new Intent(this, MainActivity.class); // TODO: Replace HomeScreen activity with SignInActivity
             startActivity(intent);
             finish();
             */
-            mUsername = "anonymous";
+            mUsername = "Emmanuel Macario";
             mPhotoUrl = null;
         } else {
             // Signed in, get user information
@@ -184,75 +184,54 @@ public class MessagingActivity extends AppCompatActivity {
         FirebaseRecyclerOptions<Message> options =
                 new FirebaseRecyclerOptions.Builder<Message>()
                         .setQuery(messagesReference, parser)
-                        // .setLifecycleOwner(this)
                         .build();
 
         // Create the Firebase Recycler Adapter
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, SentMessageViewHolder>(options) {
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(options) {
             @NonNull
             @Override
-            public SentMessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-                Log.w(TAG, "onCreateViewHolder called");
-
-                // Create a new instance of the MessageViewHolder. In this case, we
-                // will use a custom layout called R.layout.message for each item
+                Log.d(TAG, "onCreateViewHolder called");
                 LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-                View view = inflater.inflate(R.layout.item_message_received, parent, false);
-                return new SentMessageViewHolder(view);
 
-                /*
-                if (viewType == VIEW_TYPE_MESSAGE_RECEIVED) {
-                    View view = inflater.inflate(R.layout.item_message_received, parent, false);
-                    return new ReceivedMessageViewHolder(view);
+                // Create a new instance of a view holder. In this case, we
+                // will use custom layouts for each sent or received message item
+                if (viewType == VIEW_TYPE_MESSAGE_SENT) {
+                    View view = inflater.inflate(R.layout.item_message_sent, parent, false);
+                    return new SentMessageViewHolder(view);
                 } else {
                     View view = inflater.inflate(R.layout.item_message_received, parent, false);
-                    return new SentMessageViewHolder(view);
-                }*/
-
+                    return new ReceivedMessageViewHolder(view);
+                }
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull SentMessageViewHolder holder, int position,
-                                            @NonNull Message message) {
-
-                Log.w(TAG, "onBindViewHolder called");
-
-                // Hide the progress bar
-                //mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-
-                // Bind the Message object to the MessageViewHolder
+            public void onBindViewHolder(@NonNull MessageViewHolder holder, int position,
+                                         @NonNull Message message) {
+                Log.d(TAG, "onCreateViewHolder called");
                 holder.bind(message);
-                holder.messageText.setVisibility(TextView.VISIBLE);
-                holder.timeText.setVisibility(TextView.VISIBLE);
-                holder.nameText.setVisibility(TextView.VISIBLE);
-                /*
-                if (getItemViewType(message) == VIEW_TYPE_MESSAGE_SENT) {
-                    SentMessageViewHolder sentHolder = (SentMessageViewHolder) holder;
-                    sentHolder.bind(message);
-                } else {
-                    ReceivedMessageViewHolder receivedHolder = (ReceivedMessageViewHolder) holder;
-                    receivedHolder.bind(message);
-                }
-                */
             }
 
             @Override
             public void onDataChanged() {
-                Log.w(TAG, "ADDED MESSAGE TO DATABASE");
+                Log.d(TAG, "Child added to 'Messages");
             }
 
-            /*
-            private int getItemViewType(Message message) {
-                if (message.getSenderId().equals(mFirebaseUser.getUid())) {
+            @Override
+            public int getItemViewType(int position) {
+
+                String senderId = getItem(position).getSenderId();
+                String mFirebaseUserId = "5678";
+
+                if (senderId.equals(mFirebaseUserId)) {
                     return VIEW_TYPE_MESSAGE_SENT;
                 }
                 return VIEW_TYPE_MESSAGE_RECEIVED;
             }
-            */
         };
 
-        Log.w(TAG, "SIZE OF SNAPSHOTS ARRAY: " + mFirebaseAdapter.getItemCount());
+        // Log.d(TAG, "SIZE OF SNAPSHOTS ARRAY: " + mFirebaseAdapter.getItemCount());
 
         mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -284,7 +263,7 @@ public class MessagingActivity extends AppCompatActivity {
                 long time = System.currentTimeMillis() / 1000L;
 
                 // Create the message and push it to the database
-                Message message = new Message("1234", mUsername, text, "fakeimageurl", "fakephotourl", time);
+                Message message = new Message("5678", mUsername, text, "fakeimageurl", "fakephotourl", time);
                 mDatabaseReference.child("messages").push().setValue(message);
 
                 // Clear the input field
@@ -293,15 +272,6 @@ public class MessagingActivity extends AppCompatActivity {
         });
     }
 
-
-    /*
-     * https://stackoverflow.com/questions/50467814/tasksnapshot-getdownloadurl-is-deprecated
-     * @param storageReference reference to the Firebase real-time database
-     * @param uri the URI storing the image to upload
-     * @param key the key
-     */
-
-    /*
     private void storeImage(final StorageReference storageReference, Uri uri, final String key) {
 
         // Create new task to aynchronously upload from content URI to this storage reference
@@ -322,8 +292,7 @@ public class MessagingActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
-                    Message message =
-                            new Message(null, mUsername, mPhotoUrl, downloadUri.toString());
+                    Message message = new Message(); // TODO: Complete proper message object instantiation
                     mDatabaseReference.child("messages").child(key).setValue(message);
                 } else {
                     Log.w(TAG, "Image upload task was not successful", task.getException());
@@ -331,33 +300,31 @@ public class MessagingActivity extends AppCompatActivity {
             }
         });
     }
-    */
 
-    // Set event listener to monitor changes to the Firebase query
     @Override
     protected void onStart() {
-        Log.w(TAG, "STARTED LISTENING");
+        Log.w(TAG, "Started listening");
         mFirebaseAdapter.startListening();
         super.onStart();
     }
 
     @Override
     protected void onStop() {
-        Log.w(TAG, "STOPPED LISTENING");
+        Log.w(TAG, "Stopped listening");
         mFirebaseAdapter.stopListening();
         super.onStop();
     }
 
     @Override
     public void onPause() {
-        Log.w(TAG, "STOPPED LISTENING");
+        Log.w(TAG, "Stopped listening");
         mFirebaseAdapter.stopListening();
         super.onPause();
     }
 
     @Override
     public void onResume() {
-        Log.w(TAG, "STARTED LISTENING");
+        Log.d(TAG, "Started listening");
         mFirebaseAdapter.startListening();
         super.onResume();
     }

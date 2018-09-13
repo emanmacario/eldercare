@@ -3,6 +3,8 @@ package au.edu.unimelb.eldercare;
 import com.bumptech.glide.Glide;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import java.util.Calendar;
+import java.util.TimeZone;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -51,7 +53,8 @@ import com.google.firebase.storage.UploadTask;
 
 
 import android.text.format.DateUtils;
-
+import android.text.format.DateFormat;
+import java.util.Date;
 
 public class MessagingActivity extends AppCompatActivity {
 
@@ -94,8 +97,8 @@ public class MessagingActivity extends AppCompatActivity {
 
         public void bind(Message message) {
             this.messageText.setText(message.getText());
-            this.timeText.setText(((Long) message.getTime()).toString()); // TODO: Add method for formatting UNIX time into local time
             this.nameText.setText(message.getSenderDisplayName());
+            this.timeText.setText(createTimeString(message.getTime()));
         }
     }
 
@@ -115,8 +118,8 @@ public class MessagingActivity extends AppCompatActivity {
 
         public void bind(Message message) {
             this.messageText.setText(message.getText());
-            this.timeText.setText("11:05pm");
             this.nameText.setText(message.getSenderDisplayName());
+            this.timeText.setText(createTimeString(message.getTime()));
         }
     }
 
@@ -357,5 +360,18 @@ public class MessagingActivity extends AppCompatActivity {
         Log.w(TAG, "STARTED LISTENING");
         mFirebaseAdapter.startListening();
         super.onResume();
+    }
+
+    private static String createTimeString(long time) {
+        String timeString;
+        time *= 1000L;
+        Date date = new Date(time);
+
+        if (DateUtils.isToday(time)) {
+            timeString = "Today\n" + DateFormat.format("h:mm a", date).toString();
+        } else {
+            timeString = DateFormat.format("dd/MM/yy\nhh:mm a", date).toString();
+        }
+        return timeString;
     }
 }

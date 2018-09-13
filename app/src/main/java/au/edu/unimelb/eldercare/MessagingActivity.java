@@ -42,6 +42,7 @@ public class MessagingActivity extends AppCompatActivity {
     // Static variables and constants
     private static final String TAG = "MessagingActivity";
     private static final String MESSAGES_CHILD = "messages";
+    private static final String ANONYMOUS_NAME = "anonymous";
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
 
@@ -129,9 +130,16 @@ public class MessagingActivity extends AppCompatActivity {
             finish();
         } else {
             // Signed in, get user information
-            mUsername = mFirebaseUser.getDisplayName();
+            if (mFirebaseUser.getDisplayName() != null) {
+                mUsername = mFirebaseUser.getDisplayName();
+            } else {
+                mUsername = ANONYMOUS_NAME;
+            }
+
             if (mFirebaseUser.getPhotoUrl() != null) {
                 mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
+            } else {
+                mPhotoUrl = null;
             }
         }
 
@@ -258,7 +266,7 @@ public class MessagingActivity extends AppCompatActivity {
                 long time = System.currentTimeMillis() / 1000L;
 
                 // Create the message and push it to the database
-                Message message = new Message("5678", mUsername, text, null, mPhotoUrl, time);
+                Message message = new Message(mFirebaseUser.getUid(), mUsername, text, null, mPhotoUrl, time);
                 mDatabaseReference.child("messages").push().setValue(message);
 
                 // Clear the input field

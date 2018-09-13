@@ -42,6 +42,11 @@
             android:name="ChangeDNameActivity"
             android:label="@string/changeDNameHeading">
         </activity>
+
+        <activity
+            android:name="MessagingActivity"
+            android:label="Messaging">
+        </activity>
     </application>
 
 </manifest>

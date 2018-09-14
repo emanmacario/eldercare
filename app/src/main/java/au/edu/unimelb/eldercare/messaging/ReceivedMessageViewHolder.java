@@ -13,6 +13,7 @@ public class ReceivedMessageViewHolder extends MessageViewHolder {
     private TextView timeText;
     private TextView nameText;
     private ImageView profileImage;
+    private ImageView messageImage;
 
     public ReceivedMessageViewHolder(View view) {
         super(view);

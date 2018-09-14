@@ -31,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import au.edu.unimelb.eldercare.helpers.TimeUtil;
 import au.edu.unimelb.eldercare.messaging.Message;
 import au.edu.unimelb.eldercare.messaging.MessageViewHolder;
 import au.edu.unimelb.eldercare.messaging.ReceivedMessageViewHolder;
@@ -211,7 +212,7 @@ public class MessagingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Get user's input text message and current time in UNIX time
                 String text = mMessageEditText.getText().toString();
-                long time = System.currentTimeMillis() / 1000L;
+                long time = TimeUtil.getCurrentTime();
 
                 // Create the message and push it to the database
                 Message message = new Message(mFirebaseUser.getUid(), mUsername, text, null, mPhotoUrl, time);

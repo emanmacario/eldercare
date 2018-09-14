@@ -9,8 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateUtils;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
@@ -35,7 +31,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.util.Date;
+import au.edu.unimelb.eldercare.messaging.Message;
+import au.edu.unimelb.eldercare.messaging.MessageViewHolder;
+import au.edu.unimelb.eldercare.messaging.ReceivedMessageViewHolder;
+import au.edu.unimelb.eldercare.messaging.SentMessageViewHolder;
 
 public class MessagingActivity extends AppCompatActivity {
 
@@ -52,65 +51,17 @@ public class MessagingActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 
-    // Instance variables
+    // User instance variables
     private String mUsername;
     private String mPhotoUrl;
 
+    // UI instance variables
     private Button mSendButton;
     private RecyclerView mMessageRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     private EditText mMessageEditText;
     private ImageView mAddMessageImageView;
 
-    public abstract static class MessageViewHolder extends RecyclerView.ViewHolder {
-
-        public abstract void bind(Message message);
-
-        public MessageViewHolder(View view) {
-            super(view);
-        }
-    }
-
-    public static class SentMessageViewHolder extends MessageViewHolder {
-
-        TextView messageText;
-        TextView timeText;
-
-        public SentMessageViewHolder(View view) {
-            super(view);
-            this.messageText = (TextView) view.findViewById(R.id.text_message_body);
-            this.timeText = (TextView) view.findViewById(R.id.text_message_time);
-        }
-
-        @Override
-        public void bind(Message message) {
-            this.messageText.setText(message.getText());
-            this.timeText.setText(createTimeString(message.getTime()));
-        }
-    }
-
-    public static class ReceivedMessageViewHolder extends MessageViewHolder {
-
-        TextView messageText;
-        TextView timeText;
-        TextView nameText;
-        ImageView profileImage;
-
-        public ReceivedMessageViewHolder(View view) {
-            super(view);
-            this.messageText = (TextView) view.findViewById(R.id.text_message_body);
-            this.timeText = (TextView) view.findViewById(R.id.text_message_time);
-            this.nameText = (TextView) view.findViewById(R.id.text_message_name);
-            this.profileImage = (ImageView) view.findViewById(R.id.image_message_profile);
-        }
-
-        @Override
-        public void bind(Message message) {
-            this.messageText.setText(message.getText());
-            this.nameText.setText(message.getSenderDisplayName());
-            this.timeText.setText(createTimeString(message.getTime()));
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,13 +164,13 @@ public class MessagingActivity extends AppCompatActivity {
             @Override
             public void onBindViewHolder(@NonNull MessageViewHolder holder, int position,
                                          @NonNull Message message) {
-                Log.d(TAG, "onCreateViewHolder called");
+                Log.d(TAG, "onBindViewHolder called");
                 holder.bind(message);
             }
 
             @Override
             public void onDataChanged() {
-                Log.d(TAG, "Child added to 'Messages");
+                Log.d(TAG, "Child added to 'messages'");
             }
 
             @Override
@@ -328,19 +279,5 @@ public class MessagingActivity extends AppCompatActivity {
         Log.d(TAG, "Started listening");
         mFirebaseAdapter.startListening();
         super.onResume();
-    }
-
-    // TODO: Refactor this and store in a utility sub-package
-    private static String createTimeString(long time) {
-        String timeString;
-        time *= 1000L;
-        Date date = new Date(time);
-
-        if (DateUtils.isToday(time)) {
-            timeString = "Today\n" + DateFormat.format("h:mm a", date).toString();
-        } else {
-            timeString = DateFormat.format("dd/MM/yy\nhh:mm a", date).toString();
-        }
-        return timeString;
     }
 }

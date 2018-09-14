@@ -62,6 +62,7 @@
         android:layout_height="100dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="20dp"
+        android:onClick="openUserSearch"
         android:text="@string/UserSearchButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/EventsButton" />

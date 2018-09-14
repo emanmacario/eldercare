@@ -18,35 +18,44 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="HomeScreen"
-            android:label="@string/HomeText">
-        </activity>
 
         <activity
-            android:name="UserProfileUI"
-            android:label="@string/name_placeholder">
-	    </activity>
-	
-	    <activity
-            android:name="SettingsUI"
-            android:label="@string/SettingsHeading">
-        </activity>
+            android:name=".HomeScreen"
+            android:label="@string/HomeText" />
 
         <activity
-            android:name="FrequentContactsUI"
-            android:label="@string/frequentContactsHeading">
+            android:name=".UserProfileUI"
+            android:label="@string/name_placeholder" />
+        <activity
+            android:name=".SettingsUI"
+            android:label="@string/SettingsHeading" />
+        <activity
+            android:name=".FrequentContactsUI"
+            android:label="@string/frequentContactsHeading" />
+
+        <activity
+            android:name=".UserSearchUI"
+            android:label="@string/title_activity_user_search_ui"
+            android:parentActivityName=".HomeScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="au.edu.unimelb.eldercare.HomeScreen" />
         </activity>
 
         <activity
             android:name="ChangeDNameActivity"
-            android:label="@string/changeDNameHeading">
-        </activity>
+            android:label="@string/changeDNameHeading" />
 
         <activity
             android:name="MessagingActivity"
-            android:label="Messaging">
-        </activity>
+            android:label="Messaging" />
     </application>
 
 </manifest>

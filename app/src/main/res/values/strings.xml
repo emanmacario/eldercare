@@ -45,4 +45,7 @@
     <string name="changeDNameHeading">Change Display Name</string>
     <string name="new_display_name">New Display Name</string>
 
+    <string name="title_activity_user_search_ui">Find a User</string>
+    <string name="search_user_hint">Search for a User</string>
+    <string name="search_label">Find a User</string>
 </resources>

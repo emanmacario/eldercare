@@ -26,8 +26,9 @@
 
     <!-- Settings Page Strings -->
     <string name="SettingsHeading">Settings Heading</string>
-    <string name="Setting01">Setting 1</string>
     <string name="Setting02">Text Size</string>
+    <string name="displayNameSettings">Display Name</string>
+    <string name="currentDisplayName">Current Display Name</string>
 
     <!-- Frequent Contacts Page Strings -->
     <string name="frequentContactsHeading">Frequent Contacts</string>
@@ -45,4 +46,13 @@
     <string name="view_events">VIEW EVENTS</string>
     <string name="edit_event">EDIT EVENT</string>
     <string name="add_event">ADD EVENT</string>
+
+    <!-- Updating Display Name Page Strings -->
+    <string name="changeDNameHeading">Change Display Name</string>
+    <string name="new_display_name">New Display Name</string>
+
+    <string name="title_activity_user_search_ui">Find a User</string>
+    <string name="search_user_hint">Search for a User</string>
+    <string name="search_label">Find a User</string>
+
 </resources>

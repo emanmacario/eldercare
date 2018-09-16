@@ -37,8 +37,18 @@ public class HomeScreen extends AppCompatActivity {
     }
 
     //When Events button is clicked, this opens the events page
-    public void openEvents(View view){
+    public void openEvents(View view) {
         Intent intent = new Intent(HomeScreen.this, EventsUI.class);
+        startActivity(intent);
+    }
+
+    public void openMessaging(View view) {
+        Intent intent = new Intent(HomeScreen.this, MessagingActivity.class);
+        startActivity(intent);
+    }
+
+    public void openUserSearch(View view) {
+        Intent intent = new Intent(HomeScreen.this, UserSearchUI.class);
         startActivity(intent);
     }
 

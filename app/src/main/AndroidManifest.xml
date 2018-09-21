@@ -50,8 +50,12 @@
         </activity>
 
         <activity
-            android:name="ChangeDNameActivity"
+            android:name=".ChangeDNameActivity"
             android:label="@string/changeDNameHeading" />
+
+        <activity
+            android:name=".ChangeEmailActivity"
+            android:label="Change Email Address"/>
 
         <activity
             android:name="MessagingActivity"

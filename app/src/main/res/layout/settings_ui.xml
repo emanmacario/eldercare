@@ -65,7 +65,10 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:onClick="openChangeDNameActivity"
-                    android:text="Change Display Name" />
+                    android:text="Change Display Name"
+                    android:background="@color/ReseneNeptune"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"/>
 
             </LinearLayout>
 
@@ -111,7 +114,10 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:onClick="openChangeDNameActivity"
-                    android:text="Change Email Address" />
+                    android:text="Change Email Address"
+                    android:background="@color/ReseneNeptune"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"/>
             </LinearLayout>
 
             <android.support.constraint.ConstraintLayout
@@ -133,9 +139,10 @@
                     android:textColor="#000000"
                     android:textSize="20dp" />
 
+
                 <android.support.constraint.ConstraintLayout
-                    android:layout_width="64dp"
-                    android:layout_height="31dp">
+                    android:layout_width="78dp"
+                    android:layout_height="29dp">
 
                 </android.support.constraint.ConstraintLayout>
 
@@ -143,15 +150,15 @@
                     android:id="@+id/ChangePasswordButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@color/ReseneNeptune"
                     android:gravity="center"
-                    android:text="Change Password" />
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="Change Password"
+                    app:layout_constraintRight_toRightOf="parent" />
 
             </LinearLayout>
 
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="20dp"></android.support.constraint.ConstraintLayout>
-            
         </LinearLayout>
     </ScrollView>
 

@@ -18,6 +18,7 @@
                 android:id="@+id/SettingsHeading"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/playfair_display_bold"
                 android:text="@string/SettingsHeading"
                 android:textAlignment="center"
                 android:textSize="30dp"
@@ -33,10 +34,11 @@
                     android:id="@+id/displayNameSetting"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:fontFamily="@font/playfair_display"
+                    android:gravity="start"
                     android:text="@string/displayNameSettings"
-                    android:textSize="20dp"
                     android:textColor="#000000"
-                    android:gravity="start"/>
+                    android:textSize="20dp" />
 
                 <TextView
                     android:id="@+id/currentDisplayName"
@@ -62,6 +64,74 @@
                     android:onClick="openChangeDNameActivity"/>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/EmailAddressSetting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/playfair_display"
+                    android:text="Email Address"
+                    android:gravity="start"
+                    android:textColor="#000000"
+                    android:textSize="20dp"/>
+
+                <TextView
+                    android:id="@+id/CurrentEmailAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="Current Email Address"
+                    android:textSize="15dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top|end"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/ChangeEmailAddressButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Change Email Address"
+                    android:onClick="openChangeDNameActivity"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/ChangePasswordSetting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/playfair_display"
+                    android:textColor="#000000"
+                    android:text="Change Password"
+                    android:textSize="20dp"/>
+
+                <Space
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content" />
+                <Button
+                    android:id="@+id/ChangePasswordButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Change Password"/>
+
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -75,6 +145,7 @@
                     android:textAlignment="viewStart"
                     android:textSize="20dp"
                     android:textColor="#000000"
+                    android:fontFamily="@font/playfair_display"
                     android:text="@string/Setting02"
                     android:layout_weight="1"/>
 

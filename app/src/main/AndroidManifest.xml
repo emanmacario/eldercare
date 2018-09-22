@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
@@ -60,11 +62,27 @@
 
         <activity
             android:name="AddEventActivity"
-            android:label="AddEvent">
+            android:label="Add Event">
         </activity>
 
         <activity
-            android:name=".ViewEventsActivity">
+            android:name="ViewEventsActivity"
+            android:label="View Events">
+        </activity>
+
+        <activity
+            android:name="ViewEventActivity"
+            android:label="View Event">
+        </activity>
+
+        <activity
+            android:name="ViewOwnEventActivity"
+            android:label="View Own Events">
+        </activity>
+
+        <activity
+            android:name="EditEventActivity"
+            android:label="Edit Event">
         </activity>
 
         <activity

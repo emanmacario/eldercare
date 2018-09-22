@@ -30,6 +30,7 @@
         android:layout_height="100dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="20dp"
+        android:onClick="openViewEventsUI"
         android:text="@string/view_events"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/EventsText" />
@@ -40,6 +41,7 @@
         android:layout_height="100dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="20dp"
+        android:onClick="openEditEventsUI"
         android:text="@string/edit_event"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ViewEventsButton" />

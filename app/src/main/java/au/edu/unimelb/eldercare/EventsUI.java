@@ -29,9 +29,19 @@ public class EventsUI extends AppCompatActivity {
         setContentView(R.layout.event_ui);
     }
 
-    //When Events button is clicked, this opens the events page
     public void openAddEventsUI(View view){
         Intent intent = new Intent(EventsUI.this, AddEventActivity.class);
+        startActivity(intent);
+    }
+
+
+    public void openEditEventsUI(View view){
+        Intent intent = new Intent(EventsUI.this, ViewOwnEventActivity.class);
+        startActivity(intent);
+    }
+
+    public void openViewEventsUI(View view){
+        Intent intent = new Intent(EventsUI.this, ViewEventsActivity.class);
         startActivity(intent);
     }
 

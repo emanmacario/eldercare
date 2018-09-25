@@ -1,4 +1,4 @@
-package au.edu.unimelb.eldercare;
+package au.edu.unimelb.eldercare.event;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +19,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+
+import au.edu.unimelb.eldercare.R;
 
 public class ViewEventsActivity extends AppCompatActivity {
     protected HashMap<String, Event> allEvents;

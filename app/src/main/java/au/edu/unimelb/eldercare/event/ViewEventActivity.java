@@ -1,7 +1,9 @@
-package au.edu.unimelb.eldercare;
+package au.edu.unimelb.eldercare.event;
 
 import android.os.Bundle;
 import android.view.View;
+
+import au.edu.unimelb.eldercare.R;
 
 public class ViewEventActivity extends EditEventActivity {
 

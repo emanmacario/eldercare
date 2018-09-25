@@ -1,4 +1,4 @@
-package au.edu.unimelb.eldercare;
+package au.edu.unimelb.eldercare.event;
 
 
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
+
+import au.edu.unimelb.eldercare.R;
 
 public class ViewOwnEventActivity extends ViewEventsActivity {
 

@@ -1,4 +1,4 @@
-package au.edu.unimelb.eldercare;
+package au.edu.unimelb.eldercare.event;
 
 import android.annotation.SuppressLint;
 import android.os.Parcel;

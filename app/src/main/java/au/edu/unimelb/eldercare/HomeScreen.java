@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import au.edu.unimelb.eldercare.event.EventsUI;
+
 public class HomeScreen extends AppCompatActivity {
 
     private TextView mTextMessage;

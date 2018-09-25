@@ -1,4 +1,4 @@
-package au.edu.unimelb.eldercare;
+package au.edu.unimelb.eldercare.event;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -28,6 +28,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
+
+import au.edu.unimelb.eldercare.R;
 
 public class AddEventActivity extends AppCompatActivity {
 

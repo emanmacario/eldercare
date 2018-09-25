@@ -1,4 +1,4 @@
-package au.edu.unimelb.eldercare;
+package au.edu.unimelb.eldercare.event;
 
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.google.firebase.database.DatabaseReference;
 
 import java.sql.Timestamp;
+
+import au.edu.unimelb.eldercare.R;
 
 public class EditEventActivity extends AddEventActivity{
 

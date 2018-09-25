@@ -1,13 +1,10 @@
 package au.edu.unimelb.eldercare;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,7 +19,7 @@ public class ViewOwnEventActivity extends ViewEventsActivity {
         ((TextView)findViewById(R.id.allEventText)).setText("List of created event");
     }
 
-    protected class ownEventsListener extends eventsListener{
+    public class ownEventsListener extends eventsListener{
         @Override
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             super.onChildAdded(dataSnapshot, s);
@@ -34,7 +31,7 @@ public class ViewOwnEventActivity extends ViewEventsActivity {
             return newEvent.creator.equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
         }
 
-        protected class EditButtonClickListener extends ButtonClickListener{
+        public class EditButtonClickListener extends ButtonClickListener{
             @Override
             public void onClick(View view) {
                 super.activity = EditEventActivity.class;

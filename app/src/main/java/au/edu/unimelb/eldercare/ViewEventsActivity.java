@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintSet;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,8 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.facebook.internal.Logger;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,12 +35,12 @@ public class ViewEventsActivity extends AppCompatActivity {
         allEvents = new HashMap<>();
         eventDB.addChildEventListener(childEventListener);
 
-        container = (ViewGroup)findViewById(R.id.eventBoxContainer);
+        container = findViewById(R.id.eventBoxContainer);
         inflater = this.getLayoutInflater();
 
     }
 
-    protected class eventsListener implements ChildEventListener{
+    public class eventsListener implements ChildEventListener{
 
         protected Button viewButton;
 
@@ -103,7 +100,7 @@ public class ViewEventsActivity extends AppCompatActivity {
             return true;
         }
 
-        protected class ButtonClickListener implements View.OnClickListener {
+        public class ButtonClickListener implements View.OnClickListener {
 
             protected Event event;
             protected Class activity = ViewEventActivity.class;

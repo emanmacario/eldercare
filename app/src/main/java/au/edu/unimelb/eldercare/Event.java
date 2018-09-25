@@ -1,11 +1,9 @@
 package au.edu.unimelb.eldercare;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -39,6 +37,7 @@ class Event implements Parcelable{
         return this.registeredUserId.remove(Integer.valueOf(userId));
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public String toString(){
         return String.format("eventId: %s, eventName: %s, eventDescription: %s, startingTime: %d, " +

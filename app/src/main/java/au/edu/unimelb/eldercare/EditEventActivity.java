@@ -3,7 +3,6 @@ package au.edu.unimelb.eldercare;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -28,7 +27,7 @@ public class EditEventActivity extends AddEventActivity{
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-        event = (Event) intent.getParcelableExtra("event");
+        event = intent.getParcelableExtra("event");
         Timestamp eventTime = new Timestamp(event.startingTime);
 
         addEventText = findViewById(R.id.addEventText);

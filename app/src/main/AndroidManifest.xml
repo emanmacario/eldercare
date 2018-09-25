@@ -88,12 +88,20 @@
         </activity>
 
         <activity
-            android:name="ChangeDNameActivity"
+            android:name=".ChangeDNameActivity"
             android:label="@string/changeDNameHeading" />
+
+        <activity
+            android:name=".ChangeEmailActivity"
+            android:label="Change Email Address"/>
 
         <activity
             android:name="MessagingActivity"
             android:label="Messaging" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

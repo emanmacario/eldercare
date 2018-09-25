@@ -55,4 +55,6 @@
     <string name="search_user_hint">Search for a User</string>
     <string name="search_label">Find a User</string>
 
+    <string name="current_email">Current Email Address</string>
+    <string name="new_email_address">New Email Address</string>
 </resources>

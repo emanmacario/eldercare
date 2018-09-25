@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import au.edu.unimelb.eldercare.event.EventsUI;
+
 public class HomeScreen extends AppCompatActivity {
 
     private TextView mTextMessage;
@@ -33,6 +35,12 @@ public class HomeScreen extends AppCompatActivity {
     //When Frequent Contacts button is clicked, this opens the frequent contacts page
     public void openFrequentContacts(View view){
         Intent intent = new Intent(HomeScreen.this, FrequentContactsUI.class);
+        startActivity(intent);
+    }
+
+    //When Events button is clicked, this opens the events page
+    public void openEvents(View view) {
+        Intent intent = new Intent(HomeScreen.this, EventsUI.class);
         startActivity(intent);
     }
 

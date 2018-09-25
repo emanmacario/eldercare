@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="au.edu.unimelb.eldercare">
 
     <application
@@ -8,7 +9,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
@@ -20,15 +24,19 @@
         </activity>
 
         <activity
+            android:name="UserProfileUI"
+            android:label="@string/name_placeholder">
+	    </activity>
+
+	    <activity
+            android:name="SettingsUI"
+            android:label="@string/SettingsHeading">
+        </activity>
+
+        <activity
             android:name=".HomeScreen"
             android:label="@string/HomeText" />
 
-        <activity
-            android:name=".UserProfileUI"
-            android:label="@string/name_placeholder" />
-        <activity
-            android:name=".SettingsUI"
-            android:label="@string/SettingsHeading" />
         <activity
             android:name=".FrequentContactsUI"
             android:label="@string/frequentContactsHeading" />
@@ -47,6 +55,36 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="au.edu.unimelb.eldercare.HomeScreen" />
+        </activity>
+
+        <activity
+            android:name=".event.EventsUI"
+            android:label="Events">
+        </activity>
+
+        <activity
+            android:name=".event.AddEventActivity"
+            android:label="Add Event">
+        </activity>
+
+        <activity
+            android:name=".event.ViewEventsActivity"
+            android:label="View Events">
+        </activity>
+
+        <activity
+            android:name=".event.ViewEventActivity"
+            android:label="View Event">
+        </activity>
+
+        <activity
+            android:name=".event.ViewOwnEventActivity"
+            android:label="View Own Events">
+        </activity>
+
+        <activity
+            android:name=".event.EditEventActivity"
+            android:label="Edit Event">
         </activity>
 
         <activity

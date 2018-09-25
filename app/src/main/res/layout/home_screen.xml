@@ -58,6 +58,7 @@
         android:layout_height="100dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="20dp"
+        android:onClick="openEvents"
         android:fontFamily="@font/playfair_display_bold"
         android:text="@string/EventsButton"
         android:background="@color/ReseneNeptune"

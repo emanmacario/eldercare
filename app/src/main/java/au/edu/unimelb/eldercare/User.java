@@ -4,13 +4,15 @@ public class User {
 
     private String displayName;
     private String email;
+    private String userType;
 
     public User(){
     }
 
-    public User(String displayName, String email){
+    public User(String displayName, String email, String userType){
         this.displayName = displayName;
         this.email = email;
+        this.userType = userType;
     }
 
     public String getDisplayName() {
@@ -28,4 +30,10 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) { this.userType = userType; }
 }

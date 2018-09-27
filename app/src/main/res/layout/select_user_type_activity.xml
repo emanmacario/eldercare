@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center|top">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp">
+
+        </android.support.constraint.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/UserTypeQuestion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="40dp"
+            android:textColor="#000000"
+            android:fontFamily="@font/playfair_display_bold"
+            android:text="@string/user_type_question" />
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp">
+
+        </android.support.constraint.ConstraintLayout>
+
+        <RadioGroup
+            android:id="@+id/UserTypeRadio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|top">
+
+            <RadioButton
+                android:id="@+id/DependantUserRadio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30dp"
+                android:fontFamily="@font/playfair_display"
+                android:text="Dependant" />
+
+            <RadioButton
+                android:id="@+id/CarerUserRadio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30dp"
+                android:fontFamily="@font/playfair_display"
+                android:text="Carer" />
+        </RadioGroup>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp">
+
+        </android.support.constraint.ConstraintLayout>
+
+        <Button
+            android:id="@+id/ConfirmUserTypeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/ReseneNeptune"
+            android:textSize="25dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:fontFamily="@font/playfair_display_bold"
+            android:text="Confirm"
+            android:onClick="openHomeScreen"/>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 import au.edu.unimelb.eldercare.service.AuthenticationListener;
@@ -17,6 +18,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.concurrent.TimeUnit;
 
 import static au.edu.unimelb.eldercare.service.AuthenticationService.RC_SIGN_IN;
 
@@ -95,10 +98,8 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
         };
         userRef.addListenerForSingleValueEvent(eventListener);
 
+        openNextActivity();
 
-        //Open Home Screen once user is authenticated and logged in
-        Intent intent = new Intent(MainActivity.this, HomeScreen.class);
-        startActivity(intent);
     }
 
     @Override
@@ -114,9 +115,36 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
      * @param email
      */
     private void writeNewUser(String userId, String name, String email){
-        User user = new User(name, email);
-
+        User user = new User(name, email, "");
         mDatabase.child("users").child(userId).setValue(user);
     }
 
+
+    private void openNextActivity(){
+        //TODO: Figure out why when a user doesn't have a user type, we can't get null back
+//        DatabaseReference userTypeRef = FirebaseDatabase.getInstance().getReference().child("users").child(this.user.getUid());
+//        userTypeRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                User user = dataSnapshot.getValue(User.class);
+//                String userType = user.getUserType();
+//                if (userType.equals("Carer") || userType.equals("Dependant")){
+//                    Intent intent = new Intent(MainActivity.this, HomeScreen.class);
+//                    startActivity(intent);
+//                }
+//                else{
+//                    Intent intent = new Intent(MainActivity.this, SelectUserTypeActivity.class);
+//                    startActivity(intent);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+        //For now just open select user type screen
+        Intent intent = new Intent(MainActivity.this, SelectUserTypeActivity.class);
+        startActivity(intent);
+    }
 }

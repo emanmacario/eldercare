@@ -99,6 +99,10 @@
             android:name="MessagingActivity"
             android:label="Messaging" />
 
+        <activity
+            android:name=".SelectUserTypeActivity"
+            android:label="Select User Type"/>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

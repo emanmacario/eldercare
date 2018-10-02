@@ -24,12 +24,12 @@
         </activity>
 
         <activity
-            android:name="UserProfileUI"
+            android:name=".user.UserProfileUI"
             android:label="@string/name_placeholder">
 	    </activity>
 
 	    <activity
-            android:name="SettingsUI"
+            android:name=".user.SettingsUI"
             android:label="@string/SettingsHeading">
         </activity>
 
@@ -42,7 +42,7 @@
             android:label="@string/frequentContactsHeading" />
 
         <activity
-            android:name=".UserSearchUI"
+            android:name=".user.UserSearchUI"
             android:label="@string/title_activity_user_search_ui"
             android:parentActivityName=".HomeScreen">
             <intent-filter>
@@ -88,11 +88,11 @@
         </activity>
 
         <activity
-            android:name=".ChangeDNameActivity"
+            android:name=".user.ChangeDNameActivity"
             android:label="@string/changeDNameHeading" />
 
         <activity
-            android:name=".ChangeEmailActivity"
+            android:name=".user.ChangeEmailActivity"
             android:label="Change Email Address"/>
 
         <activity
@@ -100,7 +100,7 @@
             android:label="Messaging" />
 
         <activity
-            android:name=".SelectUserTypeActivity"
+            android:name=".user.SelectUserTypeActivity"
             android:label="Select User Type"/>
 
         <meta-data

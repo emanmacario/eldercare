@@ -7,16 +7,18 @@ public class User {
     private String displayName;
     private String email;
     private String userType;
+    private String connectedUserID;
     private HashMap<String, String> registeredEventId;
 
     public User(){
         this.registeredEventId = new HashMap<>();
     }
 
-    public User(String displayName, String email, String userType){
+    public User(String displayName, String email, String userType, String connectedUserID){
         this.displayName = displayName;
         this.email = email;
         this.userType = userType;
+        this.connectedUserID = connectedUserID;
     }
 
     public String getDisplayName() {
@@ -54,5 +56,13 @@ public class User {
 
     public String unregisterEvent(String eventId){
         return this.registeredEventId.remove(eventId);
+    }
+
+    public String getConnectedUserID() {
+        return connectedUserID;
+    }
+
+    public void setConnectedUserID(String connectedUserID) {
+        this.connectedUserID = connectedUserID;
     }
 }

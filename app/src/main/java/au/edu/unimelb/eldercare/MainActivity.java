@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
      * @param email
      */
     private void writeNewUser(String userId, String name, String email){
-        User user = new User(name, email, "");
+        User user = new User(name, email, "", "");
         mDatabase.child("users").child(userId).setValue(user);
     }
 

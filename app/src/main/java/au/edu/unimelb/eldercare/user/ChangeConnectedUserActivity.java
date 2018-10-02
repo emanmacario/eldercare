@@ -1,6 +1,7 @@
 package au.edu.unimelb.eldercare.user;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -17,36 +18,36 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import au.edu.unimelb.eldercare.R;
-import au.edu.unimelb.eldercare.user.User;
 
-public class ChangeEmailActivity extends AppCompatActivity {
+public class ChangeConnectedUserActivity extends AppCompatActivity{
 
-    TextView currentEmailAddress;
-    EditText newEmailAddress;
+    TextView currentConnectedUser;
+    EditText newConnectedUser;
     FirebaseUser user;
-    DatabaseReference mDatabase;
+    DatabaseReference mDatabaseCurrUser;
+    DatabaseReference mDatabaseUsers;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //sets correct layout file
-        setContentView(R.layout.change_email_activity);
+        setContentView(R.layout.change_connected_user_activity);
 
-        currentEmailAddress = findViewById(R.id.CurrentEmail);
-        newEmailAddress = findViewById(R.id.NewEmail);
+        currentConnectedUser = findViewById(R.id.ConnectedUser);
+        newConnectedUser = findViewById(R.id.NewConnectedUser);
 
-        //Get User and Database reference
         this.user = FirebaseAuth.getInstance().getCurrentUser();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(this.user.getUid());
+        mDatabaseCurrUser = FirebaseDatabase.getInstance().getReference().child("users").child(this.user.getUid());
+        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("users");
 
-        //Set Current Email Address
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        //Set Current Connected User Text
+        mDatabaseCurrUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //Assigns the current users email address to the TextView
+                //Assigns the current connected user display name to the TextView
                 User user = dataSnapshot.getValue(User.class);
-                String Email = user.getEmail();
-                currentEmailAddress.setText(Email);
+                String ConnectedUserID = user.getConnectedUserID();
+                currentConnectedUser.setText(ConnectedUserID);
             }
 
             @Override
@@ -56,9 +57,10 @@ public class ChangeEmailActivity extends AppCompatActivity {
         });
     }
 
-    public void updateEmailAddress(View view){
-        //Still have to make sure that the string in the EditText is an Email
-        String newEmail = newEmailAddress.getText().toString();
-        mDatabase.child("email").setValue(newEmail);
+    public void updateConnectedUser(View view){
+        String newConnectedUserEmail = newConnectedUser.getText().toString();
+
+        //Get the user based on entered email
+        mDatabaseUsers.orderByChild("email").equalTo(newConnectedUserEmail);
     }
 }

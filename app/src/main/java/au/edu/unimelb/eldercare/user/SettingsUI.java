@@ -67,4 +67,8 @@ public class SettingsUI extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void openChangeConnectedUserActivity(View view){
+        Intent intent = new Intent(SettingsUI.this, ChangeConnectedUserActivity.class);
+    }
+
 }

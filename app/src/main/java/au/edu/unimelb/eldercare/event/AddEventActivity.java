@@ -46,6 +46,8 @@ public class AddEventActivity extends AppCompatActivity {
     protected LatLng location;
     protected Calendar calendar;
     protected String confirmText = "Are you sure you want to submit this event?";
+    protected String alertTitleText = "Confirm Submit";
+    protected DatabaseReference eventRef = mDatabase.child("events").push();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,7 @@ public class AddEventActivity extends AppCompatActivity {
     }
 
     public void submitNewEvent(View view){
+    protected void submitNewEvent(View view){
         String eventName = ((EditText) findViewById(R.id.eventNameTextbox)).getText().toString();
 
         Long startingTime = Timestamp.valueOf(eventDate + " " + eventTime).getTime();
@@ -131,6 +134,7 @@ public class AddEventActivity extends AppCompatActivity {
         final View currentView = view;
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
         builder.setTitle("Confirm Submit").setMessage(confirmText);
+        builder.setTitle(alertTitleText).setMessage(confirmText);
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 submitNewEvent(currentView);
@@ -170,6 +174,7 @@ public class AddEventActivity extends AppCompatActivity {
 
     //TODO: Finish this method, fix location thing
     public Boolean someFieldMissing(){
+    protected boolean someFieldMissing(){
         this.location = location == null? new LatLng(2, 3): location;
         return false;
     }

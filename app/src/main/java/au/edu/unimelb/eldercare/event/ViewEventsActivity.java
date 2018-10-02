@@ -78,6 +78,11 @@ public class ViewEventsActivity extends AppCompatActivity {
             View changedBox = container.findViewWithTag(dataSnapshot.getKey());
             TextView eventNameText = changedBox.findViewById(R.id.eventNameText);
             eventNameText.setText(changedEvent.eventName);
+
+            viewButton = changedBox.findViewById(R.id.ViewEventButton);
+            ButtonClickListener onClickListener = getOnClickListener();
+            onClickListener.setEvent(changedEvent);
+            viewButton.setOnClickListener(onClickListener);
         }
 
         @Override
@@ -95,6 +100,7 @@ public class ViewEventsActivity extends AppCompatActivity {
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
             Log.e("EventsUI", "fail to get list of events");
+            Log.e(this.getClass().getSimpleName(), "fail to get list of events");
             finish();
         }
 

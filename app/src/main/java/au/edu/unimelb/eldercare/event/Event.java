@@ -15,11 +15,13 @@ class Event implements Parcelable{
     public Long startingTime;
     public HashMap<String, Double> location;
     public ArrayList<Integer> registeredUserId;
+    public HashMap<String, String> registeredUserId;
     public int maxUser;
     public String creator;
 
     public Event(){
         this.registeredUserId = new ArrayList<>();
+        this.registeredUserId = new HashMap<String, String>();
     }
 
     public Event(String eventName, Long startingTime, HashMap<String, Double> location){
@@ -27,14 +29,19 @@ class Event implements Parcelable{
         this.startingTime = startingTime;
         this.location = location;
         this.registeredUserId = new ArrayList<>();
+        this.registeredUserId = new HashMap<String, String>();
     }
 
     public boolean registerUser(int userId){
         return this.registeredUserId.add(userId);
+    public String registerUser(String userId, String state){
+        return this.registeredUserId.put(userId, state);
     }
 
     public boolean unregisterUser(int userId){
         return this.registeredUserId.remove(Integer.valueOf(userId));
+    public String unregisterUser(String userId){
+        return this.registeredUserId.remove(userId);
     }
 
     @SuppressLint("DefaultLocale")
@@ -55,6 +62,8 @@ class Event implements Parcelable{
         location =(HashMap<String, Double>) in.readSerializable();
         registeredUserId = new ArrayList<>();
         in.readList(registeredUserId, Integer.class.getClassLoader());
+        location = (HashMap<String, Double>) in.readSerializable();
+        registeredUserId = (HashMap<String, String>) in.readSerializable();
         maxUser = in.readInt();
         creator = in.readString();
     }
@@ -72,6 +81,7 @@ class Event implements Parcelable{
         dest.writeLong(startingTime);
         dest.writeSerializable(location);
         dest.writeList (registeredUserId);
+        dest.writeSerializable (registeredUserId);
         dest.writeInt(maxUser);
         dest.writeString(creator);
     }

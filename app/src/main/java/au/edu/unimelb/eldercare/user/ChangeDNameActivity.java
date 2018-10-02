@@ -1,7 +1,6 @@
-package au.edu.unimelb.eldercare;
+package au.edu.unimelb.eldercare.user;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +15,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import au.edu.unimelb.eldercare.R;
+import au.edu.unimelb.eldercare.user.User;
 
 public class ChangeDNameActivity extends AppCompatActivity {
 

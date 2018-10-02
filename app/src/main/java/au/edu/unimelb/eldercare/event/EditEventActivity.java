@@ -66,9 +66,6 @@ public class EditEventActivity extends AddEventActivity{
         eventRef.child("registeredUserId").addChildEventListener(childEventListener);
     }
 
-    @Override
-    public DatabaseReference getEventRef(){
-        return mDatabase.child("events").child(event.eventId).getRef();
     public class registeredUserListener implements ChildEventListener {
 
         protected Button viewButton;

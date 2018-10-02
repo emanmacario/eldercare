@@ -90,6 +90,14 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
                     //Once a user is authenticated and they don't already exist,
                     //create a new user on the database
                     writeNewUser(user.getUid(), user.getDisplayName(), user.getEmail());
+                    //Also need to select user type so go to this activity
+                    Intent intent = new Intent(MainActivity.this, SelectUserTypeActivity.class);
+                    startActivity(intent);
+                }
+                else{
+                    //User already has user type, go straight to home screen
+                    Intent intent = new Intent(MainActivity.this, HomeScreen.class);
+                    startActivity(intent);
                 }
             }
 
@@ -97,8 +105,6 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         };
         userRef.addListenerForSingleValueEvent(eventListener);
-
-        openNextActivity();
 
     }
 
@@ -119,32 +125,4 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
         mDatabase.child("users").child(userId).setValue(user);
     }
 
-
-    private void openNextActivity(){
-        //TODO: Figure out why when a user doesn't have a user type, we can't get null back
-//        DatabaseReference userTypeRef = FirebaseDatabase.getInstance().getReference().child("users").child(this.user.getUid());
-//        userTypeRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                User user = dataSnapshot.getValue(User.class);
-//                String userType = user.getUserType();
-//                if (userType.equals("Carer") || userType.equals("Dependant")){
-//                    Intent intent = new Intent(MainActivity.this, HomeScreen.class);
-//                    startActivity(intent);
-//                }
-//                else{
-//                    Intent intent = new Intent(MainActivity.this, SelectUserTypeActivity.class);
-//                    startActivity(intent);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-        //For now just open select user type screen
-        Intent intent = new Intent(MainActivity.this, SelectUserTypeActivity.class);
-        startActivity(intent);
-    }
 }

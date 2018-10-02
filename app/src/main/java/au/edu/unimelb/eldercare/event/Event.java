@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 class Event implements Parcelable{
@@ -14,13 +13,11 @@ class Event implements Parcelable{
     public String eventDescription;
     public Long startingTime;
     public HashMap<String, Double> location;
-    public ArrayList<Integer> registeredUserId;
     public HashMap<String, String> registeredUserId;
     public int maxUser;
     public String creator;
 
     public Event(){
-        this.registeredUserId = new ArrayList<>();
         this.registeredUserId = new HashMap<String, String>();
     }
 
@@ -28,18 +25,13 @@ class Event implements Parcelable{
         this.eventName = eventName;
         this.startingTime = startingTime;
         this.location = location;
-        this.registeredUserId = new ArrayList<>();
         this.registeredUserId = new HashMap<String, String>();
     }
 
-    public boolean registerUser(int userId){
-        return this.registeredUserId.add(userId);
     public String registerUser(String userId, String state){
         return this.registeredUserId.put(userId, state);
     }
 
-    public boolean unregisterUser(int userId){
-        return this.registeredUserId.remove(Integer.valueOf(userId));
     public String unregisterUser(String userId){
         return this.registeredUserId.remove(userId);
     }
@@ -48,9 +40,9 @@ class Event implements Parcelable{
     @Override
     public String toString(){
         return String.format("eventId: %s, eventName: %s, eventDescription: %s, startingTime: %d, " +
-                            "location: %s, registeredUserId: %s, maxUser: %d, creator: %s",
-                            eventId, eventName, eventDescription, startingTime, location,
-                            registeredUserId, maxUser, creator);
+                        "location: %s, registeredUserId: %s, maxUser: %d, creator: %s",
+                eventId, eventName, eventDescription, startingTime, location,
+                registeredUserId, maxUser, creator);
     }
 
     @SuppressWarnings("unchecked")
@@ -59,9 +51,6 @@ class Event implements Parcelable{
         eventName = in.readString();
         eventDescription = in.readString();
         startingTime = in.readLong();
-        location =(HashMap<String, Double>) in.readSerializable();
-        registeredUserId = new ArrayList<>();
-        in.readList(registeredUserId, Integer.class.getClassLoader());
         location = (HashMap<String, Double>) in.readSerializable();
         registeredUserId = (HashMap<String, String>) in.readSerializable();
         maxUser = in.readInt();
@@ -80,7 +69,6 @@ class Event implements Parcelable{
         dest.writeString(eventDescription);
         dest.writeLong(startingTime);
         dest.writeSerializable(location);
-        dest.writeList (registeredUserId);
         dest.writeSerializable (registeredUserId);
         dest.writeInt(maxUser);
         dest.writeString(creator);

@@ -40,9 +40,9 @@ class Event implements Parcelable{
     @Override
     public String toString(){
         return String.format("eventId: %s, eventName: %s, eventDescription: %s, startingTime: %d, " +
-                            "location: %s, registeredUserId: %s, maxUser: %d, creator: %s",
-                            eventId, eventName, eventDescription, startingTime, location,
-                            registeredUserId, maxUser, creator);
+                             "location: %s, registeredUserId: %s, maxUser: %d, creator: %s",
+                             eventId, eventName, eventDescription, startingTime, location,
+                             registeredUserId, maxUser, creator);
     }
 
     @SuppressWarnings("unchecked")

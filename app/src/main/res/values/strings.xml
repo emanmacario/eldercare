@@ -57,4 +57,5 @@
 
     <string name="current_email">Current Email Address</string>
     <string name="new_email_address">New Email Address</string>
+    <string name="user_type_question">What type of user are you?</string>
 </resources>

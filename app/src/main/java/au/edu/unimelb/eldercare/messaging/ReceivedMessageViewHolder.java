@@ -44,6 +44,7 @@ public class ReceivedMessageViewHolder extends MessageViewHolder {
             this.timeText.setText(TimeUtil.createTimeString(message.getTime()));
             messageImage.setVisibility(ImageView.GONE);
             messageText.setVisibility(TextView.VISIBLE);
+            timeText.setVisibility(TextView.VISIBLE);
 
         } else if (message.getImageUrl() != null) {
 
@@ -75,7 +76,7 @@ public class ReceivedMessageViewHolder extends MessageViewHolder {
             }
             messageImage.setVisibility(ImageView.VISIBLE);
             messageText.setVisibility(TextView.GONE);
-            timeText.setVisibility(TextView.VISIBLE);
+            timeText.setVisibility(TextView.GONE);
         }
     }
 }

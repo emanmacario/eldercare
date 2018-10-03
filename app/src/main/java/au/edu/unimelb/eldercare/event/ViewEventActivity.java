@@ -30,6 +30,9 @@ public class ViewEventActivity extends EditEventActivity {
         userRef = mDatabase.child("users").child(userId);
 
         alterActivityByUserJoinState();
+
+        //TODO: remove this after implementing map
+        findViewById(R.id.openMapButton).setVisibility(View.GONE);
     }
 
     @Override

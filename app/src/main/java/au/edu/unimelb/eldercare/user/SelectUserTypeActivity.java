@@ -2,6 +2,7 @@ package au.edu.unimelb.eldercare.user;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -10,8 +11,11 @@ import android.widget.RadioGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import au.edu.unimelb.eldercare.HomeScreen;
 import au.edu.unimelb.eldercare.R;
@@ -31,17 +35,47 @@ public class SelectUserTypeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        //sets the correct layout
         setContentView(R.layout.select_user_type_activity);
 
+        //Gets the reference for each variable
         confirmButton = findViewById(R.id.ConfirmUserTypeButton);
         UserTypeRadio = findViewById(R.id.UserTypeRadio);
         CarerRadio = findViewById(R.id.CarerUserRadio);
-        CarerRadio.setId(CarerRadioID);
         DependantRadio = findViewById(R.id.DependantUserRadio);
+        //Sets the IDs
+        CarerRadio.setId(CarerRadioID);
         DependantRadio.setId(DependantRadioID);
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        this.user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(this.user.getUid());
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //Gets the user object of the current user
+                User user = dataSnapshot.getValue(User.class);
+                //Set the userType of the user object from the value in the database
+                user.setUserType(dataSnapshot.child("userType").getValue(String.class));
+
+                //If there already exists a user type, make sure that radio button is selected
+                switch (user.getUserType()){
+                    case "Dependant":
+                        DependantRadio.toggle();
+                        break;
+                    case "Carer":
+                        CarerRadio.toggle();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void openHomeScreen(View view){

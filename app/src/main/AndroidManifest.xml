@@ -103,6 +103,10 @@
             android:name=".user.SelectUserTypeActivity"
             android:label="Select User Type"/>
 
+        <activity
+            android:name=".user.ChangeConnectedUserActivity"
+            android:label="Change Connected User"/>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

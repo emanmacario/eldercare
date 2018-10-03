@@ -20,6 +20,8 @@ import au.edu.unimelb.eldercare.R;
 public class SettingsUI extends AppCompatActivity {
 
     private TextView currentDisplayName;
+    private TextView currentEmailAddress;
+    private TextView currentConnectedUser;
 
 
     private FirebaseUser user;
@@ -35,6 +37,8 @@ public class SettingsUI extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(this.user.getUid());
 
         currentDisplayName = findViewById(R.id.currentDisplayName);
+        currentEmailAddress = findViewById(R.id.CurrentEmailAddress);
+        currentConnectedUser = findViewById(R.id.currentConnectedUser);
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -43,6 +47,12 @@ public class SettingsUI extends AppCompatActivity {
                 User user = dataSnapshot.getValue(User.class);
                 String dName = user.getDisplayName();
                 currentDisplayName.setText(dName);
+
+                String email = user.getEmail();
+                currentEmailAddress.setText(email);
+
+                String connectedUser = user.getConnectedUserID();
+                currentConnectedUser.setText(connectedUser);
             }
 
             @Override
@@ -69,6 +79,7 @@ public class SettingsUI extends AppCompatActivity {
 
     public void openChangeConnectedUserActivity(View view){
         Intent intent = new Intent(SettingsUI.this, ChangeConnectedUserActivity.class);
+        startActivity(intent);
     }
 
 }

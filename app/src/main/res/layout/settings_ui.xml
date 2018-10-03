@@ -249,7 +249,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:onClick="openChangeDNameActivity"
+                    android:onClick="openChangeConnectedUserActivity"
                     android:text="Change Connected User"
                     android:background="@color/ReseneNeptune"
                     android:paddingLeft="5dp"

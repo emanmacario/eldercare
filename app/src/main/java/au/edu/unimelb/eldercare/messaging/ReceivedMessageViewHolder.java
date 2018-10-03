@@ -38,10 +38,13 @@ public class ReceivedMessageViewHolder extends MessageViewHolder {
     @Override
     public void bind(Message message) {
 
+        this.nameText.setText(message.getSenderDisplayName());
+        this.timeText.setText(TimeUtil.createTimeString(message.getTime()));
+        this.nameText.setVisibility(TextView.VISIBLE);
+
         if (message.getText() != null) {
 
             this.messageText.setText(message.getText());
-            this.timeText.setText(TimeUtil.createTimeString(message.getTime()));
             messageImage.setVisibility(ImageView.GONE);
             messageText.setVisibility(TextView.VISIBLE);
             timeText.setVisibility(TextView.VISIBLE);

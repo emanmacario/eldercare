@@ -1,9 +1,11 @@
-package au.edu.unimelb.eldercare;
+package au.edu.unimelb.eldercare.user;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
+import au.edu.unimelb.eldercare.R;
 import au.edu.unimelb.eldercare.usersearch.SearchAdaptor;
 
 public class UserSearchUI extends AppCompatActivity {

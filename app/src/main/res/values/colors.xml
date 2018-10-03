@@ -3,4 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="ReseneNeptune">#77A8AB</color>
+    <color name="ReseneAstra">#EDD5A6</color>
+    <color name="LightGrey">#DDDDDD</color>
 </resources>

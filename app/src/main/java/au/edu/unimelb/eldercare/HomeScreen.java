@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import au.edu.unimelb.eldercare.event.EventsUI;
+import au.edu.unimelb.eldercare.user.SettingsUI;
+import au.edu.unimelb.eldercare.user.UserProfileUI;
+import au.edu.unimelb.eldercare.user.UserSearchUI;
 
 public class HomeScreen extends AppCompatActivity {
 

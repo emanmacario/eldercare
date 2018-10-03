@@ -44,8 +44,8 @@ class Event implements Parcelable{
         return String.format("eventId: %s, eventName: %s, eventDescription: %s, startingTime: %d, " +
                             "locationName: %s, location: %s, registeredUserId: %s, maxUser: %d, " +
                             "creator: %s",
-                            eventId, eventName, eventDescription, startingTime, location,
-                            registeredUserId, maxUser, creator);
+                            eventId, eventName, eventDescription, startingTime, locationName,
+                            location, registeredUserId, maxUser, creator);
     }
 
     @SuppressWarnings("unchecked")

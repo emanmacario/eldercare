@@ -8,6 +8,7 @@ public class User {
     private String email;
     private String userType;
     private String connectedUserID;
+    private String userBio;
     private HashMap<String, String> registeredEventId;
 
     public User(){
@@ -19,6 +20,7 @@ public class User {
         this.email = email;
         this.userType = userType;
         this.connectedUserID = connectedUserID;
+        this.userBio = " ";
     }
 
     public String getDisplayName() {
@@ -64,5 +66,13 @@ public class User {
 
     public void setConnectedUserID(String connectedUserID) {
         this.connectedUserID = connectedUserID;
+    }
+
+    public String getUserBio() {
+        return userBio;
+    }
+
+    public void setUserBio(String userBio) {
+        this.userBio = userBio;
     }
 }

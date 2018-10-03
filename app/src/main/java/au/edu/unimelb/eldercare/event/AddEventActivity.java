@@ -78,7 +78,7 @@ public class AddEventActivity extends AppCompatActivity {
         findViewById(R.id.openMapButton).setVisibility(View.GONE);
     }
 
-    protected void submitNewEvent(View view) {
+    protected void submitNewEvent(View view){
         String eventName = ((EditText) findViewById(R.id.eventNameTextbox)).getText().toString();
 
         Long startingTime = Timestamp.valueOf(eventDate + " " + eventTime).getTime();
@@ -89,12 +89,10 @@ public class AddEventActivity extends AppCompatActivity {
 
         Event newEvent = new Event(eventName, startingTime, eventLocation);
 
-        DatabaseReference eventRef = getEventRef();
-
         newEvent.eventId = eventRef.getKey();
         newEvent.startingTime = startingTime;
         newEvent.eventDescription = ((EditText) findViewById(R.id.eventDescriptionTextbox)).getText().toString();
-        newEvent.maxUser = Integer.parseInt(((EditText) findViewById(R.id.maxUserTextbox)).getText().toString());
+        newEvent.maxUser = Integer.parseInt( ( (EditText) findViewById(R.id.maxUserTextbox) ).getText().toString() );
         newEvent.creator = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         eventRef.setValue(newEvent);
@@ -102,7 +100,7 @@ public class AddEventActivity extends AppCompatActivity {
         finish();
     }
 
-    public void onClickDate(View view) {
+    public void onClickDate(View view){
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -114,7 +112,7 @@ public class AddEventActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    public void onClickTime(View view) {
+    public void onClickTime(View view){
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hour, int minute) {
@@ -126,13 +124,12 @@ public class AddEventActivity extends AppCompatActivity {
         timePickerDialog.show();
     }
 
-    public void onClickSubmit(View view) {
-        if (someFieldMissing()) {
+    public void onClickSubmit(View view){
+        if(someFieldMissing()){
             return;
         }
         final View currentView = view;
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-        builder.setTitle("Confirm Submit").setMessage(confirmText);
         builder.setTitle(alertTitleText).setMessage(confirmText);
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
@@ -140,8 +137,7 @@ public class AddEventActivity extends AppCompatActivity {
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-            }
+            public void onClick(DialogInterface dialog, int which) {}
         });
         builder.show();
     }
@@ -153,19 +149,15 @@ public class AddEventActivity extends AppCompatActivity {
         startActivityForResult(placePickerIntent, PLACE_PICKER_REQUEST);
     }
 
-    public DatabaseReference getEventRef() {
-        return mDatabase.child("events").push();
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_PICKER_REQUEST) {
-            if (resultCode == RESULT_OK) {
+            if(resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(this, data);
                 TextView locationText = findViewById(R.id.selectedLocation);
                 locationText.setText(place.getName());
                 location = place.getLatLng();
-            } else {
+            }else{
                 Log.d("place picker", "no api");
                 location = new LatLng(2, 3);
             }
@@ -173,8 +165,8 @@ public class AddEventActivity extends AppCompatActivity {
     }
 
     //TODO: Finish this method, fix location thing
-    protected boolean someFieldMissing() {
-        this.location = location == null ? new LatLng(2, 3) : location;
+    protected boolean someFieldMissing(){
+        this.location = location == null? new LatLng(2, 3): location;
         return false;
     }
 }

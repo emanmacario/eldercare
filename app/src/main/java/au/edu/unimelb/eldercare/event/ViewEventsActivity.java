@@ -99,7 +99,6 @@ public class ViewEventsActivity extends AppCompatActivity {
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
-            Log.e("EventsUI", "fail to get list of events");
             Log.e(this.getClass().getSimpleName(), "fail to get list of events");
             finish();
         }

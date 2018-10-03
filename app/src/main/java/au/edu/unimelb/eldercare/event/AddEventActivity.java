@@ -22,6 +22,7 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -38,12 +39,18 @@ public class AddEventActivity extends AppCompatActivity {
     private int currentMonth;
     private int currentDay;
     private int currentHour;
+    protected EditText eventNameTextbox;
+    protected EditText eventDescriptionTextbox;
+    protected EditText maxUserTextbox;
     protected Button dateButton;
     protected Button timeButton;
     protected String eventDate;
     protected String eventTime;
     final protected int PLACE_PICKER_REQUEST = 1;
+    protected String locationName;
     protected LatLng location;
+    protected LatLngBounds openLocation = null;
+    protected TextView locationText;
     protected Calendar calendar;
     protected String confirmText = "Are you sure you want to submit this event?";
     protected String alertTitleText = "Confirm Submit";
@@ -54,6 +61,11 @@ public class AddEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         setContentView(R.layout.add_event_ui);
+
+
+        eventNameTextbox = findViewById(R.id.eventNameTextbox);
+        eventDescriptionTextbox = findViewById(R.id.eventDescriptionTextbox);
+        maxUserTextbox = findViewById(R.id.maxUserTextbox);
 
         calendar = Calendar.getInstance();
         currentYear = calendar.get(Calendar.YEAR);
@@ -68,18 +80,15 @@ public class AddEventActivity extends AppCompatActivity {
         dateButton.setText(currentDate);
         timeButton.setText(currentTime);
 
+        locationText = findViewById(R.id.selectedLocation);
+
         //eventDate and eventTime must be in yyyy-mm-dd hh:mm:ss
         eventDate = currentDate;
         eventTime = currentTime + ":00";
-
-        //TODO: remove these thing after fixing placePicker API
-        findViewById(R.id.location).setVisibility(View.GONE);
-        findViewById(R.id.selectedLocation).setVisibility(View.GONE);
-        findViewById(R.id.openMapButton).setVisibility(View.GONE);
     }
 
     protected void submitNewEvent(View view){
-        String eventName = ((EditText) findViewById(R.id.eventNameTextbox)).getText().toString();
+        String eventName = eventNameTextbox.getText().toString();
 
         Long startingTime = Timestamp.valueOf(eventDate + " " + eventTime).getTime();
 
@@ -91,9 +100,10 @@ public class AddEventActivity extends AppCompatActivity {
 
         newEvent.eventId = eventRef.getKey();
         newEvent.startingTime = startingTime;
-        newEvent.eventDescription = ((EditText) findViewById(R.id.eventDescriptionTextbox)).getText().toString();
-        newEvent.maxUser = Integer.parseInt( ( (EditText) findViewById(R.id.maxUserTextbox) ).getText().toString() );
+        newEvent.eventDescription = eventDescriptionTextbox.getText().toString();
+        newEvent.maxUser = Integer.parseInt(maxUserTextbox.getText().toString());
         newEvent.creator = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        newEvent.locationName = locationName;
 
         eventRef.setValue(newEvent);
 
@@ -144,6 +154,7 @@ public class AddEventActivity extends AppCompatActivity {
 
     public void onClickLocation(View view) throws GooglePlayServicesNotAvailableException, GooglePlayServicesRepairableException {
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+        builder.setLatLngBounds(openLocation);
         Intent placePickerIntent = builder.build(this);
         placePickerIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivityForResult(placePickerIntent, PLACE_PICKER_REQUEST);
@@ -154,19 +165,32 @@ public class AddEventActivity extends AppCompatActivity {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if(resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(this, data);
-                TextView locationText = findViewById(R.id.selectedLocation);
-                locationText.setText(place.getName());
+                locationName = place.getName().toString();
+                locationText.setText(locationName);
                 location = place.getLatLng();
-            }else{
-                Log.d("place picker", "no api");
-                location = new LatLng(2, 3);
             }
         }
     }
 
-    //TODO: Finish this method, fix location thing
+    //TODO: add warning text tell user to fill the form
     protected boolean someFieldMissing(){
-        this.location = location == null? new LatLng(2, 3): location;
-        return false;
+        boolean isMissing = false;
+        if (isEmptyField(eventNameTextbox)) {
+            isMissing = true;
+        }
+        if (isEmptyField(eventDescriptionTextbox)) {
+            isMissing = true;
+        }
+        if (location == null) {
+            isMissing = true;
+        }
+        if (isEmptyField(maxUserTextbox)) {
+            isMissing = true;
+        }
+        return isMissing;
+    }
+
+    private boolean isEmptyField(EditText editText){
+        return editText.getText().toString().equals("");
     }
 }

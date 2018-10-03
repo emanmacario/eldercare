@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,9 +27,6 @@ public class EditEventActivity extends AddEventActivity{
     protected Event event;
 
     protected TextView addEventText;
-    protected EditText eventNameTextbox;
-    protected EditText eventDescriptionTextbox;
-    protected EditText maxUserTextbox;
     protected Button submitEventButton;
 
     protected ChildEventListener childEventListener = new registeredUserListener();
@@ -42,11 +41,6 @@ public class EditEventActivity extends AddEventActivity{
         Timestamp eventTime = new Timestamp(event.startingTime);
 
         addEventText = findViewById(R.id.addEventText);
-        eventNameTextbox = findViewById(R.id.eventNameTextbox);
-        eventDescriptionTextbox = findViewById(R.id.eventDescriptionTextbox);
-        dateButton = findViewById(R.id.dateButton);
-        timeButton = findViewById(R.id.timeButton);
-        maxUserTextbox = findViewById(R.id.maxUserTextbox);
         submitEventButton = findViewById(R.id.submitEventButton);
 
         addEventText.setText("EDIT EVENT");
@@ -54,9 +48,14 @@ public class EditEventActivity extends AddEventActivity{
         eventDescriptionTextbox.setText(event.eventDescription);
         dateButton.setText((new SimpleDateFormat("yyyy-MM-dd")).format(eventTime));
         timeButton.setText((new SimpleDateFormat("hh:mm")).format(eventTime));
-        //location.setText //TODO: fix location stuff
+        locationText.setText(event.locationName);
         maxUserTextbox.setText(String.valueOf(event.maxUser));
         submitEventButton.setText("Edit");
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(new LatLng(event.location.get("latitude"), event.location.get("longitude")));
+
+        openLocation = builder.build();
 
         alertTitleText = "Confirm Edit";
         confirmText = "Are you sure you want to edit this event?";
@@ -67,9 +66,6 @@ public class EditEventActivity extends AddEventActivity{
     }
 
     public class registeredUserListener implements ChildEventListener {
-
-        protected Button viewButton;
-
         @Override
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             String registerState = dataSnapshot.getValue(String.class);

@@ -1,6 +1,7 @@
 package au.edu.unimelb.eldercare;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
@@ -24,8 +25,19 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import au.edu.unimelb.eldercare.devicesharing.LocationGrabber;
+import au.edu.unimelb.eldercare.user.User;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -46,6 +58,34 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
+            if(userTracking){
+                mDatabase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        //Get the user object of logged in user
+                        User user = dataSnapshot.getValue(User.class);
+
+                        //Get the connected users email
+                        String ConnectedUsersEmail = user.getConnectedUserID();
+
+                        //Get the connected users location
+                        locationGrabber.setConnectedUsersLocation(ConnectedUsersEmail);
+                        LatLng ConnectedUserLocation = locationGrabber.getLocation();
+
+
+                        //Place a marker on the map at the connected user's location
+                        mMap.addMarker(new MarkerOptions().position(ConnectedUserLocation).title("Hello World"));
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
+            }
         }
     }
 
@@ -61,12 +101,27 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
+    //Firebase
+    private FirebaseUser user;
+    private DatabaseReference mDatabase;
+
+    //User Tracking
+    private LocationGrabber locationGrabber;
+    private Boolean userTracking;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
         getLocationPermission();
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(this.user.getUid());
+
+        //TODO: Add a toggle button
+        userTracking = true;
+        locationGrabber = new LocationGrabber();
     }
 
     private void getDeviceLocation(){
@@ -158,6 +213,4 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         }
     }
-
-
 }

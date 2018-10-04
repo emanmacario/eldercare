@@ -115,6 +115,10 @@
             android:name=".user.ChangeConnectedUserActivity"
             android:label="Change Connected User"/>
 
+        <activity
+            android:name=".user.ChangeUserBioActivity"
+            android:label="Change User Bio"/>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

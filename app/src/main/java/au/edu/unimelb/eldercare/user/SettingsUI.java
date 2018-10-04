@@ -38,7 +38,7 @@ public class SettingsUI extends AppCompatActivity {
 
         currentDisplayName = findViewById(R.id.currentDisplayName);
         currentEmailAddress = findViewById(R.id.CurrentEmailAddress);
-        currentConnectedUser = findViewById(R.id.currentConnectedUser);
+        currentConnectedUser = findViewById(R.id.CurrentConnectedUserSettings);
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -79,6 +79,11 @@ public class SettingsUI extends AppCompatActivity {
 
     public void openChangeConnectedUserActivity(View view){
         Intent intent = new Intent(SettingsUI.this, ChangeConnectedUserActivity.class);
+        startActivity(intent);
+    }
+
+    public void openChangeUserBioActivity(View view){
+        Intent intent = new Intent(SettingsUI.this, ChangeUserBioActivity.class);
         startActivity(intent);
     }
 

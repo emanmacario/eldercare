@@ -84,8 +84,8 @@ public class ChangeConnectedUserActivity extends AppCompatActivity{
                 //Gets the user object associated with the email
                 User user = dataSnapshot.getValue(User.class);
                 //Grabs the display name and sets that as the connected user in the current users database reference
-                String ConnectedUserName = user.getDisplayName();
-                mDatabaseCurrUser.child("ConnectedUser").setValue(ConnectedUserName);
+                String ConnectedUserEmail = user.getEmail();
+                mDatabaseCurrUser.child("ConnectedUser").setValue(ConnectedUserEmail);
             }
 
             @Override

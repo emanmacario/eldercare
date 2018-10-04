@@ -49,7 +49,8 @@
                 android:id="@+id/UserAboutButton"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:text="@string/UserAboutButton" />
+                android:text="@string/UserAboutButton"
+                android:onClick="openAboutActivity"/>
 
             <Space
                 android:layout_width="5dp"

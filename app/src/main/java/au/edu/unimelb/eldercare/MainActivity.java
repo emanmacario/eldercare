@@ -141,6 +141,23 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
         mDatabase.child("users").child(userId).setValue(user);
     }
 
+    @Override
+    public void authenticationFailed(IdpResponse response) {
+        AuthenticationService.getAuthenticationService().startAuthentication(this);
+    }
+
+
+    /**
+     * Function creates a new User and creates the user on the realtime database
+     * @param userId
+     * @param name
+     * @param email
+     */
+    private void writeNewUser(String userId, String name, String email){
+        User user = new User(name, email, "", "");
+        mDatabase.child("users").child(userId).setValue(user);
+    }
+
     //google maps implementation
 
     private void init(){

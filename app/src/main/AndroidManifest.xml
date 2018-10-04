@@ -87,6 +87,25 @@
         </activity>
 
         <activity
+        </activity>
+
+        <activity
+            android:name=".event.EventsUI"
+            android:label="Events">
+        </activity>
+
+        <activity
+            android:name=".event.AddEventActivity"
+            android:label="Add Event">
+        </activity>
+
+        <activity
+            android:name=".event.ViewEventsActivity"
+            android:label="View Events">
+        </activity>
+
+        <activity
+>>>>>>> master
             android:name=".event.ViewEventActivity"
             android:label="View Event">
         </activity>
@@ -129,6 +148,10 @@
         <activity
             android:name=".user.ChangeUserBioActivity"
             android:label="Change User Bio"/>
+
+        <activity
+            android:name=".user.AboutActivity"
+            android:label="About Page"/>
 
         <meta-data
             android:name="preloaded_fonts"

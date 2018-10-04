@@ -10,6 +10,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -46,13 +47,7 @@ public class TraceLocationService {
                 if (locationResult == null) {
                     return;
                 }
-                Location location = locationResult.getLastLocation();
-                HashMap<String, Double> locationMap = new HashMap<>();
-                locationMap.put("latitude", location.getLatitude());
-                locationMap.put("longitude", location.getLongitude());
-
-                databaseUserLocationReference.setValue(locationMap);
-                Log.d(this.getClass().getSimpleName(), "updating DB");
+                uploadLocation(locationResult.getLastLocation());
             };
         };
     }
@@ -65,13 +60,33 @@ public class TraceLocationService {
     }
 
     public void startTracing(Context context){
-        restartTracing(context);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+
+        try {
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location != null) {
+                                uploadLocation(location);
+                            }else{
+                                Log.d(this.getClass().getSimpleName(), "no location!! make a fake one");
+                                location = new Location("");
+                                location.setLatitude(3);
+                                location.setLongitude(5);
+                                uploadLocation(location);
+                            }
+                        }
+                    });
+        } catch (SecurityException e){
+            Log.e(this.getClass().getSimpleName(), "permission plz");
+        }
+
+        restartTracing();
     }
 
 
 
-    public void restartTracing(Context context){
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+    public void restartTracing(){
         try{
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
             Log.d(this.getClass().getSimpleName(), "requesting update");
@@ -84,4 +99,14 @@ public class TraceLocationService {
         mFusedLocationClient.removeLocationUpdates(mLocationCallback);
     }
 
+
+    //should be private
+    public void uploadLocation(Location location){
+        HashMap<String, Double> locationMap = new HashMap<>();
+        locationMap.put("latitude", location.getLatitude());
+        locationMap.put("longitude", location.getLongitude());
+
+        databaseUserLocationReference.setValue(locationMap);
+        Log.d(this.getClass().getSimpleName(), "updating DB");
+    }
 }

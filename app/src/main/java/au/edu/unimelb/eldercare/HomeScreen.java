@@ -1,6 +1,7 @@
 package au.edu.unimelb.eldercare;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -63,6 +64,13 @@ public class HomeScreen extends AppCompatActivity {
     //TODO: remove this before merge with master
     //start tracing
     public void onClickMap(View view){
+
+        Location location = new Location("");
+        location.setLatitude(7);
+        location.setLongitude(11);
+        TraceLocationService.getTraceLocationService().uploadLocation(location);
+        Log.d(this.getClass().getSimpleName(), "create fake location for debug");
+
         TraceLocationService.getTraceLocationService().startTracing(this);
         Log.d(this.getClass().getSimpleName(), "start trace");
     }

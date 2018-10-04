@@ -1,6 +1,9 @@
-package au.edu.unimelb.eldercare;
+package au.edu.unimelb.eldercare.messaging;
 
-
+/**
+ * The Message class, which is used for
+ * communication between two or more users
+ */
 public class Message {
 
     private String id;

@@ -28,6 +28,13 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
 
+        <ImageButton
+            android:id="@+id/button_image_add"
+            android:layout_width="64dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            app:srcCompat="@android:drawable/ic_menu_gallery" />
+
         <EditText
             android:id="@+id/edittext_chatbox"
             android:layout_width="235dp"

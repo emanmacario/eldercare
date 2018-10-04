@@ -12,6 +12,7 @@ class Event implements Parcelable{
     public String eventName;
     public String eventDescription;
     public Long startingTime;
+    public String locationName;
     public HashMap<String, Double> location;
     public HashMap<String, String> registeredUserId;
     public int maxUser;
@@ -36,13 +37,15 @@ class Event implements Parcelable{
         return this.registeredUserId.remove(userId);
     }
 
+    //for debug only
     @SuppressLint("DefaultLocale")
     @Override
     public String toString(){
         return String.format("eventId: %s, eventName: %s, eventDescription: %s, startingTime: %d, " +
-                             "location: %s, registeredUserId: %s, maxUser: %d, creator: %s",
-                             eventId, eventName, eventDescription, startingTime, location,
-                             registeredUserId, maxUser, creator);
+                            "locationName: %s, location: %s, registeredUserId: %s, maxUser: %d, " +
+                            "creator: %s",
+                            eventId, eventName, eventDescription, startingTime, locationName,
+                            location, registeredUserId, maxUser, creator);
     }
 
     @SuppressWarnings("unchecked")
@@ -51,6 +54,7 @@ class Event implements Parcelable{
         eventName = in.readString();
         eventDescription = in.readString();
         startingTime = in.readLong();
+        locationName = in.readString();
         location = (HashMap<String, Double>) in.readSerializable();
         registeredUserId = (HashMap<String, String>) in.readSerializable();
         maxUser = in.readInt();
@@ -68,6 +72,7 @@ class Event implements Parcelable{
         dest.writeString(eventName);
         dest.writeString(eventDescription);
         dest.writeLong(startingTime);
+        dest.writeString(locationName);
         dest.writeSerializable(location);
         dest.writeSerializable (registeredUserId);
         dest.writeInt(maxUser);

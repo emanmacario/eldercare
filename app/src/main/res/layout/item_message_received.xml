@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="8dp">
@@ -19,10 +20,10 @@
         android:id="@+id/text_message_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:text="Emmanuel Macario"
-        android:textSize="12sp"
+        android:textSize="14sp"
         app:layout_constraintLeft_toRightOf="@+id/image_message_profile"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -50,5 +51,18 @@
         app:layout_constraintLeft_toRightOf="@+id/text_message_body"
         android:layout_marginStart="4dp"
         app:layout_constraintBottom_toBottomOf="@+id/text_message_body" />
+
+
+    <ImageView
+        android:id="@+id/image_message_view"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:adjustViewBounds="true"
+        android:maxWidth="240dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toEndOf="@+id/image_message_profile"
+        app:layout_constraintTop_toBottomOf="@+id/text_message_name" />
 
 </android.support.constraint.ConstraintLayout>

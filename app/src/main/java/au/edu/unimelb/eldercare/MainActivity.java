@@ -10,6 +10,9 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import au.edu.unimelb.eldercare.service.AuthenticationListener;
 import au.edu.unimelb.eldercare.service.AuthenticationService;
+import au.edu.unimelb.eldercare.user.SelectUserTypeActivity;
+import au.edu.unimelb.eldercare.user.User;
+
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -87,6 +90,14 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
                     //Once a user is authenticated and they don't already exist,
                     //create a new user on the database
                     writeNewUser(user.getUid(), user.getDisplayName(), user.getEmail());
+                    //Also need to select user type so go to this activity
+                    Intent intent = new Intent(MainActivity.this, SelectUserTypeActivity.class);
+                    startActivity(intent);
+                }
+                else{
+                    //User already has user type, go straight to home screen
+                    Intent intent = new Intent(MainActivity.this, HomeScreen.class);
+                    startActivity(intent);
                 }
             }
 
@@ -95,10 +106,6 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
         };
         userRef.addListenerForSingleValueEvent(eventListener);
 
-
-        //Open Home Screen once user is authenticated and logged in
-        Intent intent = new Intent(MainActivity.this, HomeScreen.class);
-        startActivity(intent);
     }
 
     @Override
@@ -114,8 +121,7 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
      * @param email
      */
     private void writeNewUser(String userId, String name, String email){
-        User user = new User(name, email);
-
+        User user = new User(name, email, "", "");
         mDatabase.child("users").child(userId).setValue(user);
     }
 

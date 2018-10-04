@@ -4,23 +4,21 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateUtils;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
@@ -30,12 +28,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.util.Date;
+import au.edu.unimelb.eldercare.helpers.TimeUtil;
+import au.edu.unimelb.eldercare.messaging.Message;
+import au.edu.unimelb.eldercare.messaging.MessageViewHolder;
+import au.edu.unimelb.eldercare.messaging.ReceivedMessageViewHolder;
+import au.edu.unimelb.eldercare.messaging.SentMessageViewHolder;
 
 public class MessagingActivity extends AppCompatActivity {
 
@@ -43,8 +47,10 @@ public class MessagingActivity extends AppCompatActivity {
     private static final String TAG = "MessagingActivity";
     private static final String MESSAGES_CHILD = "messages";
     private static final String ANONYMOUS_NAME = "anonymous";
+    private static final String LOADING_IMAGE_URL = "gs://comp30022colombia.appspot.com/spinningwheel.gif";
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
+    private static final int REQUEST_IMAGE = 3;
 
     // Firebase instance variables
     private DatabaseReference mDatabaseReference;
@@ -52,65 +58,17 @@ public class MessagingActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 
-    // Instance variables
+    // User instance variables
     private String mUsername;
     private String mPhotoUrl;
 
+    // UI instance variables
     private Button mSendButton;
+    private ImageButton mAddImageButton;
     private RecyclerView mMessageRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
-    private EditText mMessageEditText;
-    private ImageView mAddMessageImageView;
+    private EditText mMessageEditText;;
 
-    public abstract static class MessageViewHolder extends RecyclerView.ViewHolder {
-
-        public abstract void bind(Message message);
-
-        public MessageViewHolder(View view) {
-            super(view);
-        }
-    }
-
-    public static class SentMessageViewHolder extends MessageViewHolder {
-
-        TextView messageText;
-        TextView timeText;
-
-        public SentMessageViewHolder(View view) {
-            super(view);
-            this.messageText = (TextView) view.findViewById(R.id.text_message_body);
-            this.timeText = (TextView) view.findViewById(R.id.text_message_time);
-        }
-
-        @Override
-        public void bind(Message message) {
-            this.messageText.setText(message.getText());
-            this.timeText.setText(createTimeString(message.getTime()));
-        }
-    }
-
-    public static class ReceivedMessageViewHolder extends MessageViewHolder {
-
-        TextView messageText;
-        TextView timeText;
-        TextView nameText;
-        ImageView profileImage;
-
-        public ReceivedMessageViewHolder(View view) {
-            super(view);
-            this.messageText = (TextView) view.findViewById(R.id.text_message_body);
-            this.timeText = (TextView) view.findViewById(R.id.text_message_time);
-            this.nameText = (TextView) view.findViewById(R.id.text_message_name);
-            this.profileImage = (ImageView) view.findViewById(R.id.image_message_profile);
-        }
-
-        @Override
-        public void bind(Message message) {
-            this.messageText.setText(message.getText());
-            this.nameText.setText(message.getSenderDisplayName());
-            this.timeText.setText(createTimeString(message.getTime()));
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,6 +129,17 @@ public class MessagingActivity extends AppCompatActivity {
             }
         });
 
+        mAddImageButton = (ImageButton) findViewById(R.id.button_image_add);
+        mAddImageButton.setOnClickListener(new ImageButton.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("image/*");
+                startActivityForResult(intent, REQUEST_IMAGE);
+            }
+        });
+
         // Create a parser to parse new messages in the database into a Message object
         SnapshotParser<Message> parser = new SnapshotParser<Message>() {
             @NonNull
@@ -213,13 +182,13 @@ public class MessagingActivity extends AppCompatActivity {
             @Override
             public void onBindViewHolder(@NonNull MessageViewHolder holder, int position,
                                          @NonNull Message message) {
-                Log.d(TAG, "onCreateViewHolder called");
+                Log.d(TAG, "onBindViewHolder called");
                 holder.bind(message);
             }
 
             @Override
             public void onDataChanged() {
-                Log.d(TAG, "Child added to 'Messages");
+                Log.d(TAG, "Child added to 'messages'");
             }
 
             @Override
@@ -260,7 +229,7 @@ public class MessagingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Get user's input text message and current time in UNIX time
                 String text = mMessageEditText.getText().toString();
-                long time = System.currentTimeMillis() / 1000L;
+                long time = TimeUtil.getCurrentTime();
 
                 // Create the message and push it to the database
                 Message message = new Message(mFirebaseUser.getUid(), mUsername, text, null, mPhotoUrl, time);
@@ -272,10 +241,45 @@ public class MessagingActivity extends AppCompatActivity {
         });
     }
 
-    // TODO: Complete this method in next iteration to send images
-    private void storeImage(final StorageReference storageReference, Uri uri, final String key) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
 
-        // Create new task to aynchronously upload from content URI to this storage reference
+        if (requestCode == REQUEST_IMAGE) {
+            if (resultCode == RESULT_OK) {
+                if (data != null) {
+                    final Uri uri = data.getData();
+                    Message tempMessage =
+                            new Message(mFirebaseUser.getUid(), mUsername, null, LOADING_IMAGE_URL,
+                                    mPhotoUrl, TimeUtil.getCurrentTime());
+
+                    mDatabaseReference.child(MESSAGES_CHILD).push()
+                            .setValue(tempMessage, new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(@Nullable DatabaseError databaseError,
+                                                       @NonNull DatabaseReference databaseReference) {
+                                    if (databaseError == null) {
+                                        String key = databaseReference.getKey();
+                                        StorageReference storageReference =
+                                                FirebaseStorage.getInstance()
+                                                        .getReference(mFirebaseUser.getUid())
+                                                        .child(key)
+                                                        .child(uri.getLastPathSegment());
+                                        storeImage(storageReference, uri, key);
+                                    } else {
+                                        Log.w(TAG, "Unable to write temporary message to database",
+                                                databaseError.toException());
+                                    }
+                                }
+                            });
+                }
+            }
+        }
+    }
+
+    private void storeImage(final StorageReference storageReference, Uri uri, final String key) {
+        // Create new task to asynchronously upload from content URI to this storage reference
         UploadTask uploadTask = storageReference.putFile(uri);
 
         Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
@@ -283,7 +287,9 @@ public class MessagingActivity extends AppCompatActivity {
             public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                 if (!task.isSuccessful()) {
                     Log.w(TAG, "Could not get download URL");
-                    throw task.getException();
+                    if (task.getException() != null) {
+                        throw task.getException();
+                    }
                 }
                 // Continue with the task to get the download URL
                 return storageReference.getDownloadUrl();
@@ -293,7 +299,10 @@ public class MessagingActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
-                    Message message = new Message(); // TODO: Complete proper message object instantiation
+                    Message message =
+                            new Message(mFirebaseUser.getUid(), mFirebaseUser.getDisplayName(),
+                                    null, downloadUri.toString(), mPhotoUrl,
+                                    TimeUtil.getCurrentTime());
                     mDatabaseReference.child(MESSAGES_CHILD).child(key).setValue(message);
                 } else {
                     Log.w(TAG, "Image upload task was not successful", task.getException());
@@ -328,19 +337,5 @@ public class MessagingActivity extends AppCompatActivity {
         Log.d(TAG, "Started listening");
         mFirebaseAdapter.startListening();
         super.onResume();
-    }
-
-    // TODO: Refactor this and store in a utility sub-package
-    private static String createTimeString(long time) {
-        String timeString;
-        time *= 1000L;
-        Date date = new Date(time);
-
-        if (DateUtils.isToday(time)) {
-            timeString = "Today\n" + DateFormat.format("h:mm a", date).toString();
-        } else {
-            timeString = DateFormat.format("dd/MM/yy\nhh:mm a", date).toString();
-        }
-        return timeString;
     }
 }

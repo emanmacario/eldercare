@@ -1,5 +1,7 @@
 package au.edu.unimelb.eldercare.user;
 
+import android.content.Intent;
+
 import java.util.HashMap;
 
 public class User {
@@ -9,6 +11,8 @@ public class User {
     private String userType;
     private String connectedUserID;
     private String userBio;
+    private double latitude;
+    private double longitude;
     private HashMap<String, String> registeredEventId;
 
     public User(){
@@ -21,6 +25,8 @@ public class User {
         this.userType = userType;
         this.connectedUserID = connectedUserID;
         this.userBio = " ";
+        this.latitude = 0;
+        this.longitude = 0;
     }
 
     public String getDisplayName() {
@@ -74,5 +80,21 @@ public class User {
 
     public void setUserBio(String userBio) {
         this.userBio = userBio;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Integer latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Integer longitude) {
+        this.longitude = longitude;
     }
 }

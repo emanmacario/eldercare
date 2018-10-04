@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,6 +42,15 @@ public class ChangeUserBioActivity extends AppCompatActivity {
 
     public void updateUserBio(View view){
         String newUserBioString = newUserBio.getText().toString();
+
+        //Check that bio is less than 200 characters
+        int userBioLength = newUserBioString.length();
+        if(userBioLength > 200){
+            Toast toast = Toast.makeText(ChangeUserBioActivity.this, "User Bio too long", Toast.LENGTH_LONG);
+            toast.show();
+            return;
+        }
+        //If length is <=200, set on database
         mDatabase.child("userBio").setValue(newUserBioString);
 
         //Send user to profile to see the new bio

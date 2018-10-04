@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,6 +19,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import au.edu.unimelb.eldercare.R;
 import au.edu.unimelb.eldercare.user.User;
+import au.edu.unimelb.eldercare.helpers.EmailValidifier;
+
+import static au.edu.unimelb.eldercare.helpers.EmailValidifier.isEmailValid;
 
 public class ChangeEmailActivity extends AppCompatActivity {
 
@@ -59,6 +63,14 @@ public class ChangeEmailActivity extends AppCompatActivity {
     public void updateEmailAddress(View view){
         //Still have to make sure that the string in the EditText is an Email
         String newEmail = newEmailAddress.getText().toString();
+
+        //Validate Email Address
+        if(!isEmailValid(newEmail)){
+            Toast toast = Toast.makeText(ChangeEmailActivity.this, "Invalid Email Address", Toast.LENGTH_LONG);
+            toast.show();
+            return;
+        }
+        //If valid email, change on database
         mDatabase.child("email").setValue(newEmail);
     }
 }

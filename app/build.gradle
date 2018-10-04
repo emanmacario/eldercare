@@ -21,6 +21,12 @@ android {
     }
 }
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:28.0.0-rc02'
@@ -52,5 +58,8 @@ dependencies {
 
     // Google Map
     implementation "com.google.android.gms:play-services-places:15.0.1"
+
+    // Sinch SDK for Voice Chat
+    implementation(name:'sinch-android-rtc', version:'+', ext:'aar')
 }
 apply plugin: 'com.google.gms.google-services'

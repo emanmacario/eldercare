@@ -46,10 +46,13 @@
         android:layout_height="100dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="20dp"
+        android:background="@color/ReseneNeptune"
         android:fontFamily="@font/playfair_display_bold"
+        android:onClick="onClickMap"
         android:text="@string/MapButton"
         android:onClick="openMap"
         android:background="@color/ReseneNeptune"
+>>>>>>> feature/trace_user_location
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ProfileButton" />
 
@@ -98,7 +101,10 @@
         android:layout_height="100dp"
         android:layout_marginEnd="70dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="70dp"
+        android:background="@color/ReseneNeptune"
         android:fontFamily="@font/playfair_display_bold"
+        android:onClick="onClickFriendList"
         android:text="@string/FriendsListButton"
         android:background="@color/ReseneNeptune"
         app:layout_constraintEnd_toEndOf="parent"

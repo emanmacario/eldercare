@@ -1,12 +1,15 @@
 package au.edu.unimelb.eldercare;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import au.edu.unimelb.eldercare.event.EventsUI;
+import au.edu.unimelb.eldercare.service.TraceLocationService;
 import au.edu.unimelb.eldercare.user.SettingsUI;
 import au.edu.unimelb.eldercare.user.UserProfileUI;
 import au.edu.unimelb.eldercare.user.UserSearchUI;
@@ -63,4 +66,25 @@ public class HomeScreen extends AppCompatActivity {
         startActivity(intent);
     }
 
+
+    //TODO: remove this before merge with master
+    //start tracing
+    public void onClickMap(View view){
+
+        Location location = new Location("");
+        location.setLatitude(7);
+        location.setLongitude(11);
+        TraceLocationService.getTraceLocationService().uploadLocation(location);
+        Log.d(this.getClass().getSimpleName(), "create fake location for debug");
+
+        TraceLocationService.getTraceLocationService().startTracing(this);
+        Log.d(this.getClass().getSimpleName(), "start trace");
+    }
+
+    //TODO: remove this before merge with master
+    //stop tracing
+    public void onClickFriendList(View view){
+        TraceLocationService.getTraceLocationService().stopTracing();
+        Log.d(this.getClass().getSimpleName(), "stop trace");
+    }
 }

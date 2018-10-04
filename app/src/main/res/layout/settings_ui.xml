@@ -250,11 +250,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-<<<<<<< HEAD
-                    android:onClick="openChangeEmailActivity"
-=======
                     android:onClick="openChangeConnectedUserActivity"
->>>>>>> master
                     android:text="Change Connected User"
                     android:background="@color/ReseneNeptune"
                     android:paddingLeft="5dp"

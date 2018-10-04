@@ -69,7 +69,6 @@ public class ChangeConnectedUserActivity extends AppCompatActivity{
     }
 
     public void updateConnectedUser(View view){
-        final String newConnectedUserEmail = newConnectedUser.getText().toString();
         String newConnectedUserEmail = newConnectedUser.getText().toString();
 
         if(!isEmailValid(newConnectedUserEmail)){

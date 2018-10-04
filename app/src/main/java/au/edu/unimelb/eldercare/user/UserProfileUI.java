@@ -1,16 +1,13 @@
 package au.edu.unimelb.eldercare.user;
 
-<<<<<<< HEAD
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-=======
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
->>>>>>> master
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -63,12 +60,8 @@ public class UserProfileUI extends AppCompatActivity {
         });
     }
 
-<<<<<<< HEAD
-=======
     public void openAboutActivity(View view){
         Intent intent = new Intent(UserProfileUI.this, AboutActivity.class);
         startActivity(intent);
     }
-
->>>>>>> master
 }

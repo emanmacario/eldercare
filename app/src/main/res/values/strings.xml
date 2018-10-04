@@ -6,7 +6,7 @@
     <!-- Required for Facebook authentication -->
     <string name="facebook_application_id" translatable="false">314012962512588</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb314012962512588</string>
-  
+
     <!-- Home Page Strings -->
     <string name="HomeText">HOME</string>
     <string name="ProfileButton">Profile</string>

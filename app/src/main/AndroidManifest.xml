@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="au.edu.unimelb.eldercare">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="au.edu.unimelb.eldercare">
 
-    <!--permissions required for google maps -->
-    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Google Maps permissions -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
-            android:allowBackup="true"
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
-            android:supportsRtl="true"
-            android:theme="@style/AppTheme">
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
 
         <!--requirement for Google Maps-->
         <meta-data
@@ -22,42 +25,114 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAzYCvAu0vFGpHuQMw52XXfyNYh2kHsZ4I"/>
+            android:value="AIzaSyAMZg4y71b3Lv0cdrmqg9tjyx1qWtH0VsY"/>
 
         <activity
-                android:name=".MainActivity"
-                android:label="@string/app_name">
-        </activity>
-
-        <activity
-            android:name="HomeScreen"
-            android:label="@string/HomeText">
+            android:name=".MainActivity"
+            android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name="UserProfileUI"
+            android:name=".user.UserProfileUI"
             android:label="@string/name_placeholder">
 	    </activity>
+
+	    <activity
+            android:name=".user.SettingsUI"
+            android:label="@string/SettingsHeading">
+        </activity>
+
+        <activity
+            android:name=".HomeScreen"
+            android:label="@string/HomeText" />
+
+        <activity
+            android:name=".FrequentContactsUI"
+            android:label="@string/frequentContactsHeading" />
+
+        <activity
+            android:name=".user.UserSearchUI"
+            android:label="@string/title_activity_user_search_ui"
+            android:parentActivityName=".HomeScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="au.edu.unimelb.eldercare.HomeScreen" />
+        </activity>
+
+        <activity
+            android:name=".event.EventsUI"
+            android:label="Events">
+        </activity>
+
+        <activity
+            android:name=".event.AddEventActivity"
+            android:label="Add Event">
+        </activity>
+
+        <activity
+            android:name=".event.ViewEventsActivity"
+            android:label="View Events">
+        </activity>
+
+        <activity
+            android:name=".event.ViewEventActivity"
+            android:label="View Event">
+        </activity>
+
+        <activity
+            android:name=".event.ViewOwnEventActivity"
+            android:label="View Own Events">
+        </activity>
+
+        <activity
+            android:name=".event.EditEventActivity"
+            android:label="Edit Event">
+        </activity>
+
+        <activity
+            android:name=".user.ChangeDNameActivity"
+            android:label="@string/changeDNameHeading" />
+
+        <activity
+            android:name=".user.ChangeEmailActivity"
+            android:label="Change Email Address"/>
+
+        <activity
+            android:name="MessagingActivity"
+            android:label="Messaging" />
+
+        <activity
+            android:name=".user.SelectUserTypeActivity"
+            android:label="Select User Type"/>
 
         <activity
             android:name=".MapActivity"
             android:label="Map page">
         </activity>
-	
-	    <activity
-            android:name="SettingsUI"
-            android:label="@string/SettingsHeading">
-        </activity>
 
         <activity
-            android:name="FrequentContactsUI"
-            android:label="@string/frequentContactsHeading">
-        </activity>
+            android:name=".user.ChangeConnectedUserActivity"
+            android:label="Change Connected User"/>
+
+        <activity
+            android:name=".user.ChangeUserBioActivity"
+            android:label="Change User Bio"/>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

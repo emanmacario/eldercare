@@ -3,6 +3,10 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <!-- Required for Facebook authentication -->
+    <string name="facebook_application_id" translatable="false">314012962512588</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb314012962512588</string>
+  
     <!-- Home Page Strings -->
     <string name="HomeText">HOME</string>
     <string name="ProfileButton">Profile</string>
@@ -22,8 +26,9 @@
 
     <!-- Settings Page Strings -->
     <string name="SettingsHeading">Settings Heading</string>
-    <string name="Setting01">Setting 1</string>
     <string name="Setting02">Text Size</string>
+    <string name="displayNameSettings">Display Name</string>
+    <string name="currentDisplayName">Current Display Name</string>
 
     <!-- Frequent Contacts Page Strings -->
     <string name="frequentContactsHeading">Frequent Contacts</string>
@@ -36,5 +41,21 @@
     <string name="SettingsMediumText">Medium</string>
     <string name="SettingsLargeText">Large</string>
 
-    <string name="GoogleMapsAPIKey">AIzaSyAzYCvAu0vFGpHuQMw52XXfyNYh2kHsZ4I</string>
+    <!-- Event Page Strings -->
+    <string name="events">EVENTS</string>
+    <string name="view_events">VIEW EVENTS</string>
+    <string name="edit_event">EDIT EVENT</string>
+    <string name="add_event">ADD EVENT</string>
+
+    <!-- Updating Display Name Page Strings -->
+    <string name="changeDNameHeading">Change Display Name</string>
+    <string name="new_display_name">New Display Name</string>
+
+    <string name="title_activity_user_search_ui">Find a User</string>
+    <string name="search_user_hint">Search for a User</string>
+    <string name="search_label">Find a User</string>
+
+    <string name="current_email">Current Email Address</string>
+    <string name="new_email_address">New Email Address</string>
+    <string name="user_type_question">What type of user are you?</string>
 </resources>

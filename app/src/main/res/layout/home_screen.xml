@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/LightGrey">
 
     <TextView
         android:id="@+id/HomeText"
@@ -15,12 +16,13 @@
         android:layout_marginStart="111dp"
         android:layout_marginTop="20dp"
         android:ems="10"
+        android:fontFamily="@font/playfair_display_bold"
         android:inputType="none"
         android:text="@string/HomeText"
         android:textAlignment="center"
+        android:textColor="#000000"
         android:textSize="25sp"
         android:textStyle="bold"
-        android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -31,19 +33,23 @@
         android:layout_height="100dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="20dp"
+        android:fontFamily="@font/playfair_display_bold"
         android:text="@string/ProfileButton"
         android:onClick="openUserProfileUI"
+        android:background="@color/ReseneNeptune"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/HomeText" />
 
     <Button
-        android:id="@+id/mapBtn"
+        android:id="@+id/MapButton"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="20dp"
+        android:fontFamily="@font/playfair_display_bold"
         android:text="@string/MapButton"
         android:onClick="openMap"
+        android:background="@color/ReseneNeptune"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ProfileButton" />
 
@@ -53,9 +59,12 @@
         android:layout_height="100dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="20dp"
+        android:onClick="openEvents"
+        android:fontFamily="@font/playfair_display_bold"
         android:text="@string/EventsButton"
+        android:background="@color/ReseneNeptune"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/MapButton" />
 
     <Button
         android:id="@+id/UserSearchButton"
@@ -63,7 +72,10 @@
         android:layout_height="100dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="20dp"
+        android:onClick="openUserSearch"
+        android:fontFamily="@font/playfair_display_bold"
         android:text="@string/UserSearchButton"
+        android:background="@color/ReseneNeptune"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/EventsButton" />
 
@@ -73,7 +85,10 @@
         android:layout_height="100dp"
         android:layout_marginEnd="70dp"
         android:layout_marginTop="20dp"
+        android:fontFamily="@font/playfair_display_bold"
         android:text="@string/MessagesButton"
+        android:onClick="openMessaging"
+        android:background="@color/ReseneNeptune"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/HomeText" />
 
@@ -83,7 +98,9 @@
         android:layout_height="100dp"
         android:layout_marginEnd="70dp"
         android:layout_marginTop="20dp"
+        android:fontFamily="@font/playfair_display_bold"
         android:text="@string/FriendsListButton"
+        android:background="@color/ReseneNeptune"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/MessagesButton" />
 
@@ -93,8 +110,10 @@
         android:layout_height="100dp"
         android:layout_marginEnd="70dp"
         android:layout_marginTop="20dp"
+        android:fontFamily="@font/playfair_display_bold"
         android:text="@string/FrequentContactsButton"
         android:onClick="openFrequentContacts"
+        android:background="@color/ReseneNeptune"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/FriendsListButton" />
 
@@ -104,8 +123,10 @@
         android:layout_height="100dp"
         android:layout_marginEnd="70dp"
         android:layout_marginTop="20dp"
+        android:fontFamily="@font/playfair_display_bold"
         android:text="@string/SettingsButton"
         android:onClick="openSettings"
+        android:background="@color/ReseneNeptune"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/FrequentContactsButton" />
 </android.support.constraint.ConstraintLayout>

@@ -68,20 +68,6 @@ public class HomeScreen extends AppCompatActivity {
 
 
     //TODO: remove this before merge with master
-    //start tracing
-    public void onClickMap(View view){
-
-        Location location = new Location("");
-        location.setLatitude(7);
-        location.setLongitude(11);
-        TraceLocationService.getTraceLocationService().uploadLocation(location);
-        Log.d(this.getClass().getSimpleName(), "create fake location for debug");
-
-        TraceLocationService.getTraceLocationService().startTracing(this);
-        Log.d(this.getClass().getSimpleName(), "start trace");
-    }
-
-    //TODO: remove this before merge with master
     //stop tracing
     public void onClickFriendList(View view){
         TraceLocationService.getTraceLocationService().stopTracing();

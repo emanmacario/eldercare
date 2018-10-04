@@ -37,6 +37,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import au.edu.unimelb.eldercare.devicesharing.LocationGrabber;
+import au.edu.unimelb.eldercare.service.TraceLocationService;
 import au.edu.unimelb.eldercare.user.User;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -59,6 +60,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
             if(userTracking){
+                traceLocationService.startTracing(MapActivity.this);
                 mDatabase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -108,6 +110,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     //User Tracking
     private LocationGrabber locationGrabber;
     private Boolean userTracking;
+    private TraceLocationService traceLocationService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -122,6 +125,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         //TODO: Add a toggle button
         userTracking = true;
         locationGrabber = new LocationGrabber();
+        traceLocationService = TraceLocationService.getTraceLocationService();
     }
 
     private void getDeviceLocation(){

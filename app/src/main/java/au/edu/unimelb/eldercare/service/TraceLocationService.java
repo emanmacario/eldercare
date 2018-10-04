@@ -2,6 +2,7 @@ package au.edu.unimelb.eldercare.service;
 
 import android.content.Context;
 import android.location.Location;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -13,10 +14,16 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+
+import au.edu.unimelb.eldercare.user.User;
 
 public class TraceLocationService {
 
@@ -26,7 +33,9 @@ public class TraceLocationService {
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback mLocationCallback;
 
-    private DatabaseReference databaseUserLocationReference;
+    private DatabaseReference mDatabase;
+
+    private FirebaseUser user;
 
     private TraceLocationService(){
         Log.d(this.getClass().getSimpleName(), "creating service");
@@ -37,9 +46,9 @@ public class TraceLocationService {
 
         DatabaseReference userDatabase = FirebaseDatabase.getInstance().getReference().child("users");
 
-        String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
-        databaseUserLocationReference = userDatabase.child(currentUser).child("location").getRef();
+        mDatabase = userDatabase.child(this.user.getUid());
 
         mLocationCallback = new LocationCallback() {
             @Override
@@ -60,28 +69,33 @@ public class TraceLocationService {
     }
 
     public void startTracing(Context context){
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-
-        try {
-            mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
-                                uploadLocation(location);
-                            }else{
-                                Log.d(this.getClass().getSimpleName(), "no location!! make a fake one");
-                                location = new Location("");
-                                location.setLatitude(3);
-                                location.setLongitude(5);
-                                uploadLocation(location);
-                            }
-                        }
-                    });
-        } catch (SecurityException e){
-            Log.e(this.getClass().getSimpleName(), "permission plz");
-        }
-
-        restartTracing();
+        Location location = new Location("");
+        location.setLatitude(-37.8136);
+        location.setLongitude(144.9631);
+        uploadLocation(location);
+//        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+//
+//
+//        try {
+//            mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+//                        @Override
+//                        public void onSuccess(Location location) {
+//                            if (location != null) {
+//                                uploadLocation(location);
+//                            }else{
+//                                Log.d(this.getClass().getSimpleName(), "no location!! make a fake one");
+//                                location = new Location("");
+//                                location.setLatitude(-37.8136);
+//                                location.setLongitude(144.9631);
+//                                uploadLocation(location);
+//                            }
+//                        }
+//                    });
+//        } catch (SecurityException e){
+//            Log.e(this.getClass().getSimpleName(), "permission plz");
+//        }
+//
+//        restartTracing();
     }
 
 
@@ -101,12 +115,28 @@ public class TraceLocationService {
 
 
     //should be private
-    public void uploadLocation(Location location){
+    public void uploadLocation(final Location location){
         HashMap<String, Double> locationMap = new HashMap<>();
         locationMap.put("latitude", location.getLatitude());
         locationMap.put("longitude", location.getLongitude());
 
-        databaseUserLocationReference.setValue(locationMap);
+        mDatabase.child("location").setValue(locationMap);
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+
+                user.setLatitude(location.getLatitude());
+                user.setLongitude(location.getLongitude());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         Log.d(this.getClass().getSimpleName(), "updating DB");
     }
 }

@@ -1,11 +1,6 @@
 package au.edu.unimelb.eldercare.user;
 
-<<<<<<< HEAD
-import android.content.Intent;
-
-=======
 import java.util.ArrayList;
->>>>>>> master
 import java.util.HashMap;
 import java.util.List;
 
@@ -90,7 +85,6 @@ public class User {
         this.userBio = userBio;
     }
 
-<<<<<<< HEAD
     public double getLatitude() {
         return latitude;
     }
@@ -105,7 +99,8 @@ public class User {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
-=======
+    }
+
     public List<String> getFriends() {
         if (this.friends == null) this.friends = new ArrayList<>();
         return this.friends;
@@ -117,6 +112,5 @@ public class User {
 
     public String getUserId() {
         return userId;
->>>>>>> master
     }
 }

@@ -92,14 +92,15 @@
         app:layout_constraintTop_toBottomOf="@+id/HomeText" />
 
     <Button
-        android:id="@+id/FriendsListButton"
+        android:id="@+id/VoiceCallButton"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginEnd="70dp"
         android:layout_marginTop="20dp"
-        android:fontFamily="@font/playfair_display_bold"
-        android:text="@string/FriendsListButton"
         android:background="@color/ReseneNeptune"
+        android:fontFamily="@font/playfair_display_bold"
+        android:text="@string/VoiceCallButton"
+        android:onClick="openVoiceCall"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/MessagesButton" />
 
@@ -114,7 +115,7 @@
         android:onClick="openFrequentContacts"
         android:background="@color/ReseneNeptune"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/FriendsListButton" />
+        app:layout_constraintTop_toBottomOf="@+id/VoiceCallButton" />
 
     <Button
         android:id="@+id/SettingsButton"

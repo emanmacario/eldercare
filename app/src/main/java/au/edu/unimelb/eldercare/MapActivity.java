@@ -10,12 +10,17 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import android.location.Location;
 
 
-
+import com.directions.route.AbstractRouting;
+import com.directions.route.Route;
+import com.directions.route.RouteException;
+import com.directions.route.Routing;
+import com.directions.route.RoutingListener;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -24,10 +29,16 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, RoutingListener {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -65,6 +76,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        //route lines
+        polylines = new ArrayList<>();
 
         getLocationPermission();
     }
@@ -98,6 +111,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }catch (SecurityException e){
             Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage() );
         }
+
     }
 
     private void moveCamera(LatLng latLng, float zoom){
@@ -158,6 +172,105 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         }
     }
+
+
+    private List<Polyline> polylines;
+    private static final int[] COLORS = new int[]{R.color.primary_dark_material_light};
+
+    @Override
+    public void onRoutingFailure(RouteException e) {
+        // The Routing request failed
+        //progressDialog.dismiss();
+        if(e != null) {
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }else {
+            Toast.makeText(this, "Something went wrong, Try again", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    protected Location mLastLocation;
+    //mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+    public void route(View view){
+        final Task location = mFusedLocationProviderClient.getLastLocation();
+        location.addOnCompleteListener(new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                if(task.isSuccessful() && task.getResult() != null) {
+                    Log.d(TAG, "onComplete: found location!");
+                    Location currentLocation = (Location) task.getResult();
+
+                    moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
+                            DEFAULT_ZOOM);
+
+                    getRoute(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+
+                }else{
+                    Log.d(TAG, "onComplete: current location is null");
+                    Toast.makeText(MapActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
+
+    private void getRoute(LatLng startLatLng){
+        double latitude = Double.parseDouble("37.7749");
+        double longitude = Double.parseDouble("122.4194");
+        Routing routing = new Routing.Builder()
+                .travelMode(AbstractRouting.TravelMode.DRIVING)
+                .withListener(this)
+                .alternativeRoutes(false)
+                .waypoints(new LatLng(latitude, longitude), startLatLng)
+                .build();
+        routing.execute();
+    }
+
+    @Override
+    public void onRoutingStart() {
+
+    }
+
+    @Override
+    public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
+
+        if(polylines.size()>0) {
+            for (Polyline poly : polylines) {
+                poly.remove();
+            }
+        }
+
+        polylines = new ArrayList<>();
+        //add route(s) to the map.
+        for (int i = 0; i <route.size(); i++) {
+
+            //In case of more than 5 alternative routes
+            int colorIndex = i % COLORS.length;
+
+            PolylineOptions polyOptions = new PolylineOptions();
+            polyOptions.color(getResources().getColor(COLORS[colorIndex]));
+            polyOptions.width(10 + i * 3);
+            polyOptions.addAll(route.get(i).getPoints());
+            Polyline polyline = mMap.addPolyline(polyOptions);
+            polylines.add(polyline);
+
+            Toast.makeText(getApplicationContext(),"Route "+ (i+1) +": distance - "+ route.get(i).getDistanceValue()+": duration - "+ route.get(i).getDurationValue(),Toast.LENGTH_SHORT).show();
+        }
+
+
+
+    }
+
+    @Override
+    public void onRoutingCancelled() {
+    }
+        private void erasePolylines(){
+            for (Polyline line : polylines) {
+                line.remove();
+            }
+            polylines.clear();
+        }
 
 
 }

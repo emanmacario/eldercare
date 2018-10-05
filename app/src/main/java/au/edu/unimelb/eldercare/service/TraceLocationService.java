@@ -34,7 +34,6 @@ public class TraceLocationService {
     private LocationCallback mLocationCallback;
 
     private DatabaseReference mDatabase;
-
     private FirebaseUser user;
 
     private TraceLocationService(){
@@ -126,6 +125,8 @@ public class TraceLocationService {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
+                assert(user != null);
+
 
                 user.setLatitude(location.getLatitude());
                 user.setLongitude(location.getLongitude());

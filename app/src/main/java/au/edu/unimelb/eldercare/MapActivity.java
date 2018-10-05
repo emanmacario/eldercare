@@ -61,11 +61,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             if(userTracking){
                 traceLocationService.startTracing(MapActivity.this);
-                mDatabase.addValueEventListener(new ValueEventListener() {
+                this.mDatabase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         //Get the user object of logged in user
                         User user = dataSnapshot.getValue(User.class);
+                        assert(user != null);
+
+
 
                         //Get the connected users email
                         String ConnectedUsersEmail = user.getConnectedUserID();
@@ -76,7 +79,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
                         //Place a marker on the map at the connected user's location
-                        mMap.addMarker(new MarkerOptions().position(ConnectedUserLocation).title("Hello World"));
+                        mMap.addMarker(new MarkerOptions().position(new LatLng(user.getLatitude(), user.getLongitude())).title("Hello World"));
                     }
 
                     @Override
@@ -119,8 +122,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         getLocationPermission();
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(this.user.getUid());
+        this.user = FirebaseAuth.getInstance().getCurrentUser();
+        this.mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(this.user.getUid());
 
         //TODO: Add a toggle button
         userTracking = true;

@@ -25,8 +25,8 @@ public class User {
         this.userType = userType;
         this.connectedUserID = connectedUserID;
         this.userBio = " ";
-        this.latitude = -37.813;
-        this.longitude = 144.96;
+        this.latitude = 0;
+        this.longitude = 0;
     }
 
     public String getDisplayName() {

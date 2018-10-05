@@ -1,54 +1,37 @@
 package au.edu.unimelb.eldercare;
 
-import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-
 import android.Manifest;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
-import android.location.Location;
-
-
-import com.directions.route.AbstractRouting;
-import com.directions.route.Route;
-import com.directions.route.RouteException;
-import com.directions.route.Routing;
-import com.directions.route.RoutingListener;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-
+import au.edu.unimelb.eldercare.devicesharing.LocationGrabber;
+import au.edu.unimelb.eldercare.service.TraceLocationService;
+import au.edu.unimelb.eldercare.user.User;
+import com.directions.route.*;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-<<<<<<< HEAD
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-=======
-import com.google.android.gms.maps.model.MarkerOptions;
->>>>>>> 63b5078e5d5569805a80d2ee1a324407a5727223
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import au.edu.unimelb.eldercare.devicesharing.LocationGrabber;
-import au.edu.unimelb.eldercare.service.TraceLocationService;
-import au.edu.unimelb.eldercare.user.User;
+import com.google.firebase.database.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,15 +56,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
-            if(userTracking){
+            if (userTracking) {
                 traceLocationService.startTracing(MapActivity.this);
                 this.mDatabase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         //Get the user object of logged in user
                         User user = dataSnapshot.getValue(User.class);
-                        assert(user != null);
-
+                        assert (user != null);
 
 
                         //Get the connected users email
@@ -101,7 +83,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                     }
                 });
-
 
 
             }
@@ -147,67 +128,67 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         traceLocationService = TraceLocationService.getTraceLocationService();
     }
 
-    private void getDeviceLocation(){
+    private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-        try{
-            if(mLocationPermissionsGranted){
+        try {
+            if (mLocationPermissionsGranted) {
 
                 final Task location = mFusedLocationProviderClient.getLastLocation();
                 location.addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
-                        if(task.isSuccessful() && task.getResult() != null) {
+                        if (task.isSuccessful() && task.getResult() != null) {
                             Log.d(TAG, "onComplete: found location!");
                             Location currentLocation = (Location) task.getResult();
 
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                     DEFAULT_ZOOM);
 
-                        }else{
+                        } else {
                             Log.d(TAG, "onComplete: current location is null");
                             Toast.makeText(MapActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
             }
-        }catch (SecurityException e){
-            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage() );
+        } catch (SecurityException e) {
+            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
         }
 
     }
 
-    private void moveCamera(LatLng latLng, float zoom){
-        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
+    private void moveCamera(LatLng latLng, float zoom) {
+        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
-    private void initMap(){
+    private void initMap() {
         Log.d(TAG, "initMap: initializing map");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(MapActivity.this);
     }
 
-    private void getLocationPermission(){
+    private void getLocationPermission() {
         Log.d(TAG, "getLocationPermission: getting location permissions");
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
 
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mLocationPermissionsGranted = true;
                 initMap();
-            }else{
+            } else {
                 ActivityCompat.requestPermissions(this,
                         permissions,
                         LOCATION_PERMISSION_REQUEST_CODE);
             }
-        }else{
+        } else {
             ActivityCompat.requestPermissions(this,
                     permissions,
                     LOCATION_PERMISSION_REQUEST_CODE);
@@ -219,11 +200,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Log.d(TAG, "onRequestPermissionsResult: called.");
         mLocationPermissionsGranted = false;
 
-        switch(requestCode){
-            case LOCATION_PERMISSION_REQUEST_CODE:{
-                if(grantResults.length > 0){
-                    for(int i = 0; i < grantResults.length; i++){
-                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+        switch (requestCode) {
+            case LOCATION_PERMISSION_REQUEST_CODE: {
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < grantResults.length; i++) {
+                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                             mLocationPermissionsGranted = false;
                             Log.d(TAG, "onRequestPermissionsResult: permission failed");
                             return;
@@ -237,8 +218,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         }
     }
-<<<<<<< HEAD
-
 
     private List<Polyline> polylines;
     private static final int[] COLORS = new int[]{R.color.primary_dark_material_light};
@@ -247,9 +226,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onRoutingFailure(RouteException e) {
         // The Routing request failed
         //progressDialog.dismiss();
-        if(e != null) {
+        if (e != null) {
             Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }else {
+        } else {
             Toast.makeText(this, "Something went wrong, Try again", Toast.LENGTH_SHORT).show();
         }
 
@@ -258,12 +237,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected Location mLastLocation;
     //mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-    public void route(View view){
+    public void route(View view) {
         final Task location = mFusedLocationProviderClient.getLastLocation();
         location.addOnCompleteListener(new OnCompleteListener() {
             @Override
             public void onComplete(@NonNull Task task) {
-                if(task.isSuccessful() && task.getResult() != null) {
+                if (task.isSuccessful() && task.getResult() != null) {
                     Log.d(TAG, "onComplete: found location!");
                     Location currentLocation = (Location) task.getResult();
 
@@ -272,7 +251,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                     getRoute(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
 
-                }else{
+                } else {
                     Log.d(TAG, "onComplete: current location is null");
                     Toast.makeText(MapActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
                 }
@@ -281,14 +260,29 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    private void getRoute(LatLng startLatLng){
-        double latitude = Double.parseDouble("37.7749");
-        double longitude = Double.parseDouble("122.4194");
+    private void getRoute(LatLng startLatLng) {
+        String apiKey = "";
+        ApplicationInfo ai = null;
+        try {
+            ai = getPackageManager().getApplicationInfo(this.getPackageName(), PackageManager.GET_META_DATA);
+            Bundle bundle = ai.metaData;
+            apiKey = bundle.getString("com.google.android.geo.API_KEY");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        LatLng start = new LatLng(18.015365, -77.499382);
+        LatLng waypoint= new LatLng(18.01455, -77.499333);
+        LatLng end = new LatLng(18.012590, -77.500659);
+
+//        double latitude = Double.parseDouble("37.7749");
+//        double longitude = Double.parseDouble("122.4194");
         Routing routing = new Routing.Builder()
-                .travelMode(AbstractRouting.TravelMode.DRIVING)
+                .travelMode(AbstractRouting.TravelMode.WALKING)
                 .withListener(this)
                 .alternativeRoutes(false)
-                .waypoints(new LatLng(latitude, longitude), startLatLng)
+                .waypoints(end, start)
+                .key(apiKey)
                 .build();
         routing.execute();
     }
@@ -301,7 +295,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
 
-        if(polylines.size()>0) {
+        if (polylines.size() > 0) {
             for (Polyline poly : polylines) {
                 poly.remove();
             }
@@ -309,7 +303,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         polylines = new ArrayList<>();
         //add route(s) to the map.
-        for (int i = 0; i <route.size(); i++) {
+        for (int i = 0; i < route.size(); i++) {
 
             //In case of more than 5 alternative routes
             int colorIndex = i % COLORS.length;
@@ -321,24 +315,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             Polyline polyline = mMap.addPolyline(polyOptions);
             polylines.add(polyline);
 
-            Toast.makeText(getApplicationContext(),"Route "+ (i+1) +": distance - "+ route.get(i).getDistanceValue()+": duration - "+ route.get(i).getDurationValue(),Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Route " + (i + 1) + ": distance - " + route.get(i).getDistanceValue() + ": duration - " + route.get(i).getDurationValue(), Toast.LENGTH_SHORT).show();
         }
-
 
 
     }
 
     @Override
     public void onRoutingCancelled() {
-    }
-        private void erasePolylines(){
-            for (Polyline line : polylines) {
-                line.remove();
-            }
-            polylines.clear();
+        for (Polyline line : polylines) {
+            line.remove();
         }
-
-
-=======
->>>>>>> 63b5078e5d5569805a80d2ee1a324407a5727223
+        polylines.clear();
+    }
 }

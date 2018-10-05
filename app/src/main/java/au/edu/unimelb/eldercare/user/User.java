@@ -1,6 +1,8 @@
 package au.edu.unimelb.eldercare.user;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class User {
 
@@ -9,7 +11,11 @@ public class User {
     private String userType;
     private String connectedUserID;
     private String userBio;
+    private double latitude;
+    private double longitude;
     private HashMap<String, String> registeredEventId;
+    private List<String> friends;
+    private String userId;
 
     public User(){
         this.registeredEventId = new HashMap<>();
@@ -20,7 +26,10 @@ public class User {
         this.email = email;
         this.userType = userType;
         this.connectedUserID = connectedUserID;
+        this.friends = new ArrayList<>();
         this.userBio = " ";
+        this.latitude = 0;
+        this.longitude = 0;
     }
 
     public String getDisplayName() {
@@ -74,5 +83,34 @@ public class User {
 
     public void setUserBio(String userBio) {
         this.userBio = userBio;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public List<String> getFriends() {
+        if (this.friends == null) this.friends = new ArrayList<>();
+        return this.friends;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 }

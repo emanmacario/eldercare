@@ -1,6 +1,7 @@
 package au.edu.unimelb.eldercare;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
@@ -29,10 +30,25 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
+<<<<<<< HEAD
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+=======
+import com.google.android.gms.maps.model.MarkerOptions;
+>>>>>>> 63b5078e5d5569805a80d2ee1a324407a5727223
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import au.edu.unimelb.eldercare.devicesharing.LocationGrabber;
+import au.edu.unimelb.eldercare.service.TraceLocationService;
+import au.edu.unimelb.eldercare.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +73,38 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
+            if(userTracking){
+                traceLocationService.startTracing(MapActivity.this);
+                this.mDatabase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        //Get the user object of logged in user
+                        User user = dataSnapshot.getValue(User.class);
+                        assert(user != null);
+
+
+
+                        //Get the connected users email
+                        String ConnectedUsersEmail = user.getConnectedUserID();
+
+                        //Get the connected users location
+                        locationGrabber.setConnectedUsersLocation(ConnectedUsersEmail);
+                        LatLng ConnectedUserLocation = locationGrabber.getLocation();
+
+
+                        //Place a marker on the map at the connected user's location
+                        mMap.addMarker(new MarkerOptions().position(new LatLng(user.getLatitude(), user.getLongitude())).title("Hello World"));
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
+            }
         }
     }
 
@@ -72,6 +120,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
+    //Firebase
+    private FirebaseUser user;
+    private DatabaseReference mDatabase;
+
+    //User Tracking
+    private LocationGrabber locationGrabber;
+    private Boolean userTracking;
+    private TraceLocationService traceLocationService;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +137,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         polylines = new ArrayList<>();
 
         getLocationPermission();
+
+        this.user = FirebaseAuth.getInstance().getCurrentUser();
+        this.mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(this.user.getUid());
+
+        //TODO: Add a toggle button
+        userTracking = true;
+        locationGrabber = new LocationGrabber();
+        traceLocationService = TraceLocationService.getTraceLocationService();
     }
 
     private void getDeviceLocation(){
@@ -172,6 +237,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         }
     }
+<<<<<<< HEAD
 
 
     private List<Polyline> polylines;
@@ -273,4 +339,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
 
+=======
+>>>>>>> 63b5078e5d5569805a80d2ee1a324407a5727223
 }

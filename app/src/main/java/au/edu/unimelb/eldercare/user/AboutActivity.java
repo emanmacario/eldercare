@@ -2,12 +2,9 @@ package au.edu.unimelb.eldercare.user;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,22 +17,35 @@ import com.google.firebase.database.ValueEventListener;
 
 import au.edu.unimelb.eldercare.R;
 
-public class UserProfileUI extends AppCompatActivity {
+public class AboutActivity extends AppCompatActivity {
 
-    private TextView DisplayName;
-    private TextView userBio;
+    TextView AboutPageHeading;
+    TextView AboutNameStatic;
+    TextView AboutEmailStatic;
+    TextView AboutUserTypeStatic;
+
+    TextView AboutNameUser;
+    TextView AboutEmailUser;
+    TextView AboutUserTypeUser;
 
     FirebaseUser user;
     DatabaseReference mDatabase;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //Sets the screen on open
-        setContentView(R.layout.user_profile_ui);
 
-        DisplayName = findViewById(R.id.UserProfileHeading);
-        userBio = findViewById(R.id.UserBio);
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.about_activity);
+
+        AboutPageHeading = findViewById(R.id.AboutPageHeading);
+        AboutNameStatic = findViewById(R.id.AboutNameStatic);
+        AboutEmailStatic = findViewById(R.id.AboutEmailStatic);
+        AboutUserTypeStatic = findViewById(R.id.AboutUserTypeStatic);
+
+        AboutNameUser = findViewById(R.id.AboutNameUser);
+        AboutEmailUser = findViewById(R.id.AboutEmailUser);
+        AboutUserTypeUser = findViewById(R.id.AboutUserTypeUser);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(this.user.getUid());
@@ -44,13 +54,14 @@ public class UserProfileUI extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                //Display Name
-                String userName = user.getDisplayName();
-                DisplayName.setText(userName);
-                //User Bio
-                String userBioString = user.getUserBio();
-                userBio.setText(userBioString);
 
+                String userName = user.getDisplayName();
+                String userEmail = user.getEmail();
+                String userType = user.getUserType();
+
+                AboutNameUser.setText(userName);
+                AboutEmailUser.setText(userEmail);
+                AboutUserTypeUser.setText(userType);
             }
 
             @Override
@@ -58,10 +69,5 @@ public class UserProfileUI extends AppCompatActivity {
 
             }
         });
-    }
-
-    public void openAboutActivity(View view){
-        Intent intent = new Intent(UserProfileUI.this, AboutActivity.class);
-        startActivity(intent);
     }
 }

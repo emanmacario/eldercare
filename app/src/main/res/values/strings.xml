@@ -17,6 +17,7 @@
     <string name="FriendsListButton">Friends List</string>
     <string name="FrequentContactsButton">Frequent Contacts</string>
     <string name="SettingsButton">Settings</string>
+    <string name="VoiceCallButton">Voice Call</string>
 
     <!-- User Profile UI Strings -->
     <string name="name_placeholder">Name Placeholder</string>

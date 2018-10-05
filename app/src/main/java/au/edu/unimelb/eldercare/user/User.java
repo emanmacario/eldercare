@@ -1,8 +1,13 @@
 package au.edu.unimelb.eldercare.user;
 
+<<<<<<< HEAD
 import android.content.Intent;
 
+=======
+import java.util.ArrayList;
+>>>>>>> master
 import java.util.HashMap;
+import java.util.List;
 
 public class User {
 
@@ -14,6 +19,8 @@ public class User {
     private double latitude;
     private double longitude;
     private HashMap<String, String> registeredEventId;
+    private List<String> friends;
+    private String userId;
 
     public User(){
         this.registeredEventId = new HashMap<>();
@@ -24,6 +31,7 @@ public class User {
         this.email = email;
         this.userType = userType;
         this.connectedUserID = connectedUserID;
+        this.friends = new ArrayList<>();
         this.userBio = " ";
         this.latitude = 0;
         this.longitude = 0;
@@ -82,6 +90,7 @@ public class User {
         this.userBio = userBio;
     }
 
+<<<<<<< HEAD
     public double getLatitude() {
         return latitude;
     }
@@ -96,5 +105,18 @@ public class User {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+=======
+    public List<String> getFriends() {
+        if (this.friends == null) this.friends = new ArrayList<>();
+        return this.friends;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return userId;
+>>>>>>> master
     }
 }

@@ -13,9 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-import au.edu.unimelb.eldercare.devicesharing.LocationGrabber;
 import au.edu.unimelb.eldercare.service.TraceLocationService;
-import au.edu.unimelb.eldercare.user.User;
 import com.directions.route.*;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -58,24 +56,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             if (userTracking) {
                 traceLocationService.startTracing(MapActivity.this);
-                this.mDatabase.addValueEventListener(new ValueEventListener() {
+                mDatabase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        //Get the user object of logged in user
-                        User user = dataSnapshot.getValue(User.class);
-                        assert (user != null);
-
 
                         //Get the connected users email
-                        String ConnectedUsersEmail = user.getConnectedUserID();
+                        String ConnectedUsersUid = dataSnapshot.child(user.getUid()).child("ConnectedUser").getValue(String.class);
 
-                        //Get the connected users location
-                        locationGrabber.setConnectedUsersLocation(ConnectedUsersEmail);
-                        LatLng ConnectedUserLocation = locationGrabber.getLocation();
-
+                        //Using the connected users Uid, grab their location
+                        double lat = dataSnapshot.child(ConnectedUsersUid).child("location").child("latitude").getValue(double.class);
+                        double lon = dataSnapshot.child(ConnectedUsersUid).child("location").child("longitude").getValue(double.class);
 
                         //Place a marker on the map at the connected user's location
-                        mMap.addMarker(new MarkerOptions().position(new LatLng(user.getLatitude(), user.getLongitude())).title("Hello World"));
+                        mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title("Hello World"));
                     }
 
                     @Override
@@ -106,7 +99,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private DatabaseReference mDatabase;
 
     //User Tracking
-    private LocationGrabber locationGrabber;
     private Boolean userTracking;
     private TraceLocationService traceLocationService;
 
@@ -120,11 +112,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         getLocationPermission();
 
         this.user = FirebaseAuth.getInstance().getCurrentUser();
-        this.mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(this.user.getUid());
+        this.mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
 
         //TODO: Add a toggle button
         userTracking = true;
-        locationGrabber = new LocationGrabber();
         traceLocationService = TraceLocationService.getTraceLocationService();
     }
 

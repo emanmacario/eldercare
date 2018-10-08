@@ -28,8 +28,6 @@ public class User {
         this.connectedUserID = connectedUserID;
         this.friends = new ArrayList<>();
         this.userBio = " ";
-        this.latitude = 0;
-        this.longitude = 0;
     }
 
     public String getDisplayName() {
@@ -85,21 +83,6 @@ public class User {
         this.userBio = userBio;
     }
 
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
 
     public List<String> getFriends() {
         if (this.friends == null) this.friends = new ArrayList<>();

@@ -81,11 +81,10 @@ public class ChangeConnectedUserActivity extends AppCompatActivity{
         mDatabaseUsers.orderByChild("email").equalTo(newConnectedUserEmail).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                //Gets the user object associated with the email
-                User user = dataSnapshot.getValue(User.class);
-                //Grabs the display name and sets that as the connected user in the current users database reference
-                String ConnectedUserEmail = user.getEmail();
-                mDatabaseCurrUser.child("ConnectedUser").setValue(ConnectedUserEmail);
+
+                //Grabs the Uid and sets that as the connected user in the current users database reference
+                String ConnectedUserUid = dataSnapshot.getKey();
+                mDatabaseCurrUser.child("ConnectedUser").setValue(ConnectedUserUid);
             }
 
             @Override

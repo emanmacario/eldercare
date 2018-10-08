@@ -121,23 +121,6 @@ public class TraceLocationService {
 
         mDatabase.child("location").setValue(locationMap);
 
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                assert(user != null);
-
-
-                user.setLatitude(location.getLatitude());
-                user.setLongitude(location.getLongitude());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
         Log.d(this.getClass().getSimpleName(), "updating DB");
     }
 }

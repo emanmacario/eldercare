@@ -11,8 +11,6 @@ public class User {
     private String userType;
     private String connectedUserID;
     private String userBio;
-    private double latitude;
-    private double longitude;
     private HashMap<String, String> registeredEventId;
     private List<String> friends;
     private String userId;

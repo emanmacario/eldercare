@@ -25,6 +25,7 @@ public class UserProfileUI extends AppCompatActivity {
     private TextView DisplayName;
     private TextView userBio;
 
+    //Firebase References
     FirebaseUser user;
     DatabaseReference mDatabase;
 

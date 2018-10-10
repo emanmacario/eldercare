@@ -1,6 +1,8 @@
 package au.edu.unimelb.eldercare.user;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class User {
 
@@ -10,6 +12,8 @@ public class User {
     private String connectedUserID;
     private String userBio;
     private HashMap<String, String> registeredEventId;
+    private List<String> friends;
+    private String userId;
 
     public User(){
         this.registeredEventId = new HashMap<>();
@@ -20,6 +24,7 @@ public class User {
         this.email = email;
         this.userType = userType;
         this.connectedUserID = connectedUserID;
+        this.friends = new ArrayList<>();
         this.userBio = " ";
     }
 
@@ -74,5 +79,18 @@ public class User {
 
     public void setUserBio(String userBio) {
         this.userBio = userBio;
+    }
+
+    public List<String> getFriends() {
+        if (this.friends == null) this.friends = new ArrayList<>();
+        return this.friends;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 }

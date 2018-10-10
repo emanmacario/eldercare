@@ -1,14 +1,17 @@
 package au.edu.unimelb.eldercare.user;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
+import android.util.Log;
 import au.edu.unimelb.eldercare.R;
 import au.edu.unimelb.eldercare.usersearch.SearchAdaptor;
 
 public class UserSearchUI extends AppCompatActivity {
+
+    private static final String TAG = "UserSearchUI";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,5 +25,10 @@ public class UserSearchUI extends AppCompatActivity {
 
         // Set layout manager to position the items
         rvSearch.setLayoutManager(new LinearLayoutManager(this));
+
+        Intent intent = getIntent();
+        if (Intent.ACTION_SEARCH.equalsIgnoreCase(intent.getAction())) {
+            Log.d(TAG, "onCreate: searching!");
+        }
     }
 }

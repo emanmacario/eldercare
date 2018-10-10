@@ -239,17 +239,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if (grantResults.length > 0) {
                     for (int grantResult : grantResults) {
                         if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                    for (int i = 0; i < grantResults.length; i++) {
-                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                            mLocationPermissionsGranted = false;
-                            Log.d(TAG, "onRequestPermissionsResult: permission failed");
-                            return;
+                            for (int i = 0; i < grantResults.length; i++) {
+                                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                                    mLocationPermissionsGranted = false;
+                                    Log.d(TAG, "onRequestPermissionsResult: permission failed");
+                                    return;
+                                }
+                            }
+                            Log.d(TAG, "onRequestPermissionsResult: permission granted");
+                            mLocationPermissionsGranted = true;
+                            //initialize our map
+                            initMap();
                         }
                     }
-                    Log.d(TAG, "onRequestPermissionsResult: permission granted");
-                    mLocationPermissionsGranted = true;
-                    //initialize our map
-                    initMap();
                 }
             }
         }
@@ -285,18 +287,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        final Task location = mFusedLocationProviderClient.getLastLocation();
 
-        //current issue occurs with permissions for users location but is fixed after use gives google maps
-        //permission to view their location
-        location.addOnCompleteListener(new OnCompleteListener() {
-            @Override
-            public void onComplete(@NonNull Task task) {
-                if(task.isSuccessful() && task.getResult() != null) {
-    protected Location mLastLocation;
-    //mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-    public void route(View view) {
         final Task location = mFusedLocationProviderClient.getLastLocation();
         location.addOnCompleteListener(new OnCompleteListener() {
             @Override
@@ -310,12 +301,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                     try {
                         getRoute(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-                }else{
-                    getRoute(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
 
                 } else {
                     Log.d(TAG, "onComplete: current location is null");
@@ -325,22 +313,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
 
     }
-
-    private void getRoute(LatLng startLatLng) throws IOException {
-
-        //get the users inputted location
-        searchAddress = findViewById(R.id.searchAddress);
-
-
-        //get the latitude and longitude for the search terms location
-        Geocoder gc = new Geocoder(this);
-        List<Address> list = gc.getFromLocationName(searchAddress.getText().toString(), 1);
-        Address add = list.get(0);
-        String locality = add.getLocality();
-        Toast.makeText(getApplicationContext(), locality ,Toast.LENGTH_LONG).show();
-
-        double lat = add.getLatitude();
-        double lon = add.getLongitude();
 
     private void getRoute(LatLng startLatLng) {
         String apiKey = "";
@@ -354,13 +326,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         //use the lat and long to and create a route from the users current location to destination
-        LatLng end = new LatLng(lat, lon);
-
-        Routing routing = new Routing.Builder()
-                .travelMode(AbstractRouting.TravelMode.DRIVING)
-                .withListener(this)
-                .alternativeRoutes(false)
-                .waypoints(end, startLatLng)
         LatLng start = new LatLng(18.015365, -77.499382);
         LatLng waypoint= new LatLng(18.01455, -77.499333);
         LatLng end = new LatLng(18.012590, -77.500659);
@@ -388,10 +353,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
 
-        if(polylines.size()>0) {
-    @Override
-    public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
-
         if (polylines.size() > 0) {
             for (Polyline poly : polylines) {
                 poly.remove();
@@ -400,7 +361,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         polylines = new ArrayList<>();
         //add route(s) to the map.
-        for (int i = 0; i <route.size(); i++) {
         for (int i = 0; i < route.size(); i++) {
 
             //In case of more than 5 alternative routes
@@ -418,25 +378,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             //Toast.makeText(getApplicationContext(),"Route "+ (i+1) +": distance - "+ route.get(i).getDistanceValue()+": duration - "+ route.get(i).getDurationValue(),Toast.LENGTH_SHORT).show();
         }
 
-
-
-    }
-
-    //function not currently implemented but it will remove the route from users screen
-    @Override
-    public void onRoutingCancelled() {
-    }
-        private void erasePolylines(){
-            for (Polyline line : polylines) {
-                line.remove();
-            }
-            polylines.clear();
-        }
-
-
-}}
-            Toast.makeText(getApplicationContext(), "Route " + (i + 1) + ": distance - " + route.get(i).getDistanceValue() + ": duration - " + route.get(i).getDurationValue(), Toast.LENGTH_SHORT).show();
-        }
 
 
     }

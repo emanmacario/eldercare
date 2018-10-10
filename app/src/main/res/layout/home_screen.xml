@@ -49,7 +49,6 @@
         android:fontFamily="@font/playfair_display_bold"
         android:onClick="openMap"
         android:text="@string/MapButton"
-        android:onClick="openMap"
         android:background="@color/ReseneNeptune"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ProfileButton" />

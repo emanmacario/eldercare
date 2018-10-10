@@ -123,6 +123,10 @@
             android:name=".user.AboutActivity"
             android:label="About Page"/>
 
+        <activity
+            android:name=".user.OtherUserProfileActivity"
+            android:label="Other User Profile"/>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

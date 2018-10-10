@@ -52,5 +52,9 @@ dependencies {
 
     // Google Map
     implementation "com.google.android.gms:play-services-places:15.0.1"
+    implementation "com.google.android.gms:play-services-location:15.0.1"
+
+    //map routing library
+    implementation 'com.github.jd-alexander:library:1.1.0'
 }
 apply plugin: 'com.google.gms.google-services'

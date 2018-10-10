@@ -47,6 +47,7 @@
         android:layout_marginStart="70dp"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/playfair_display_bold"
+        android:onClick="openMap"
         android:text="@string/MapButton"
         android:onClick="openMap"
         android:background="@color/ReseneNeptune"
@@ -98,9 +99,10 @@
         android:layout_height="100dp"
         android:layout_marginEnd="70dp"
         android:layout_marginTop="20dp"
-        android:fontFamily="@font/playfair_display_bold"
-        android:text="@string/FriendsListButton"
         android:background="@color/ReseneNeptune"
+        android:fontFamily="@font/playfair_display_bold"
+        android:onClick="onClickFriendList"
+        android:text="@string/FriendsListButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/MessagesButton" />
 

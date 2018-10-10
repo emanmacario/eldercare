@@ -81,6 +81,7 @@ public class User {
         this.userBio = userBio;
     }
 
+
     public List<String> getFriends() {
         if (this.friends == null) this.friends = new ArrayList<>();
         return this.friends;

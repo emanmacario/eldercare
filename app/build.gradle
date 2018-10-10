@@ -42,6 +42,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:16.0.2'
     implementation 'com.google.firebase:firebase-storage:16.0.2'
     implementation 'com.google.firebase:firebase-auth:16.0.3'
+    implementation 'com.google.firebase:firebase-core:16.0.4'
+    implementation 'com.google.firebase:firebase-database:16.0.3'
+    implementation 'com.google.firebase:firebase-storage:16.0.3'
+    implementation 'com.google.firebase:firebase-auth:16.0.4'
     implementation 'com.firebaseui:firebase-ui-auth:4.1.0'
 
     // Firebase UI
@@ -53,6 +57,8 @@ dependencies {
     // Google Map
     implementation "com.google.android.gms:play-services-places:15.0.1"
     implementation "com.google.android.gms:play-services-location:15.0.1"
+    implementation "com.google.android.gms:play-services-places:16.0.0"
+    implementation "com.google.android.gms:play-services-location:16.0.0"
 
     //map routing library
     implementation 'com.github.jd-alexander:library:1.1.0'

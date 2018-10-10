@@ -26,9 +26,12 @@ public class SelectUserTypeActivity extends AppCompatActivity {
     RadioGroup UserTypeRadio;
     RadioButton CarerRadio;
     RadioButton DependantRadio;
+
+    //Firebase References
     private DatabaseReference mDatabase;
     private FirebaseUser user;
 
+    //These IDs identify which radio button is selected
     private static final int CarerRadioID = 101;
     private static final int DependantRadioID = 102;
 
@@ -78,6 +81,10 @@ public class SelectUserTypeActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Sets the user type value on the database before moving to the home screen
+     * @param view
+     */
     public void openHomeScreen(View view){
         //Make sure that a user type has been selected
         if(UserTypeRadio.getCheckedRadioButtonId() == -1){

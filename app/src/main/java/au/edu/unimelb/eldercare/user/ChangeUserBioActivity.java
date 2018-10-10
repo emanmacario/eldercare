@@ -23,6 +23,7 @@ public class ChangeUserBioActivity extends AppCompatActivity {
     EditText newUserBio;
     Button confirmButton;
 
+    //Firebase references
     FirebaseUser user;
     DatabaseReference mDatabase;
 
@@ -30,6 +31,7 @@ public class ChangeUserBioActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //set correct layout
         setContentView(R.layout.change_user_bio_activity);
 
         editBioHeading = findViewById(R.id.EditUserBioHeading);
@@ -40,13 +42,19 @@ public class ChangeUserBioActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(this.user.getUid());
     }
 
+
+    /**
+     * Updates the Users Bio on the database
+     * @param view
+     */
     public void updateUserBio(View view){
+        //get the text entered in the EditText
         String newUserBioString = newUserBio.getText().toString();
 
         //Check that bio is less than 200 characters
         int userBioLength = newUserBioString.length();
         if(userBioLength > 200){
-            Toast toast = Toast.makeText(ChangeUserBioActivity.this, "User Bio too long", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(ChangeUserBioActivity.this, "@string/bio_too_long", Toast.LENGTH_LONG);
             toast.show();
             return;
         }

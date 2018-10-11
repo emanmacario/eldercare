@@ -5,7 +5,7 @@
 
     <uses-feature
         android:name="android.hardware.microphone"
-        android:required="false"/>
+        android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -68,22 +68,22 @@
         </activity>
         <activity
             android:name=".event.EventsUI"
-            android:label="Events"></activity>
+            android:label="Events" />
         <activity
             android:name=".event.AddEventActivity"
-            android:label="Add Event"></activity>
+            android:label="Add Event" />
         <activity
             android:name=".event.ViewEventsActivity"
-            android:label="View Events"></activity>
+            android:label="View Events" />
         <activity
             android:name=".event.ViewEventActivity"
-            android:label="View Event"></activity>
+            android:label="View Event" />
         <activity
             android:name=".event.ViewOwnEventActivity"
-            android:label="View Own Events"></activity>
+            android:label="View Own Events" />
         <activity
             android:name=".event.EditEventActivity"
-            android:label="Edit Event"></activity>
+            android:label="Edit Event" />
         <activity
             android:name=".user.ChangeDNameActivity"
             android:label="@string/changeDNameHeading" />
@@ -113,6 +113,8 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
+        <activity android:name=".IncomingCallActivity" />
+        <activity android:name=".ActiveCallActivity"></activity>
     </application>
 
 </manifest>

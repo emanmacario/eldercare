@@ -13,15 +13,14 @@ import au.edu.unimelb.eldercare.user.UserSearchUI;
 
 public class HomeScreen extends AppCompatActivity {
 
-    private TextView mTextMessage;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Sets the screen on open
         setContentView(R.layout.home_screen);
 
-        mTextMessage = findViewById(R.id.message);
+        // Create the Sinch Client for the current authenticated user
+        VoiceCallService sinchService = VoiceCallService.getInstance();
+        sinchService.buildSinchClient(this);
     }
 
     public void openUserProfileUI(View view){
@@ -48,7 +47,9 @@ public class HomeScreen extends AppCompatActivity {
     }
 
     public void openMessaging(View view) {
-        Intent intent = new Intent(HomeScreen.this, MessagingActivity.class);
+        // Intent intent = new Intent(HomeScreen.this, MessagingActivity.class);
+
+        Intent intent = new Intent(HomeScreen.this, IncomingCallActivity.class);
         startActivity(intent);
     }
 
@@ -61,5 +62,4 @@ public class HomeScreen extends AppCompatActivity {
         Intent intent = new Intent(HomeScreen.this, VoiceCallActivity.class);
         startActivity(intent);
     }
-
 }

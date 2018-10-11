@@ -68,33 +68,29 @@ public class TraceLocationService {
     }
 
     public void startTracing(Context context){
-        Location location = new Location("");
-        location.setLatitude(-37.8136);
-        location.setLongitude(144.9631);
-        uploadLocation(location);
-//        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-//
-//
-//        try {
-//            mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-//                        @Override
-//                        public void onSuccess(Location location) {
-//                            if (location != null) {
-//                                uploadLocation(location);
-//                            }else{
-//                                Log.d(this.getClass().getSimpleName(), "no location!! make a fake one");
-//                                location = new Location("");
-//                                location.setLatitude(-37.8136);
-//                                location.setLongitude(144.9631);
-//                                uploadLocation(location);
-//                            }
-//                        }
-//                    });
-//        } catch (SecurityException e){
-//            Log.e(this.getClass().getSimpleName(), "permission plz");
-//        }
-//
-//        restartTracing();
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+
+
+        try {
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location != null) {
+                                uploadLocation(location);
+                            }else{
+                                Log.d(this.getClass().getSimpleName(), "no location!! make a fake one");
+                                location = new Location("");
+                                location.setLatitude(-37.8136);
+                                location.setLongitude(144.9631);
+                                uploadLocation(location);
+                            }
+                        }
+                    });
+        } catch (SecurityException e){
+            Log.e(this.getClass().getSimpleName(), "permission plz");
+        }
+
+        restartTracing();
     }
 
 
@@ -113,8 +109,7 @@ public class TraceLocationService {
     }
 
 
-    //should be private
-    public void uploadLocation(final Location location){
+    private void uploadLocation(final Location location){
         HashMap<String, Double> locationMap = new HashMap<>();
         locationMap.put("latitude", location.getLatitude());
         locationMap.put("longitude", location.getLongitude());

@@ -59,6 +59,10 @@ public class ChangeDNameActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Updates the display name on the database
+     * @param view
+     */
     public void updateDisplayName(View view){
         String newDName = newDisplayName.getText().toString();
         mDatabase.child("displayName").setValue(newDName);

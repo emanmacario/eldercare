@@ -57,6 +57,10 @@ public class AuthenticationService {
         }
     }
 
+    /**
+     * Commences an authentication session
+     * @param sender The activity requesting authentication
+     */
     public void startAuthentication(AppCompatActivity sender) {
         sender.startActivityForResult(
                 AuthUI.getInstance()
@@ -66,6 +70,12 @@ public class AuthenticationService {
                 RC_SIGN_IN);
     }
 
+    /**
+     * Handles the outcome of an authentication request
+     * @param resultCode From Firebase, whether or not authentication was successful
+     * @param data From Firebase, the user data
+     * @param sender The activity handling authentication
+     */
     public void handleAuthenticationRequestCallback(int resultCode, @Nullable Intent data, AuthenticationListener sender) {
         IdpResponse response = IdpResponse.fromResultIntent(data);
 

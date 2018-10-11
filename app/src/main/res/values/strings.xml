@@ -56,7 +56,19 @@
     <string name="search_user_hint">Search for a User</string>
     <string name="search_label">Find a User</string>
 
+    <!-- Change Connected User Activity Strings -->
+    <string name="invalid_email">Invalid Email Address</string>
+    <string name="user_doesnt_exist">Email Address does not match user in database</string>
+    <string name="same_user_types">Connected User must be a different User Type</string>
+
+    <!-- User Bio Strings -->
+    <string name="bio_too_long">User Bio is too long (>200 Characters)</string>
+
     <string name="current_email">Current Email Address</string>
     <string name="new_email_address">New Email Address</string>
     <string name="user_type_question">What type of user are you?</string>
+    <string name="addFriendText">Add Friend</string>
+    <string name="friendAddButtonSelf">You!</string>
+    <string name="friendAddButtonAlreadyFriends">Friends!</string>
+    <string name="friendAddButtonRequested">Requested!</string>
 </resources>

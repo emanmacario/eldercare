@@ -19,15 +19,18 @@ import au.edu.unimelb.eldercare.R;
 
 public class AboutActivity extends AppCompatActivity {
 
+    //Static Text Views
     TextView AboutPageHeading;
     TextView AboutNameStatic;
     TextView AboutEmailStatic;
     TextView AboutUserTypeStatic;
 
+    //Variable Text Views
     TextView AboutNameUser;
     TextView AboutEmailUser;
     TextView AboutUserTypeUser;
 
+    //Database and User references
     FirebaseUser user;
     DatabaseReference mDatabase;
 
@@ -36,20 +39,25 @@ public class AboutActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Set the correct Layout
         setContentView(R.layout.about_activity);
 
+        //Static Text Views
         AboutPageHeading = findViewById(R.id.AboutPageHeading);
         AboutNameStatic = findViewById(R.id.AboutNameStatic);
         AboutEmailStatic = findViewById(R.id.AboutEmailStatic);
         AboutUserTypeStatic = findViewById(R.id.AboutUserTypeStatic);
 
+        //Variable Text Views
         AboutNameUser = findViewById(R.id.AboutNameUser);
         AboutEmailUser = findViewById(R.id.AboutEmailUser);
         AboutUserTypeUser = findViewById(R.id.AboutUserTypeUser);
 
+        //Database and User references
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(this.user.getUid());
 
+        //This Listener gets values from the database snapshot and sets the appropriate text views
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

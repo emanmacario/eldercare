@@ -45,10 +45,10 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
     // Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.3'
-    implementation 'com.google.firebase:firebase-database:16.0.2'
-    implementation 'com.google.firebase:firebase-storage:16.0.2'
-    implementation 'com.google.firebase:firebase-auth:16.0.3'
+    implementation 'com.google.firebase:firebase-core:16.0.4'
+    implementation 'com.google.firebase:firebase-database:16.0.3'
+    implementation 'com.google.firebase:firebase-storage:16.0.3'
+    implementation 'com.google.firebase:firebase-auth:16.0.4'
     implementation 'com.firebaseui:firebase-ui-auth:4.1.0'
 
     // Firebase UI
@@ -57,10 +57,16 @@ dependencies {
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.8.0'
 
-    // Google Map
-    implementation "com.google.android.gms:play-services-places:15.0.1"
+
 
     // Sinch SDK for Voice Chat
     implementation(name: 'sinch-android-rtc', version: '+', ext: 'aar')
+
+    // Google Map
+    implementation "com.google.android.gms:play-services-places:16.0.0"
+    implementation "com.google.android.gms:play-services-location:16.0.0"
+
+    //map routing library
+    implementation 'com.github.jd-alexander:library:1.1.0'
 }
 apply plugin: 'com.google.gms.google-services'

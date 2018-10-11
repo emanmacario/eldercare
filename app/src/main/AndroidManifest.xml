@@ -3,12 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="au.edu.unimelb.eldercare">
 
+    <!-- Google Maps permissions -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <!-- Voice call permissions -->
     <uses-feature
         android:name="android.hardware.microphone"
         android:required="false" />
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -96,6 +102,11 @@
         <activity
             android:name=".user.SelectUserTypeActivity"
             android:label="Select User Type" />
+        <activity
+            android:name=".MapActivity"
+            android:label="Map page">
+        </activity>
+
         <activity
             android:name=".user.ChangeConnectedUserActivity"
             android:label="Change Connected User" />

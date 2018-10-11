@@ -1,7 +1,10 @@
 package au.edu.unimelb.eldercare;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
+import android.speech.tts.Voice;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,9 +14,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.sinch.android.rtc.MissingPermissionException;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.Sinch;
 import com.sinch.android.rtc.SinchClient;
@@ -49,56 +54,29 @@ public class VoiceCallActivity extends AppCompatActivity {
         callState = (TextView) findViewById(R.id.call_state);
 
 
-
-
-        sinchClient.getCallClient().addCallClientListener(new SinchCallClientListener());
-
         // Set button properties
         callButton = (Button) findViewById(R.id.button);
+        callButton.setEnabled(false);
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Make a call or hang up depending on whether or not the call is null
-                if (call == null) {
-                    CallClient callClient = sinchClient.getCallClient();
-                    call = callClient.callUser(recipientUserId);
-                    call.addCallListener(new SinchCallListener());
-                    callButton.setText("End Call");
-                } else {
-                    call.hangup();
-                }
-            }
-        });
 
-        // Set the accept and decline call buttons
-        acceptButton = (Button) findViewById(R.id.button_accept);
-        declineButton = (Button) findViewById(R.id.button_decline);
+                VoiceCallService sinchService = VoiceCallService.getInstance();
 
-        acceptButton.setVisibility(Button.GONE);
-        declineButton.setVisibility(Button.GONE);
-
-        acceptButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (call == null) {
-                    Log.d(TAG, "ERROR, ACCEPTING NULL CALL");
-                    return;
-                }
-                call.answer();
-                call.addCallListener(new SinchCallListener());
-                callButton.setText("End Call");
-                //acceptButton.setVisibility(Button.GONE);
-                //declineButton.setVisibility(Button.GONE);
-            }
-        });
-
-        declineButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (call != null) {
-                    call.hangup();
-                    acceptButton.setVisibility(Button.GONE);
-                    declineButton.setVisibility(Button.GONE);
+                // Try to make the call
+                try {
+                    Call call = sinchService.callUser(recipientUserId);
+                    if (call == null) {
+                        // Service failed for some reason, show a Toast message and abort
+                        Toast.makeText(getApplicationContext(), "Unable to make a call",
+                                Toast.LENGTH_LONG).show();
+                    }
+                    String callId = call.getCallId();
+                    Intent intent = new Intent(getApplicationContext(), ActiveCallActivity.class);
+                    intent.putExtra("CALL_ID", callId);
+                    startActivity(intent);
+                } catch (MissingPermissionException e) {
+                    ActivityCompat.requestPermissions(VoiceCallActivity.this, new String[]{e.getRequiredPermission()}, 0);
                 }
             }
         });
@@ -128,58 +106,12 @@ public class VoiceCallActivity extends AppCompatActivity {
         });
     }
 
-    private class SinchCallListener implements CallListener {
-        @Override
-        public void onCallEnded(Call endedCall) {
-            // Call ended by either party. Reset button text and
-            // make volume buttons go back to controlling ringer volume
-            Log.d(TAG, "onCallEnded called");
-            call = null;
-            callButton.setText("Call");
-            callState.setText("");
-            setVolumeControlStream(AudioManager.USE_DEFAULT_STREAM_TYPE);
-        }
-
-        @Override
-        public void onCallEstablished(Call establishedCall) {
-            // Incoming call was picked up. Make volume buttons
-            // control the volume of the phone call while connected
-            Log.d(TAG, "onCallEstablished called");
-            callState.setText("CONNECTED");
-            setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
-
-            // TODO: If progress tone is played, it should be stopped here
-        }
-
-        @Override
-        public void onCallProgressing(Call progressingCall) {
-            // Call is currently being made (i.e. ringing)
-            Log.d(TAG, "onCallProgressing called");
-            callState.setText("RINGING ...");
-
-            // TODO: Add progress tone here to indicate outgoing call is being made
-        }
-
-        @Override
-        public void onShouldSendPushNotification(Call call, List<PushPair> pushPairs) {
-            // Don't worry about this right now
-            Log.d(TAG, "onShouldSendPushNotification called");
-        }
-    }
-
-    public class SinchCallClientListener implements CallClientListener {
-        @Override
-        public void onIncomingCall(CallClient callClient, Call incomingCall) {
-            Log.d(TAG, "onIncomingCall called");
-
-            // TODO: Start playing ringtone
-
-            call = incomingCall;
-            acceptButton.setVisibility(Button.VISIBLE);
-            declineButton.setVisibility(Button.VISIBLE);
-
-
-            // TODO: Stop playing ringtone
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "You may now place a call", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "This application needs permission to use your microphone to function properly.", Toast
+                    .LENGTH_LONG).show();
         }
     }
 }

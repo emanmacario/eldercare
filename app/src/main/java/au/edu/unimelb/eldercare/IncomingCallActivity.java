@@ -5,14 +5,19 @@ import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sinch.android.rtc.MissingPermissionException;
+import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.calling.Call;
+import com.sinch.android.rtc.calling.CallListener;
 import com.sinch.android.rtc.calling.CallState;
+
+import java.util.List;
 
 public class IncomingCallActivity extends AppCompatActivity {
 
@@ -53,6 +58,8 @@ public class IncomingCallActivity extends AppCompatActivity {
         mSinchService = VoiceCallService.getInstance();
         mCallId = getIntent().getStringExtra("CALL_ID"); // TODO: refactor string into constant somewhere
         Call call = mSinchService.getCall(mCallId);
+        call.addCallListener(new SinchCallListener());
+
         mRemoteUser = (TextView) findViewById(R.id.remoteUser);
         mRemoteUser.setText(call.getRemoteUserId());
     }
@@ -69,7 +76,7 @@ public class IncomingCallActivity extends AppCompatActivity {
             } catch (MissingPermissionException e) {
                 ActivityCompat.requestPermissions(this, new String[]{e.getRequiredPermission()}, 0);
             }
-        } else if (call.getState().equals(CallState.ENDED)) {
+        } else {
             finish();
         }
     }
@@ -80,6 +87,28 @@ public class IncomingCallActivity extends AppCompatActivity {
             call.hangup();
         }
         finish();
+    }
+
+    private class SinchCallListener implements CallListener {
+        @Override
+        public void onCallEnded(Call call) {
+            Log.d(TAG, "Call ended");
+            finish();
+        }
+
+        @Override
+        public void onCallEstablished(Call call) {
+            Log.d(TAG, "Call established");
+        }
+
+        @Override
+        public void onCallProgressing(Call call) {
+            Log.d(TAG, "Call progressing");
+        }
+
+        @Override
+        public void onShouldSendPushNotification(Call call, List<PushPair> pushPairs) {
+        }
     }
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {

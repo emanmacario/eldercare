@@ -13,6 +13,8 @@ import com.sinch.android.rtc.calling.Call;
 import com.sinch.android.rtc.calling.CallListener;
 import com.sinch.android.rtc.calling.CallState;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -42,6 +44,7 @@ public class ActiveCallActivity extends AppCompatActivity {
         mCallerName = (TextView) findViewById(R.id.remoteUser);
         mEndCallButton = (Button) findViewById(R.id.hangupButton);
 
+        mCallDuration.setVisibility(TextView.GONE);
         mEndCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,8 +86,7 @@ public class ActiveCallActivity extends AppCompatActivity {
             Log.d(TAG, "onCallEnded called");
             mCallState.setText("ENDED");
             setVolumeControlStream(AudioManager.USE_DEFAULT_STREAM_TYPE);
-            mTimer.cancel();
-            finish();
+            endCall();
         }
 
         @Override
@@ -96,6 +98,7 @@ public class ActiveCallActivity extends AppCompatActivity {
             setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
 
             // Set timer to update call duration on a separate thread
+            mCallDuration.setVisibility(TextView.VISIBLE);
             mTimer.schedule(new UpdateCallDurationTask(), 0, 600);
 
             // TODO: If progress tone is played, it should be stopped here

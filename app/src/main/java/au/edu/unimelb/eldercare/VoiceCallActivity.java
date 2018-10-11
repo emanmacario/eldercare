@@ -53,7 +53,6 @@ public class VoiceCallActivity extends AppCompatActivity {
         // Set the call state text view
         callState = (TextView) findViewById(R.id.call_state);
 
-
         // Set button properties
         callButton = (Button) findViewById(R.id.button);
         callButton.setEnabled(false);
@@ -70,6 +69,7 @@ public class VoiceCallActivity extends AppCompatActivity {
                         // Service failed for some reason, show a Toast message and abort
                         Toast.makeText(getApplicationContext(), "Unable to make a call",
                                 Toast.LENGTH_LONG).show();
+                        return;
                     }
                     String callId = call.getCallId();
                     Intent intent = new Intent(getApplicationContext(), ActiveCallActivity.class);

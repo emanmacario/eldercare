@@ -52,7 +52,7 @@ public class HomeScreen extends AppCompatActivity {
     public void openMessaging(View view) {
         // Intent intent = new Intent(HomeScreen.this, MessagingActivity.class);
 
-        Intent intent = new Intent(HomeScreen.this, IncomingCallActivity.class);
+        Intent intent = new Intent(HomeScreen.this, VoiceCallActivity.class);
         startActivity(intent);
     }
 

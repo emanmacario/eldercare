@@ -11,14 +11,20 @@ import android.widget.TextView;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.calling.Call;
 import com.sinch.android.rtc.calling.CallListener;
+import com.sinch.android.rtc.calling.CallState;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import au.edu.unimelb.eldercare.helpers.TimeUtil;
 
 public class ActiveCallActivity extends AppCompatActivity {
 
     private static final String TAG = ActiveCallActivity.class.getSimpleName();
 
     private String mCallId;
+    private Timer mTimer;
     private VoiceCallService mSinchService;
 
     private TextView mCallState;
@@ -43,19 +49,20 @@ public class ActiveCallActivity extends AppCompatActivity {
             }
         });
 
-        // Get the id of the current active call
         mSinchService = VoiceCallService.getInstance();
         mCallId = getIntent().getStringExtra("CALL_ID");
         Call call = mSinchService.getCall(mCallId);
 
         if (call != null) {
             call.addCallListener(new SinchCallListener());
-            mCallerName.setText("Other caller here");
+            mCallerName.setText(call.getRemoteUserId());
             mCallState.setText(call.getState().toString());
         } else {
             Log.e(TAG, "Started with invalid call, aborting");
             finish();
         }
+
+        mTimer = new Timer();
     }
 
     private void endCall() {
@@ -63,6 +70,7 @@ public class ActiveCallActivity extends AppCompatActivity {
         if (call != null) {
             call.hangup();
         }
+        mTimer.cancel();
         finish();
     }
 
@@ -73,7 +81,10 @@ public class ActiveCallActivity extends AppCompatActivity {
             // Call ended by either party. Reset button text and
             // make volume buttons go back to controlling ringer volume
             Log.d(TAG, "onCallEnded called");
+            mCallState.setText("ENDED");
             setVolumeControlStream(AudioManager.USE_DEFAULT_STREAM_TYPE);
+            mTimer.cancel();
+            finish();
         }
 
         @Override
@@ -84,6 +95,9 @@ public class ActiveCallActivity extends AppCompatActivity {
             mCallState.setText("CONNECTED");
             setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
 
+            // Set timer to update call duration on a separate thread
+            mTimer.schedule(new UpdateCallDurationTask(), 0, 600);
+
             // TODO: If progress tone is played, it should be stopped here
         }
 
@@ -91,7 +105,7 @@ public class ActiveCallActivity extends AppCompatActivity {
         public void onCallProgressing(Call progressingCall) {
             // Call is currently being made (i.e. ringing)
             Log.d(TAG, "onCallProgressing called");
-            mCallState.setText("RINGING ...");
+            mCallState.setText("CALLING");
 
             // TODO: Add progress tone here to indicate outgoing call is being made
         }
@@ -100,6 +114,26 @@ public class ActiveCallActivity extends AppCompatActivity {
         public void onShouldSendPushNotification(Call call, List<PushPair> pushPairs) {
             // Don't worry about this right now
             Log.d(TAG, "onShouldSendPushNotification called");
+        }
+    }
+
+    private class UpdateCallDurationTask extends TimerTask {
+        @Override
+        public void run() {
+            ActiveCallActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    updateCallDuration();
+                }
+            });
+        }
+    }
+
+    private void updateCallDuration() {
+        Call call = mSinchService.getCall(mCallId);
+        if (call != null) {
+            String timeDurationString = TimeUtil.formatTimeDuration(call.getDetails().getDuration());
+            mCallDuration.setText(timeDurationString);
         }
     }
 }

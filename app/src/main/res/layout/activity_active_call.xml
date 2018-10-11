@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="10dp"
-            android:text=""
+            android:text="Sample User"
             android:textColor="@color/colorPrimary"
             android:textSize="28sp" />
 
@@ -48,7 +48,7 @@
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/displayPicture"
             android:layout_width="96dp"
-            android:layout_height="96dp"
+            android:layout_height="135dp"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/default_profile_display"
             app:civ_border_color="#FF000000"

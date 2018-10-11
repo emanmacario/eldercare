@@ -7,18 +7,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sinch.android.rtc.MissingPermissionException;
 import com.sinch.android.rtc.calling.Call;
+import com.sinch.android.rtc.calling.CallState;
 
 public class IncomingCallActivity extends AppCompatActivity {
 
     private static final String TAG = IncomingCallActivity.class.getSimpleName();
 
-    private View.OnClickListener mClickListener;
     private VoiceCallService mSinchService;
     private String mCallId;
+
+    private View.OnClickListener mClickListener;
+    private TextView mRemoteUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,9 @@ public class IncomingCallActivity extends AppCompatActivity {
 
         mSinchService = VoiceCallService.getInstance();
         mCallId = getIntent().getStringExtra("CALL_ID"); // TODO: refactor string into constant somewhere
+        Call call = mSinchService.getCall(mCallId);
+        mRemoteUser = (TextView) findViewById(R.id.remoteUser);
+        mRemoteUser.setText(call.getRemoteUserId());
     }
 
     private void answerClicked() {
@@ -58,10 +65,11 @@ public class IncomingCallActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, ActiveCallActivity.class);
                 intent.putExtra("CALL_ID", mCallId);
                 startActivity(intent);
+                finish();
             } catch (MissingPermissionException e) {
                 ActivityCompat.requestPermissions(this, new String[]{e.getRequiredPermission()}, 0);
             }
-        } else {
+        } else if (call.getState().equals(CallState.ENDED)) {
             finish();
         }
     }

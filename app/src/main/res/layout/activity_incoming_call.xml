@@ -20,7 +20,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_margin="14dp"
             android:text="Sample User"
-            android:textColor="#000"
+            android:textColor="@color/colorPrimary"
             android:textSize="28sp" />
 
         <TextView
@@ -55,14 +55,18 @@
                 android:id="@+id/answerButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#0F0"/>
+                android:background="#0F0"
+                android:text="ACCEPT"
+                android:textColor="#FFF" />
 
             <Button
                 android:id="@+id/declineButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@+id/answerButton"
-                android:background="#F00"/>
+                android:background="#F00"
+                android:text="DECLINE"
+                android:textColor="#FFF" />
 
         </RelativeLayout>
 

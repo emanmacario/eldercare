@@ -2,8 +2,11 @@ package au.edu.unimelb.eldercare;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Debug;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.sinch.android.rtc.Sinch;
 import com.sinch.android.rtc.SinchClient;
 import com.sinch.android.rtc.calling.Call;
@@ -48,7 +51,8 @@ public class VoiceCallService {
         this.context = context;
 
         // Get id of current authenticated user
-        String userId = AuthenticationService.getAuthenticationService().getUser().getUid();
+        FirebaseUser currentUser = AuthenticationService.getAuthenticationService().getUser();
+        String userId = currentUser.getUid();
 
         // Instantiate a SinchClient using the SinchClientBuilder
         sinchClient = Sinch.getSinchClientBuilder()

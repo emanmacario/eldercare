@@ -34,6 +34,29 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
+import android.Manifest;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
+import au.edu.unimelb.eldercare.service.TraceLocationService;
+import com.directions.route.*;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,6 +66,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 //import java.util.Map;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, RoutingListener {
@@ -67,6 +96,31 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
+            if (userTracking) {
+                traceLocationService.startTracing(MapActivity.this);
+                mDatabase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        //Get the connected users email
+                        String ConnectedUsersUid = dataSnapshot.child(user.getUid()).child("ConnectedUser").getValue(String.class);
+
+                        //Using the connected users Uid, grab their location
+                        double lat = dataSnapshot.child(ConnectedUsersUid).child("location").child("latitude").getValue(double.class);
+                        double lon = dataSnapshot.child(ConnectedUsersUid).child("location").child("longitude").getValue(double.class);
+
+                        //Place a marker on the map at the connected user's location
+                        mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title("Hello World"));
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+            }
         }
     }
 
@@ -82,6 +136,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
+    //Firebase
+    private FirebaseUser user;
+    private DatabaseReference mDatabase;
+
+    //User Tracking
+    private Boolean userTracking;
+    private TraceLocationService traceLocationService;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +152,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         polylines = new ArrayList<>();
 
         getLocationPermission();
+
+        this.user = FirebaseAuth.getInstance().getCurrentUser();
+        this.mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+
+        //TODO: Add a toggle button
+        userTracking = false;
+        traceLocationService = TraceLocationService.getTraceLocationService();
     }
 
     private void getDeviceLocation() {
@@ -170,15 +239,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if (grantResults.length > 0) {
                     for (int grantResult : grantResults) {
                         if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                            mLocationPermissionsGranted = false;
-                            Log.d(TAG, "onRequestPermissionsResult: permission failed");
-                            return;
+                            for (int i = 0; i < grantResults.length; i++) {
+                                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                                    mLocationPermissionsGranted = false;
+                                    Log.d(TAG, "onRequestPermissionsResult: permission failed");
+                                    return;
+                                }
+                            }
+                            Log.d(TAG, "onRequestPermissionsResult: permission granted");
+                            mLocationPermissionsGranted = true;
+                            //initialize our map
+                            initMap();
                         }
                     }
-                    Log.d(TAG, "onRequestPermissionsResult: permission granted");
-                    mLocationPermissionsGranted = true;
-                    //initialize our map
-                    initMap();
                 }
             }
         }
@@ -214,14 +287,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        final Task location = mFusedLocationProviderClient.getLastLocation();
 
-        //current issue occurs with permissions for users location but is fixed after use gives google maps
-        //permission to view their location
+        final Task location = mFusedLocationProviderClient.getLastLocation();
         location.addOnCompleteListener(new OnCompleteListener() {
             @Override
             public void onComplete(@NonNull Task task) {
-                if(task.isSuccessful() && task.getResult() != null) {
+                if (task.isSuccessful() && task.getResult() != null) {
                     Log.d(TAG, "onComplete: found location!");
                     Location currentLocation = (Location) task.getResult();
 
@@ -230,11 +301,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                     try {
                         getRoute(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
-                }else{
+                } else {
                     Log.d(TAG, "onComplete: current location is null");
                     Toast.makeText(MapActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
                 }
@@ -293,7 +364,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
 
-        if(polylines.size()>0) {
+        if (polylines.size() > 0) {
             for (Polyline poly : polylines) {
                 poly.remove();
             }
@@ -301,7 +372,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         polylines = new ArrayList<>();
         //add route(s) to the map.
-        for (int i = 0; i <route.size(); i++) {
+        for (int i = 0; i < route.size(); i++) {
 
             //In case of more than 5 alternative routes
             int colorIndex = i % COLORS.length;
@@ -322,16 +393,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    //function not currently implemented but it will remove the route from users screen
     @Override
     public void onRoutingCancelled() {
-    }
-        private void erasePolylines(){
-            for (Polyline line : polylines) {
-                line.remove();
-            }
-            polylines.clear();
+        for (Polyline line : polylines) {
+            line.remove();
         }
-
-
+        polylines.clear();
+    }
 }

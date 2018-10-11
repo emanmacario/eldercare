@@ -48,24 +48,8 @@ public class VoiceCallActivity extends AppCompatActivity {
         // Set the call state text view
         callState = (TextView) findViewById(R.id.call_state);
 
-        // Instantiate a SinchClient using the SinchClientBuilder
-        sinchClient = Sinch.getSinchClientBuilder()
-                .context(this)
-                .userId(mFirebaseUser.getUid()) // TODO: Replace id with mFirebaseUser.getUid();
-                .applicationKey("0a9ff560-c6ed-4d85-a4ab-1143c50eb1ae") // TODO: Don't commit keys
-                .applicationSecret("BqjIJOCIhEynByd5ApgSoA==")
-                .environmentHost("clientapi.sinch.com")
-                .build();
 
-        // Verify manifest in runtime during development
-        // This can be removed when application is ready for release
-        sinchClient.checkManifest(); // TODO: Delete this
 
-        // Enable app-app calling, then start the client
-        sinchClient.setSupportCalling(true);
-        sinchClient.setSupportActiveConnectionInBackground(true);
-        sinchClient.startListeningOnActiveConnection();
-        sinchClient.start();
 
         sinchClient.getCallClient().addCallClientListener(new SinchCallClientListener());
 
@@ -183,7 +167,7 @@ public class VoiceCallActivity extends AppCompatActivity {
         }
     }
 
-    private class SinchCallClientListener implements CallClientListener {
+    public class SinchCallClientListener implements CallClientListener {
         @Override
         public void onIncomingCall(CallClient callClient, Call incomingCall) {
             Log.d(TAG, "onIncomingCall called");

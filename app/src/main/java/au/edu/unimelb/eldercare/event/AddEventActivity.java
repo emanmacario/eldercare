@@ -154,7 +154,9 @@ public class AddEventActivity extends AppCompatActivity {
 
     public void onClickLocation(View view) throws GooglePlayServicesNotAvailableException, GooglePlayServicesRepairableException {
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-        builder.setLatLngBounds(openLocation);
+        if (openLocation != null) {
+            builder.setLatLngBounds(openLocation);
+        }
         Intent placePickerIntent = builder.build(this);
         placePickerIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivityForResult(placePickerIntent, PLACE_PICKER_REQUEST);

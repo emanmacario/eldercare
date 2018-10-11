@@ -56,6 +56,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -104,13 +105,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                         //Get the connected users email
                         String ConnectedUsersUid = dataSnapshot.child(user.getUid()).child("ConnectedUser").getValue(String.class);
+                        if(ConnectedUsersUid != null){
+                            //Using the connected users Uid, grab their location
+                            double lat = dataSnapshot.child(ConnectedUsersUid).child("location").child("latitude").getValue(double.class);
+                            double lon = dataSnapshot.child(ConnectedUsersUid).child("location").child("longitude").getValue(double.class);
 
-                        //Using the connected users Uid, grab their location
-                        double lat = dataSnapshot.child(ConnectedUsersUid).child("location").child("latitude").getValue(double.class);
-                        double lon = dataSnapshot.child(ConnectedUsersUid).child("location").child("longitude").getValue(double.class);
+                            //Place a marker on the map at the connected user's location
+                            mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title("Hello World"));
+                        }
+                        else{
+                            Toast noConnectedUserToast = Toast.makeText(MapActivity.this, "No User to Track", Toast.LENGTH_LONG);
+                            noConnectedUserToast.show();
+                        }
 
-                        //Place a marker on the map at the connected user's location
-                        mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title("Hello World"));
                     }
 
                     @Override
@@ -120,6 +127,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 });
 
 
+            }
+            else {
+                mMap.clear();
             }
         }
     }
@@ -399,5 +409,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             line.remove();
         }
         polylines.clear();
+    }
+
+    public void toggleUserTracking(View view){
+        userTracking = !userTracking;
+        onMapReady(mMap);
     }
 }

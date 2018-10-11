@@ -34,6 +34,8 @@ public class ChangeConnectedUserActivity extends AppCompatActivity{
     FirebaseUser user;
     DatabaseReference mDatabaseCurrUser;
     DatabaseReference mDatabaseUsers;
+    //Current User type
+    String currentUserType;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,14 +43,16 @@ public class ChangeConnectedUserActivity extends AppCompatActivity{
         //sets correct layout file
         setContentView(R.layout.change_connected_user_activity);
 
+        //on screen texts
         currentConnectedUser = findViewById(R.id.CurrentConnectedUser);
         newConnectedUser = findViewById(R.id.NewConnectedUser);
 
+        //Sets up the firebase variables
         this.user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabaseCurrUser = FirebaseDatabase.getInstance().getReference().child("users").child(this.user.getUid());
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("users");
 
-        //Set Current Connected User Text
+        //Set Current Connected User Text from the database
         mDatabaseCurrUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -59,6 +63,8 @@ public class ChangeConnectedUserActivity extends AppCompatActivity{
                 //Uses this to set the value of the TextView
                 String ConnectedUserID = user.getConnectedUserID();
                 currentConnectedUser.setText(ConnectedUserID);
+                //set the current user type
+                currentUserType = dataSnapshot.child("userType").getValue(String.class);
             }
 
             @Override
@@ -69,10 +75,12 @@ public class ChangeConnectedUserActivity extends AppCompatActivity{
     }
 
     public void updateConnectedUser(View view){
+        //Get the text entered in the EditText
         String newConnectedUserEmail = newConnectedUser.getText().toString();
 
+        //Checks that the email entered is a valid email
         if(!isEmailValid(newConnectedUserEmail)){
-            Toast toast = Toast.makeText(ChangeConnectedUserActivity.this, "Invalid Email Address", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(ChangeConnectedUserActivity.this, R.string.invalid_email, Toast.LENGTH_LONG);
             toast.show();
             return;
         }
@@ -81,11 +89,20 @@ public class ChangeConnectedUserActivity extends AppCompatActivity{
         mDatabaseUsers.orderByChild("email").equalTo(newConnectedUserEmail).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                //Gets the user object associated with the email
-                User user = dataSnapshot.getValue(User.class);
-                //Grabs the display name and sets that as the connected user in the current users database reference
-                String ConnectedUserName = user.getDisplayName();
-                mDatabaseCurrUser.child("ConnectedUser").setValue(ConnectedUserName);
+
+                //get connected user type
+                String connectedUserType = dataSnapshot.child("userType").getValue(String.class);
+                //check that it's different to the current user's type
+                if(connectedUserType.equals(currentUserType)){
+                    Toast toast = Toast.makeText(ChangeConnectedUserActivity.this, R.string.same_user_types, Toast.LENGTH_LONG);
+                    toast.show();
+                    return;
+                }
+
+                //Grabs the Uid and sets that as the connected user in the current users database reference
+                String ConnectedUserUid = dataSnapshot.getKey();
+                mDatabaseCurrUser.child("ConnectedUser").setValue(ConnectedUserUid);
+
             }
 
             @Override

@@ -32,13 +32,7 @@ public class VoiceCallActivity extends AppCompatActivity {
 
     private static String TAG = "VoiceCallActivity";
 
-    private FirebaseUser mFirebaseUser;
-    private SinchClient sinchClient;
-    private Call call;
     private Button callButton;
-    private Button acceptButton;
-    private Button declineButton;
-    private TextView callState;
     private EditText recipientIdEditText;
     private String recipientUserId;
 
@@ -46,12 +40,6 @@ public class VoiceCallActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voice_call);
-
-        // Get the current Firebase user
-        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        // Set the call state text view
-        callState = (TextView) findViewById(R.id.call_state);
 
         // Set button properties
         callButton = (Button) findViewById(R.id.button);
@@ -84,10 +72,6 @@ public class VoiceCallActivity extends AppCompatActivity {
         recipientIdEditText = (EditText) findViewById(R.id.edittext_recipientid);
         recipientIdEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 // Set the new recipient user id
                 recipientUserId = recipientIdEditText.getText().toString();
@@ -98,6 +82,10 @@ public class VoiceCallActivity extends AppCompatActivity {
                 } else {
                     callButton.setEnabled(false);
                 }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
 
             @Override

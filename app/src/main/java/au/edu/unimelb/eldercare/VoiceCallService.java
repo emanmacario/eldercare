@@ -3,10 +3,16 @@ package au.edu.unimelb.eldercare;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Debug;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.sinch.android.rtc.Sinch;
 import com.sinch.android.rtc.SinchClient;
 import com.sinch.android.rtc.calling.Call;
@@ -14,6 +20,7 @@ import com.sinch.android.rtc.calling.CallClient;
 import com.sinch.android.rtc.calling.CallClientListener;
 
 import au.edu.unimelb.eldercare.service.AuthenticationService;
+import au.edu.unimelb.eldercare.user.User;
 
 
 /**
@@ -28,6 +35,7 @@ public class VoiceCallService {
 
     private Context context;
     private SinchClient sinchClient;
+    private String displayName;
 
     private static VoiceCallService instance;
 
@@ -105,8 +113,28 @@ public class VoiceCallService {
         return sinchClient.getCallClient().callUser(userId);
     }
 
-    public String getUserId() {
-        return AuthenticationService.getAuthenticationService().getUser().getUid();
+    public String getDisplayName(String userId) {
+
+        DatabaseReference databaseReference
+                = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
+
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                if (user != null) {
+                    displayName = user.getDisplayName();
+                } else {
+                    displayName = "fuck yo titties bitch";
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+        return displayName;
     }
 
     public Call getCall(String callId) {

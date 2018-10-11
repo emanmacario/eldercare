@@ -61,7 +61,7 @@ public class IncomingCallActivity extends AppCompatActivity {
         call.addCallListener(new SinchCallListener());
 
         mRemoteUser = (TextView) findViewById(R.id.remoteUser);
-        mRemoteUser.setText(call.getRemoteUserId());
+        mRemoteUser.setText(mSinchService.getDisplayName(call.getRemoteUserId()));
     }
 
     private void answerClicked() {

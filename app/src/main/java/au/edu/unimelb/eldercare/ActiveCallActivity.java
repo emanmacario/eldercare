@@ -58,14 +58,13 @@ public class ActiveCallActivity extends AppCompatActivity {
 
         if (call != null) {
             call.addCallListener(new SinchCallListener());
-            mCallerName.setText(call.getRemoteUserId());
+            mCallerName.setText(mSinchService.getDisplayName(call.getRemoteUserId()));
             mCallState.setText(call.getState().toString());
+            mTimer = new Timer();
         } else {
             Log.e(TAG, "Started with invalid call, aborting");
             finish();
         }
-
-        mTimer = new Timer();
     }
 
     private void endCall() {

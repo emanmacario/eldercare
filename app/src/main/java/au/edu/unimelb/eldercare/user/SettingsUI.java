@@ -43,8 +43,9 @@ public class SettingsUI extends AppCompatActivity {
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //Assigns the current users display name to the TextView
                 User user = dataSnapshot.getValue(User.class);
+
+                //Sets the TextView strings based on values in the database
                 String dName = user.getDisplayName();
                 currentDisplayName.setText(dName);
 

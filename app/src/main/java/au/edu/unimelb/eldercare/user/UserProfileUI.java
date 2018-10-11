@@ -1,5 +1,8 @@
 package au.edu.unimelb.eldercare.user;
 
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +25,7 @@ public class UserProfileUI extends AppCompatActivity {
     private TextView DisplayName;
     private TextView userBio;
 
+    //Firebase References
     FirebaseUser user;
     DatabaseReference mDatabase;
 
@@ -61,5 +65,4 @@ public class UserProfileUI extends AppCompatActivity {
         Intent intent = new Intent(UserProfileUI.this, AboutActivity.class);
         startActivity(intent);
     }
-
 }

@@ -75,6 +75,11 @@ public class SearchAdaptor extends RecyclerView.Adapter<SearchAdaptor.ViewHolder
             button.setOnClickListener(clicked);
             button.setTag(user);
         }
+        //View Profile Button
+        Button viewProfileButton = viewHolder.viewProfileButton;
+        viewProfileButton.setText("View Profile");
+        viewProfileButton.setEnabled(true);
+        
     }
 
     @Override
@@ -99,12 +104,14 @@ public class SearchAdaptor extends RecyclerView.Adapter<SearchAdaptor.ViewHolder
         TextView nameTextView;
 
         Button addButton;
+        Button viewProfileButton;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             nameTextView = itemView.findViewById(R.id.user_name);
             addButton = itemView.findViewById(R.id.add_button);
+            viewProfileButton = itemView.findViewById(R.id.view_profile_button);
         }
     }
 }

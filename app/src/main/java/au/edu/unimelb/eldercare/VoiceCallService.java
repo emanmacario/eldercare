@@ -45,6 +45,8 @@ public class VoiceCallService {
      * @param context the context from which to build the Sinch Client
      */
     public void buildSinchClient(Context context) {
+        this.context = context;
+
         // Get id of current authenticated user
         String userId = AuthenticationService.getAuthenticationService().getUser().getUid();
 

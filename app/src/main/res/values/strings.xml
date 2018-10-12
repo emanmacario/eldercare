@@ -70,4 +70,5 @@
     <string name="friendAddButtonSelf">You!</string>
     <string name="friendAddButtonAlreadyFriends">Friends!</string>
     <string name="friendAddButtonRequested">Requested!</string>
+    <string name="viewProfile">View Profile</string>
 </resources>

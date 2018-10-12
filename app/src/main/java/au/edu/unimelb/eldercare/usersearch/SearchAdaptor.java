@@ -79,7 +79,8 @@ public class SearchAdaptor extends RecyclerView.Adapter<SearchAdaptor.ViewHolder
         }
         //View Profile Button
         Button viewProfileButton = viewHolder.viewProfileButton;
-        viewProfileButton.setText("View Profile");
+        viewProfileButton.setTag(user.getUserId());
+        viewProfileButton.setText(R.string.viewProfile);
         viewProfileButton.setEnabled(true);
         
     }

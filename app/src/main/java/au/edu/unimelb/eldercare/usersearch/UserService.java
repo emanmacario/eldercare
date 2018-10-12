@@ -34,12 +34,27 @@ public class UserService {
                 List<User> userList = new ArrayList<>();
                 for (DataSnapshot user : dataSnapshot.getChildren()) {
                     User firebaseUser = user.getValue(User.class);
+                    assert firebaseUser != null;
                     firebaseUser.setUserId(user.getKey());
                     userList.add(firebaseUser);
                     Log.d(TAG, "onDataChange: adding user");
                 }
                 Log.d(TAG, "onDataChange: invoking callback");
                 sender.userListLoaded(userList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void getSpecificUser(String userId, final UserAccessor sender) {
+        databaseReference.child(userId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                sender.userLoaded(dataSnapshot.getValue(User.class));
             }
 
             @Override

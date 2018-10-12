@@ -103,6 +103,11 @@ public class SearchAdaptor extends RecyclerView.Adapter<SearchAdaptor.ViewHolder
         Log.d(TAG, "userListLoaded: updating list");
     }
 
+    @Override
+    public void userLoaded(User value) {
+        // Not used
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView;
 

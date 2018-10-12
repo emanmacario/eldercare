@@ -39,7 +39,8 @@ public class HomeScreen extends AppCompatActivity {
 
     //When Frequent Contacts button is clicked, this opens the frequent contacts page
     public void openFrequentContacts(View view){
-        Intent intent = new Intent(HomeScreen.this, FrequentContactsUI.class);
+        //Intent intent = new Intent(HomeScreen.this, FrequentContactsUI.class);
+        Intent intent = new Intent(HomeScreen.this, VoiceCallActivity.class);
         startActivity(intent);
     }
 
@@ -52,7 +53,7 @@ public class HomeScreen extends AppCompatActivity {
     public void openMessaging(View view) {
         // Intent intent = new Intent(HomeScreen.this, MessagingActivity.class);
 
-        Intent intent = new Intent(HomeScreen.this, VoiceCallActivity.class);
+        Intent intent = new Intent(HomeScreen.this, MessagingActivity.class);
         startActivity(intent);
     }
 
@@ -73,5 +74,10 @@ public class HomeScreen extends AppCompatActivity {
     public void onClickFriendList(View view){
         TraceLocationService.getTraceLocationService().stopTracing();
         Log.d(this.getClass().getSimpleName(), "stop trace");
+    }
+
+    public void openVoiceCall(View view){
+        Intent intent = new Intent(HomeScreen.this, VoiceCallActivity.class);
+        startActivity(intent);
     }
 }

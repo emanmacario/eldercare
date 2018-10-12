@@ -121,12 +121,7 @@ public class VoiceCallService {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                if (user != null) {
-                    displayName = user.getDisplayName();
-                } else {
-                    displayName = "fuck yo titties bitch";
-                }
+                displayName = dataSnapshot.child("displayName").getValue(String.class);
             }
 
             @Override

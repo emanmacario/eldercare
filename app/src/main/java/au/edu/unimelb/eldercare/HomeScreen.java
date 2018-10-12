@@ -68,16 +68,9 @@ public class HomeScreen extends AppCompatActivity {
         startActivity(intent);
     }
 
-
-    //TODO: remove this before merge with master
-    //stop tracing
-    public void onClickFriendList(View view){
-        TraceLocationService.getTraceLocationService().stopTracing();
-        Log.d(this.getClass().getSimpleName(), "stop trace");
-    }
-
     public void openVoiceCall(View view){
         Intent intent = new Intent(HomeScreen.this, VoiceCallActivity.class);
         startActivity(intent);
     }
+
 }

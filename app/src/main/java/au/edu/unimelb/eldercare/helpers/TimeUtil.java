@@ -3,6 +3,7 @@ package au.edu.unimelb.eldercare.helpers;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Utility class for helping with time and
@@ -30,9 +31,21 @@ public class TimeUtil {
 
     /**
      * Returns the current UNIX time in seconds
-     * @return
+     * @return current time
      */
     public static long getCurrentTime() {
         return System.currentTimeMillis() / 1000L;
+    }
+
+    /**
+     * Returns a formatted string displaying the total number of
+     * minutes and seconds, given a total duration in seconds.
+     * @param totalSeconds the total number of seconds elapsed
+     * @return formatted time string
+     */
+    public static String formatTimeDuration(int totalSeconds) {
+        long minutes = totalSeconds / 60;
+        long seconds = totalSeconds % 60;
+        return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
     }
 }

@@ -6,12 +6,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import au.edu.unimelb.eldercare.R;
 import au.edu.unimelb.eldercare.usersearch.SearchAdaptor;
 
 public class UserSearchUI extends AppCompatActivity {
 
     private static final String TAG = "UserSearchUI";
+
+    public void onUserProfileClick(View view) {
+        Intent intent = new Intent(UserSearchUI.this, UserProfileUI.class);
+        intent.putExtra("targetUser", (String)view.getTag());
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

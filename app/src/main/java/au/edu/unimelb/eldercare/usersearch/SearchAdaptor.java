@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import au.edu.unimelb.eldercare.R;
 import au.edu.unimelb.eldercare.service.AuthenticationService;
+import au.edu.unimelb.eldercare.service.UserService;
 import au.edu.unimelb.eldercare.user.User;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -27,9 +28,11 @@ public class SearchAdaptor extends RecyclerView.Adapter<SearchAdaptor.ViewHolder
             User addedUser = (User) view.getTag();
             User thisUser = findLoggedInUser(user.getUid());
             thisUser.getFriends().add(addedUser.getUserId());
+            Button button = (Button)view;
+            button.setEnabled(false);
+            button.setText(R.string.friendAddButtonRequested);
             UserService.getInstance().saveUser(thisUser);
             Log.d(TAG, "onClick: clicked!" + addedUser.getDisplayName());
-
         }
     };
 
@@ -75,6 +78,12 @@ public class SearchAdaptor extends RecyclerView.Adapter<SearchAdaptor.ViewHolder
             button.setOnClickListener(clicked);
             button.setTag(user);
         }
+        //View Profile Button
+        Button viewProfileButton = viewHolder.viewProfileButton;
+        viewProfileButton.setTag(user.getUserId());
+        viewProfileButton.setText(R.string.viewProfile);
+        viewProfileButton.setEnabled(true);
+        
     }
 
     @Override
@@ -95,16 +104,23 @@ public class SearchAdaptor extends RecyclerView.Adapter<SearchAdaptor.ViewHolder
         Log.d(TAG, "userListLoaded: updating list");
     }
 
+    @Override
+    public void userLoaded(User value) {
+        // Not used
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView;
 
         Button addButton;
+        Button viewProfileButton;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             nameTextView = itemView.findViewById(R.id.user_name);
             addButton = itemView.findViewById(R.id.add_button);
+            viewProfileButton = itemView.findViewById(R.id.view_profile_button);
         }
     }
 }

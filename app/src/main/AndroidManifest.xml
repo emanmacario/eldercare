@@ -11,6 +11,14 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
+    <!-- Voice call permissions -->
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,14 +28,13 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <!--requirement for Google Maps-->
+        <!-- requirement for Google Maps -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAMZg4y71b3Lv0cdrmqg9tjyx1qWtH0VsY"/>
+            android:value="AIzaSyAMZg4y71b3Lv0cdrmqg9tjyx1qWtH0VsY" />
 
         <activity
             android:name=".MainActivity"
@@ -38,25 +45,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".user.UserProfileUI"
-            android:label="@string/name_placeholder">
-	    </activity>
-
-	    <activity
+            android:label="@string/name_placeholder" />
+        <activity
             android:name=".user.SettingsUI"
-            android:label="@string/SettingsHeading">
-        </activity>
-
+            android:label="@string/SettingsHeading" />
         <activity
             android:name=".HomeScreen"
             android:label="@string/HomeText" />
-
         <activity
             android:name=".FrequentContactsUI"
             android:label="@string/frequentContactsHeading" />
-
         <activity
             android:name=".user.UserSearchUI"
             android:label="@string/title_activity_user_search_ui"
@@ -72,53 +72,36 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="au.edu.unimelb.eldercare.HomeScreen" />
         </activity>
-
         <activity
             android:name=".event.EventsUI"
-            android:label="Events">
-        </activity>
-
+            android:label="Events" />
         <activity
             android:name=".event.AddEventActivity"
-            android:label="Add Event">
-        </activity>
-
+            android:label="Add Event" />
         <activity
             android:name=".event.ViewEventsActivity"
-            android:label="View Events">
-        </activity>
-
+            android:label="View Events" />
         <activity
             android:name=".event.ViewEventActivity"
-            android:label="View Event">
-        </activity>
-
+            android:label="View Event" />
         <activity
             android:name=".event.ViewOwnEventActivity"
-            android:label="View Own Events">
-        </activity>
-
+            android:label="View Own Events" />
         <activity
             android:name=".event.EditEventActivity"
-            android:label="Edit Event">
-        </activity>
-
+            android:label="Edit Event" />
         <activity
             android:name=".user.ChangeDNameActivity"
             android:label="@string/changeDNameHeading" />
-
         <activity
             android:name=".user.ChangeEmailActivity"
-            android:label="Change Email Address"/>
-
+            android:label="Change Email Address" />
         <activity
-            android:name="MessagingActivity"
+            android:name=".MessagingActivity"
             android:label="Messaging" />
-
         <activity
             android:name=".user.SelectUserTypeActivity"
-            android:label="Select User Type"/>
-
+            android:label="Select User Type" />
         <activity
             android:name=".MapActivity"
             android:label="Map page">
@@ -126,19 +109,27 @@
 
         <activity
             android:name=".user.ChangeConnectedUserActivity"
-            android:label="Change Connected User"/>
-
+            android:label="Change Connected User" />
         <activity
             android:name=".user.ChangeUserBioActivity"
-            android:label="Change User Bio"/>
-
+            android:label="Change User Bio" />
         <activity
             android:name=".user.AboutActivity"
-            android:label="About Page"/>
+            android:label="About Page" />
+        <activity
+            android:name=".VoiceCallActivity"
+            android:label="Voice Call" />
+
+        <activity
+            android:name=".user.OtherUserProfileActivity"
+            android:label="Other User Profile"/>
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <activity android:name=".IncomingCallActivity" />
+        <activity android:name=".ActiveCallActivity"></activity>
     </application>
 
 </manifest>

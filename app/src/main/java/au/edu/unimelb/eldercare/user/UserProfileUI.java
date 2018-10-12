@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 import au.edu.unimelb.eldercare.R;
 import au.edu.unimelb.eldercare.usersearch.UserAccessor;
-import au.edu.unimelb.eldercare.usersearch.UserService;
+import au.edu.unimelb.eldercare.service.UserService;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;

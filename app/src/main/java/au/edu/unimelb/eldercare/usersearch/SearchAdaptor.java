@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import au.edu.unimelb.eldercare.R;
 import au.edu.unimelb.eldercare.service.AuthenticationService;
+import au.edu.unimelb.eldercare.service.UserService;
 import au.edu.unimelb.eldercare.user.User;
 import com.google.firebase.auth.FirebaseUser;
 

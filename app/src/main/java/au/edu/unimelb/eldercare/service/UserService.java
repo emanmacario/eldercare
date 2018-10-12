@@ -1,9 +1,10 @@
-package au.edu.unimelb.eldercare.usersearch;
+package au.edu.unimelb.eldercare.service;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import au.edu.unimelb.eldercare.user.User;
+import au.edu.unimelb.eldercare.usersearch.UserAccessor;
 import com.google.firebase.database.*;
 
 import java.util.ArrayList;

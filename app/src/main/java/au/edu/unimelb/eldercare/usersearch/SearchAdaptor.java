@@ -27,9 +27,11 @@ public class SearchAdaptor extends RecyclerView.Adapter<SearchAdaptor.ViewHolder
             User addedUser = (User) view.getTag();
             User thisUser = findLoggedInUser(user.getUid());
             thisUser.getFriends().add(addedUser.getUserId());
+            Button button = (Button)view;
+            button.setEnabled(false);
+            button.setText(R.string.friendAddButtonRequested);
             UserService.getInstance().saveUser(thisUser);
             Log.d(TAG, "onClick: clicked!" + addedUser.getDisplayName());
-
         }
     };
 

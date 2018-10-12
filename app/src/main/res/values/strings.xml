@@ -6,7 +6,7 @@
     <!-- Required for Facebook authentication -->
     <string name="facebook_application_id" translatable="false">314012962512588</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb314012962512588</string>
-  
+
     <!-- Home Page Strings -->
     <string name="HomeText">HOME</string>
     <string name="ProfileButton">Profile</string>
@@ -17,6 +17,7 @@
     <string name="FriendsListButton">Friends List</string>
     <string name="FrequentContactsButton">Frequent Contacts</string>
     <string name="SettingsButton">Settings</string>
+    <string name="VoiceCallButton">Voice Call</string>
 
     <!-- User Profile UI Strings -->
     <string name="name_placeholder">Name Placeholder</string>

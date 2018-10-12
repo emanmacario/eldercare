@@ -120,6 +120,10 @@
             android:name=".VoiceCallActivity"
             android:label="Voice Call" />
 
+        <activity
+            android:name=".user.OtherUserProfileActivity"
+            android:label="Other User Profile"/>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

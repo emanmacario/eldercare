@@ -5,12 +5,21 @@
     android:layout_height="wrap_content"
     android:paddingTop="10dp"
     android:paddingBottom="10dp">
+
     <TextView
         android:id="@+id/user_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        />
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/view_profile_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:textSize="12sp"
+        android:onClick="onUserProfileClick"/>
 
     <Button
         android:id="@+id/add_button"
@@ -18,7 +27,6 @@
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:textSize="12sp"
-        />
+        android:textSize="12sp" />
 
 </LinearLayout>

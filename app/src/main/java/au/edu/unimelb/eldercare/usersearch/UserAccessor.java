@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface UserAccessor {
     void userListLoaded(List<User> users);
+
+    void userLoaded(User value);
 }

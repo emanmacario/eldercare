@@ -67,18 +67,4 @@ public class HomeScreen extends AppCompatActivity {
     }
 
 
-    //TODO: remove this before merge with master
-    private boolean isTracing = true;
-    //toggle tracing
-    public void onClickFriendList(View view){
-        if (isTracing){
-            isTracing = !isTracing;
-            TraceLocationService.getTraceLocationService().startTracing(this);
-            Log.d(this.getClass().getSimpleName(), "start trace");
-        }else{
-            isTracing = !isTracing;
-            TraceLocationService.getTraceLocationService().stopTracing();
-            Log.d(this.getClass().getSimpleName(), "stop trace");
-        }
-    }
 }

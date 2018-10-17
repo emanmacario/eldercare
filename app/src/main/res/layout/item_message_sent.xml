@@ -45,7 +45,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:riv_corner_radius="15dip"
         app:riv_mutate_background="true"
-        app:riv_tile_mode="repeat"
         app:riv_oval="false" />
 
 </android.support.constraint.ConstraintLayout>

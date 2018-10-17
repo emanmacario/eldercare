@@ -24,12 +24,16 @@
             android:layout_height="30dp">
         </android.support.constraint.ConstraintLayout>
 
-        <ImageView
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/UserProfilePicture"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:srcCompat="@mipmap/ic_launcher"
-            android:layout_gravity="center"/>
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_gravity="center"
+            android:src="@drawable/default_profile_display"
+            app:civ_border_width="0dp"
+            app:civ_border_color="#FF000000"/>
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -39,11 +43,11 @@
         <TextView
             android:id="@+id/OtherUserBio"
             android:layout_width="match_parent"
-            android:layout_height="125dp"
+            android:layout_height="83dp"
             android:text="Bio Placeholder"
             android:textAlignment="center"
             android:textColor="#000000"
-            android:textSize="20dp"/>
+            android:textSize="20dp" />
 
         <LinearLayout
             android:layout_width="match_parent"

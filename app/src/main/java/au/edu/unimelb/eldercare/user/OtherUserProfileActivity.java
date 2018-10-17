@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -30,12 +31,13 @@ import au.edu.unimelb.eldercare.VoiceCallActivity;
 import au.edu.unimelb.eldercare.VoiceCallService;
 import au.edu.unimelb.eldercare.service.UserService;
 import au.edu.unimelb.eldercare.usersearch.UserAccessor;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OtherUserProfileActivity extends AppCompatActivity implements UserAccessor {
 
     TextView userProfileName;
     TextView userProfileBio;
-
+    CircleImageView userDisplayPhoto;
     Button userAboutButton;
     Button userAddFriendButton;
     Button userCallButton;
@@ -56,6 +58,7 @@ public class OtherUserProfileActivity extends AppCompatActivity implements UserA
         userAddFriendButton = findViewById(R.id.addFriendButtonUserProfile);
         userCallButton = findViewById(R.id.CallOtherUserButton);
         userMessageButton = findViewById(R.id.MessageOtherUserButton);
+        userDisplayPhoto = findViewById(R.id.UserProfilePicture);
 
 
         userCallButton.setOnClickListener(new Button.OnClickListener() {
@@ -104,5 +107,12 @@ public class OtherUserProfileActivity extends AppCompatActivity implements UserA
 
         String userBioString = value.getUserBio();
         userProfileBio.setText(userBioString);
+
+        String displayPhotoUrl = value.getDisplayPhoto();
+        if (displayPhotoUrl != null) {
+            Glide.with(this)
+                    .load(displayPhotoUrl)
+                    .into(userDisplayPhoto);
+        }
     }
 }

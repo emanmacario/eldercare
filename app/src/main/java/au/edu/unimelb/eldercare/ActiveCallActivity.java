@@ -20,8 +20,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import au.edu.unimelb.eldercare.helpers.TimeUtil;
+import au.edu.unimelb.eldercare.service.UserService;
+import au.edu.unimelb.eldercare.user.User;
+import au.edu.unimelb.eldercare.usersearch.UserAccessor;
 
-public class ActiveCallActivity extends AppCompatActivity {
+public class ActiveCallActivity extends AppCompatActivity implements UserAccessor {
 
     private static final String TAG = ActiveCallActivity.class.getSimpleName();
 
@@ -58,13 +61,24 @@ public class ActiveCallActivity extends AppCompatActivity {
 
         if (call != null) {
             call.addCallListener(new SinchCallListener());
-            mCallerName.setText(mSinchService.getDisplayName(call.getRemoteUserId()));
+            String remoteUserId = call.getRemoteUserId();
+            UserService.getInstance().getSpecificUser(remoteUserId, this);
             mCallState.setText(call.getState().toString());
             mTimer = new Timer();
         } else {
             Log.e(TAG, "Started with invalid call, aborting");
             finish();
         }
+    }
+
+    @Override
+    public void userListLoaded(List<User> users) {
+        // Not used
+    }
+
+    @Override
+    public void userLoaded(User user) {
+        mCallerName.setText(user.getDisplayName());
     }
 
     private void endCall() {

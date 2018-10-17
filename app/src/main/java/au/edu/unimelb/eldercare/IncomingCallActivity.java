@@ -19,15 +19,20 @@ import com.sinch.android.rtc.calling.CallState;
 
 import java.util.List;
 
-public class IncomingCallActivity extends AppCompatActivity {
+import au.edu.unimelb.eldercare.service.UserService;
+import au.edu.unimelb.eldercare.user.User;
+import au.edu.unimelb.eldercare.usersearch.UserAccessor;
+
+public class IncomingCallActivity extends AppCompatActivity implements UserAccessor {
 
     private static final String TAG = IncomingCallActivity.class.getSimpleName();
 
     private VoiceCallService mSinchService;
     private String mCallId;
+    private String mRemoteUserId;
 
     private View.OnClickListener mClickListener;
-    private TextView mRemoteUser;
+    private TextView mRemoteUserDisplayName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +56,8 @@ public class IncomingCallActivity extends AppCompatActivity {
         };
 
         Button answer = (Button) findViewById(R.id.answerButton);
-        answer.setOnClickListener(mClickListener);
         Button decline = (Button) findViewById(R.id.declineButton);
+        answer.setOnClickListener(mClickListener);
         decline.setOnClickListener(mClickListener);
 
         mSinchService = VoiceCallService.getInstance();
@@ -60,8 +65,19 @@ public class IncomingCallActivity extends AppCompatActivity {
         Call call = mSinchService.getCall(mCallId);
         call.addCallListener(new SinchCallListener());
 
-        mRemoteUser = (TextView) findViewById(R.id.remoteUser);
-        mRemoteUser.setText(mSinchService.getDisplayName(call.getRemoteUserId()));
+        mRemoteUserDisplayName = (TextView) findViewById(R.id.remoteUser);
+        mRemoteUserId = call.getRemoteUserId();
+        UserService.getInstance().getSpecificUser(mRemoteUserId, this);
+    }
+
+    @Override
+    public void userListLoaded(List<User> users) {
+        // Not used
+    }
+
+    @Override
+    public void userLoaded(User user) {
+        mRemoteUserDisplayName.setText(user.getDisplayName());
     }
 
     private void answerClicked() {

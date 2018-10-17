@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import au.edu.unimelb.eldercare.event.EventsUI;
+import au.edu.unimelb.eldercare.service.AuthenticationService;
 import au.edu.unimelb.eldercare.service.TraceLocationService;
 import au.edu.unimelb.eldercare.user.SettingsUI;
 import au.edu.unimelb.eldercare.user.UserProfileUI;
@@ -26,12 +27,13 @@ public class HomeScreen extends AppCompatActivity {
         sinchService.buildSinchClient(this);
     }
 
-    public void openUserProfileUI(View view){
+    public void openUserProfileUI(View view) {
+        String userId = AuthenticationService.getAuthenticationService().getUser().getUid();
         Intent intent = new Intent(HomeScreen.this, UserProfileUI.class);
+        intent.putExtra("targetUser", userId);
     	startActivity(intent);
     }
 
-    //When Settings button is clicked, this opens the settings page
     public void openSettings(View view){
         Intent intent = new Intent(HomeScreen.this, SettingsUI.class);
         startActivity(intent);
@@ -51,8 +53,6 @@ public class HomeScreen extends AppCompatActivity {
     }
 
     public void openMessaging(View view) {
-        // Intent intent = new Intent(HomeScreen.this, MessagingActivity.class);
-
         Intent intent = new Intent(HomeScreen.this, MessagingActivity.class);
         startActivity(intent);
     }
@@ -62,7 +62,6 @@ public class HomeScreen extends AppCompatActivity {
         startActivity(intent);
     }
 
-    //When Map button is clicked, this opens the Map page
     public void openMap(View view){
         Intent intent = new Intent(HomeScreen.this, MapActivity.class);
         startActivity(intent);

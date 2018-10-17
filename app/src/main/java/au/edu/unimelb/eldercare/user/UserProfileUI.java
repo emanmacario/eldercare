@@ -23,7 +23,6 @@ public class UserProfileUI extends AppCompatActivity implements UserAccessor {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Sets the screen on open
         setContentView(R.layout.user_profile_ui);
 
         DisplayName = findViewById(R.id.UserProfileHeading);

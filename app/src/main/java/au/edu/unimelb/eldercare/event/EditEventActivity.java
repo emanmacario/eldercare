@@ -53,7 +53,8 @@ public class EditEventActivity extends AddEventActivity{
         submitEventButton.setText("Edit");
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        builder.include(new LatLng(event.location.get("latitude"), event.location.get("longitude")));
+        location = new LatLng(event.location.get("latitude"), event.location.get("longitude"));
+        builder.include(location);
 
         openLocation = builder.build();
 

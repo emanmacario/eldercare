@@ -22,6 +22,7 @@ android {
 }
 
 repositories {
+    mavenCentral()
     flatDir {
         dirs 'libs'
     }
@@ -43,6 +44,7 @@ dependencies {
 
     // More design
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'com.makeramen:roundedimageview:2.3.0'
 
     // Firebase
     implementation 'com.google.firebase:firebase-core:16.0.4'

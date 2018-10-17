@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import au.edu.unimelb.eldercare.R;
 import au.edu.unimelb.eldercare.helpers.TimeUtil;
@@ -23,13 +24,13 @@ public class SentMessageViewHolder extends MessageViewHolder {
 
     private TextView messageText;
     private TextView timeText;
-    private ImageView messageImage;
+    private RoundedImageView messageImage;
 
     public SentMessageViewHolder(View view) {
         super(view);
         this.messageText = (TextView) view.findViewById(R.id.text_message_body);
         this.timeText = (TextView) view.findViewById(R.id.text_message_time);
-        this.messageImage = (ImageView) view.findViewById(R.id.image_message_view);
+        this.messageImage = (RoundedImageView) view.findViewById(R.id.image_message_view);
     }
 
     @Override
@@ -54,6 +55,7 @@ public class SentMessageViewHolder extends MessageViewHolder {
                             @Override
                             public void onComplete(@NonNull Task<Uri> task) {
                                 if (task.isSuccessful()) {
+                                    assert(task.getResult() != null);
                                     String downloadUrl = task.getResult().toString();
                                     Glide.with(messageImage.getContext())
                                             .load(downloadUrl)

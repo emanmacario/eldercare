@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class ReceivedMessageViewHolder extends MessageViewHolder implements User
     private TextView timeText;
     private TextView nameText;
     private CircleImageView profileImage;
-    private ImageView messageImage;
+    private RoundedImageView messageImage;
 
     public ReceivedMessageViewHolder(View view) {
         super(view);
@@ -38,7 +39,7 @@ public class ReceivedMessageViewHolder extends MessageViewHolder implements User
         this.timeText = (TextView) view.findViewById(R.id.text_message_time);
         this.nameText = (TextView) view.findViewById(R.id.text_message_name);
         this.profileImage = (CircleImageView) view.findViewById(R.id.image_message_profile);
-        this.messageImage = (ImageView) view.findViewById(R.id.image_message_view);
+        this.messageImage = (RoundedImageView) view.findViewById(R.id.image_message_view);
     }
 
     @Override

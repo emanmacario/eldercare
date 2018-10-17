@@ -54,16 +54,21 @@
         android:layout_marginStart="4dp"
         app:layout_constraintBottom_toBottomOf="@+id/text_message_body" />
 
-    <ImageView
+    <com.makeramen.roundedimageview.RoundedImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/image_message_view"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
         android:layout_width="256dp"
         android:layout_height="wrap_content"
+        android:maxWidth="256dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
-        android:adjustViewBounds="true"
-        android:maxWidth="256dp"
-        android:scaleType="fitCenter"
         app:layout_constraintStart_toEndOf="@+id/image_message_profile"
-        app:layout_constraintTop_toBottomOf="@+id/text_message_name" />
+        app:layout_constraintTop_toBottomOf="@+id/text_message_name"
+        app:riv_corner_radius="15dip"
+        app:riv_mutate_background="true"
+        app:riv_tile_mode="repeat"
+        app:riv_oval="false" />
 
 </android.support.constraint.ConstraintLayout>

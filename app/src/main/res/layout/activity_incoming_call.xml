@@ -40,7 +40,7 @@
             android:layout_gravity="center_horizontal"
             android:src="@drawable/default_profile_display"
             app:civ_border_color="#FF000000"
-            app:civ_border_width="0.5dp" />
+            app:civ_border_width="0.1dp" />
 
         <RelativeLayout
             android:id="@+id/bottomPanel"

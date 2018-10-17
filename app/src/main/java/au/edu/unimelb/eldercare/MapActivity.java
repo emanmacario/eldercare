@@ -98,35 +98,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
             if (userTracking) {
-                traceLocationService.startTracing(MapActivity.this);
-                mDatabase.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                        //Get the connected users email
-                        String ConnectedUsersUid = dataSnapshot.child(user.getUid()).child("ConnectedUser").getValue(String.class);
-                        if(ConnectedUsersUid != null){
-                            //Using the connected users Uid, grab their location
-                            double lat = dataSnapshot.child(ConnectedUsersUid).child("location").child("latitude").getValue(double.class);
-                            double lon = dataSnapshot.child(ConnectedUsersUid).child("location").child("longitude").getValue(double.class);
-
-                            //Place a marker on the map at the connected user's location
-                            mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title("Hello World"));
-                        }
-                        else{
-                            Toast noConnectedUserToast = Toast.makeText(MapActivity.this, "No User to Track", Toast.LENGTH_LONG);
-                            noConnectedUserToast.show();
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
-
+               trackUser();
             }
             else {
                 mMap.clear();
@@ -169,6 +141,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         //TODO: Add a toggle button
         userTracking = false;
         traceLocationService = TraceLocationService.getTraceLocationService();
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(userTracking){
+                    trackUser();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void getDeviceLocation() {
@@ -414,5 +400,35 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void toggleUserTracking(View view){
         userTracking = !userTracking;
         onMapReady(mMap);
+    }
+
+    public void trackUser(){
+        traceLocationService.startTracing(MapActivity.this);
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mMap.clear();
+                //Get the connected users email
+                String ConnectedUsersUid = dataSnapshot.child(user.getUid()).child("ConnectedUser").getValue(String.class);
+                if(ConnectedUsersUid != null){
+                    //Using the connected users Uid, grab their location
+                    double lat = dataSnapshot.child(ConnectedUsersUid).child("location").child("latitude").getValue(double.class);
+                    double lon = dataSnapshot.child(ConnectedUsersUid).child("location").child("longitude").getValue(double.class);
+
+                    //Place a marker on the map at the connected user's location
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title("Hello World"));
+                }
+                else{
+                    Toast noConnectedUserToast = Toast.makeText(MapActivity.this, "No User to Track", Toast.LENGTH_LONG);
+                    noConnectedUserToast.show();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

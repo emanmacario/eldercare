@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.model.Circle;
 import com.sinch.android.rtc.MissingPermissionException;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.calling.Call;
@@ -22,6 +24,7 @@ import java.util.List;
 import au.edu.unimelb.eldercare.service.UserService;
 import au.edu.unimelb.eldercare.user.User;
 import au.edu.unimelb.eldercare.usersearch.UserAccessor;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class IncomingCallActivity extends AppCompatActivity implements UserAccessor {
 
@@ -29,17 +32,16 @@ public class IncomingCallActivity extends AppCompatActivity implements UserAcces
 
     private VoiceCallService mSinchService;
     private String mCallId;
-    private String mRemoteUserId;
 
-    private View.OnClickListener mClickListener;
     private TextView mRemoteUserDisplayName;
+    private CircleImageView mRemoteUserDisplayPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_incoming_call);
 
-        mClickListener = new View.OnClickListener() {
+        View.OnClickListener mClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switch (view.getId()) {
@@ -55,6 +57,8 @@ public class IncomingCallActivity extends AppCompatActivity implements UserAcces
             }
         };
 
+
+
         Button answer = (Button) findViewById(R.id.answerButton);
         Button decline = (Button) findViewById(R.id.declineButton);
         answer.setOnClickListener(mClickListener);
@@ -65,8 +69,10 @@ public class IncomingCallActivity extends AppCompatActivity implements UserAcces
         Call call = mSinchService.getCall(mCallId);
         call.addCallListener(new SinchCallListener());
 
+        mRemoteUserDisplayPhoto = (CircleImageView) findViewById(R.id.displayPicture);
         mRemoteUserDisplayName = (TextView) findViewById(R.id.remoteUser);
-        mRemoteUserId = call.getRemoteUserId();
+
+        String mRemoteUserId = call.getRemoteUserId();
         UserService.getInstance().getSpecificUser(mRemoteUserId, this);
     }
 
@@ -77,6 +83,12 @@ public class IncomingCallActivity extends AppCompatActivity implements UserAcces
 
     @Override
     public void userLoaded(User user) {
+        String displayPhotoUrl = user.getDisplayPhoto();
+        if (displayPhotoUrl != null) {
+            Glide.with(this)
+                    .load(displayPhotoUrl)
+                    .into(mRemoteUserDisplayPhoto);
+        }
         mRemoteUserDisplayName.setText(user.getDisplayName());
     }
 

@@ -13,27 +13,36 @@
         <TextView
             android:id="@+id/UserProfileHeading"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:text="@string/name_placeholder"
+            android:paddingTop="20sp"
+            android:paddingBottom="5sp"
+            android:textAlignment="center"
             android:textColor="#000000"
-            android:textSize="40dp"
-            android:textAlignment="center"/>
+            android:textSize="40sp" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/ProfilePicture"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:srcCompat="@mipmap/ic_launcher"
-            android:layout_gravity="center"/>
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_gravity="center"
+            android:src="@drawable/default_profile_display"
+            app:civ_border_width="0dp"
+            app:civ_border_color="#FF000000"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
 
         <TextView
             android:id="@+id/UserBio"
             android:layout_width="match_parent"
-            android:layout_height="125dp"
+            android:layout_height="114dp"
             android:text="Bio Placeholder"
             android:textAlignment="center"
             android:textColor="#000000"
-            android:textSize="20dp"/>
+            android:textSize="20dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -73,6 +82,12 @@
             android:layout_width="match_parent"
             android:layout_height="20dp" />
 
+        <Button
+            android:id="@+id/ChangeDisplayPictureButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="SET DISPLAY PICTURE" />
 
 
     </LinearLayout>

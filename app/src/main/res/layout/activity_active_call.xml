@@ -45,14 +45,22 @@
             android:textColor="#000"
             android:textSize="16sp" />
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="27dp" />
+
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/displayPicture"
-            android:layout_width="96dp"
-            android:layout_height="135dp"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/default_profile_display"
             app:civ_border_color="#FF000000"
-            app:civ_border_width="0.5dp" />
+            app:civ_border_width="0dp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="27dp" />
 
         <Button
             android:id="@+id/hangupButton"

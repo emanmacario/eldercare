@@ -37,6 +37,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import au.edu.unimelb.eldercare.helpers.TimeUtil;
@@ -44,8 +45,11 @@ import au.edu.unimelb.eldercare.messaging.Message;
 import au.edu.unimelb.eldercare.messaging.MessageViewHolder;
 import au.edu.unimelb.eldercare.messaging.ReceivedMessageViewHolder;
 import au.edu.unimelb.eldercare.messaging.SentMessageViewHolder;
+import au.edu.unimelb.eldercare.service.UserService;
+import au.edu.unimelb.eldercare.user.User;
+import au.edu.unimelb.eldercare.usersearch.UserAccessor;
 
-public class MessagingActivity extends AppCompatActivity {
+public class MessagingActivity extends AppCompatActivity implements UserAccessor {
 
     // Static variables and constants
     private static final String TAG = "MessagingActivity";
@@ -73,13 +77,15 @@ public class MessagingActivity extends AppCompatActivity {
     private ImageButton mAddImageButton;
     private RecyclerView mMessageRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
-    private EditText mMessageEditText;;
+    private EditText mMessageEditText;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messaging);
+
+
 
         // Initialise Firebase instance variables
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -102,13 +108,12 @@ public class MessagingActivity extends AppCompatActivity {
 
             if (mFirebaseUser.getPhotoUrl() != null) {
                 mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
-            } else {
-                mPhotoUrl = null;
             }
         }
 
         mCurrentUserId = mFirebaseUser.getUid();
         mChatUserId = getIntent().getStringExtra("targetUser");
+        UserService.getInstance().getSpecificUser(mCurrentUserId, this);
 
         mDatabaseReference.child("chat").child(mCurrentUserId).addValueEventListener(new ValueEventListener() {
             @Override
@@ -342,6 +347,16 @@ public class MessagingActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    public void userListLoaded(List<User> users) {
+        // Not used
+    }
+
+    @Override
+    public void userLoaded(User user) {
+        mPhotoUrl = user.getDisplayPhoto();
     }
 
     private void storeImage(final StorageReference storageReference, Uri uri, final String key) {

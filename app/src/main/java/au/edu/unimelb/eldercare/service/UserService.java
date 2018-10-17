@@ -55,7 +55,10 @@ public class UserService {
         databaseReference.child(userId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                sender.userLoaded(dataSnapshot.getValue(User.class));
+                User firebaseUser = dataSnapshot.getValue(User.class);
+                assert firebaseUser != null;
+                firebaseUser.setUserId(dataSnapshot.getKey());
+                sender.userLoaded(firebaseUser);
             }
 
             @Override

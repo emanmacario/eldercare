@@ -7,6 +7,7 @@ import java.util.List;
 public class User {
 
     private String displayName;
+    private String displayPhoto;
     private String email;
     private String userType;
     private String connectedUserID;
@@ -93,5 +94,13 @@ public class User {
 
     public String getUserId() {
         return userId;
+    }
+
+    public void setDisplayPhoto(String displayPhoto) {
+        this.displayPhoto = displayPhoto;
+    }
+
+    public String getDisplayPhoto() {
+        return this.displayPhoto;
     }
 }

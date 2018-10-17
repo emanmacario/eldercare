@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.calling.Call;
 import com.sinch.android.rtc.calling.CallListener;
@@ -23,6 +24,7 @@ import au.edu.unimelb.eldercare.helpers.TimeUtil;
 import au.edu.unimelb.eldercare.service.UserService;
 import au.edu.unimelb.eldercare.user.User;
 import au.edu.unimelb.eldercare.usersearch.UserAccessor;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ActiveCallActivity extends AppCompatActivity implements UserAccessor {
 
@@ -35,6 +37,7 @@ public class ActiveCallActivity extends AppCompatActivity implements UserAccesso
     private TextView mCallState;
     private TextView mCallDuration;
     private TextView mCallerName;
+    private CircleImageView mCallerDisplayPhoto;
     private Button mEndCallButton;
 
     @Override
@@ -45,6 +48,7 @@ public class ActiveCallActivity extends AppCompatActivity implements UserAccesso
         mCallState = (TextView) findViewById(R.id.callState);
         mCallDuration = (TextView) findViewById(R.id.callDuration);
         mCallerName = (TextView) findViewById(R.id.remoteUser);
+        mCallerDisplayPhoto = (CircleImageView) findViewById(R.id.displayPicture);
         mEndCallButton = (Button) findViewById(R.id.hangupButton);
 
         mCallDuration.setVisibility(TextView.GONE);
@@ -79,6 +83,13 @@ public class ActiveCallActivity extends AppCompatActivity implements UserAccesso
     @Override
     public void userLoaded(User user) {
         mCallerName.setText(user.getDisplayName());
+
+        String displayPhotoUrl = user.getDisplayPhoto();
+        if (displayPhotoUrl != null) {
+            Glide.with(this)
+                    .load(displayPhotoUrl)
+                    .into(mCallerDisplayPhoto);
+        }
     }
 
     private void endCall() {

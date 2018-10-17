@@ -2,19 +2,21 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="8dp">
 
-    <ImageView
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/image_message_profile"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:background="@drawable/circle_blue"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/default_profile_display"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="8dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
 
     <TextView
         android:id="@+id/text_message_name"
@@ -52,15 +54,14 @@
         android:layout_marginStart="4dp"
         app:layout_constraintBottom_toBottomOf="@+id/text_message_body" />
 
-
     <ImageView
         android:id="@+id/image_message_view"
-        android:layout_width="240dp"
+        android:layout_width="256dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:adjustViewBounds="true"
-        android:maxWidth="240dp"
+        android:maxWidth="256dp"
         android:scaleType="fitCenter"
         app:layout_constraintStart_toEndOf="@+id/image_message_profile"
         app:layout_constraintTop_toBottomOf="@+id/text_message_name" />

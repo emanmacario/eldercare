@@ -43,12 +43,15 @@ public class UserProfileUI extends AppCompatActivity implements UserAccessor {
     private String mCurrentUserId;
 
     // Firebase References
-    FirebaseUser user;
+    //FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_profile_ui);
+
+        String profileUserId = getIntent().getStringExtra("targetUser");
+        UserService.getInstance().getSpecificUser(profileUserId, this);
 
         mDisplayName = findViewById(R.id.UserProfileHeading);
         mUserBio = findViewById(R.id.UserBio);
@@ -67,9 +70,6 @@ public class UserProfileUI extends AppCompatActivity implements UserAccessor {
 
             }
         });
-
-        String profileUserId = getIntent().getStringExtra("targetUser");
-        UserService.getInstance().getSpecificUser(profileUserId, this);
     }
 
     @Override
@@ -151,8 +151,8 @@ public class UserProfileUI extends AppCompatActivity implements UserAccessor {
     public void userLoaded(User user) {
         mCurrentUserId = user.getUserId();
 
-        String userName = user.getDisplayName();
-        mDisplayName.setText(userName);
+        String displayName = user.getDisplayName();
+        mDisplayName.setText(displayName);
 
         String userBioString = user.getUserBio();
         mUserBio.setText(userBioString);

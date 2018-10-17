@@ -24,6 +24,7 @@ import com.sinch.android.rtc.calling.Call;
 import java.util.List;
 
 import au.edu.unimelb.eldercare.ActiveCallActivity;
+import au.edu.unimelb.eldercare.MessagingActivity;
 import au.edu.unimelb.eldercare.R;
 import au.edu.unimelb.eldercare.VoiceCallActivity;
 import au.edu.unimelb.eldercare.VoiceCallService;
@@ -78,6 +79,15 @@ public class OtherUserProfileActivity extends AppCompatActivity implements UserA
                     ActivityCompat.requestPermissions(OtherUserProfileActivity.this,
                             new String[] {e.getRequiredPermission()}, 0);
                 }
+            }
+        });
+
+        userMessageButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(OtherUserProfileActivity.this, MessagingActivity.class);
+                intent.putExtra("targetUser", profileUserId);
+                startActivity(intent);
             }
         });
     }

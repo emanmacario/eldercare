@@ -31,9 +31,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import au.edu.unimelb.eldercare.helpers.TimeUtil;
 import au.edu.unimelb.eldercare.messaging.Message;
@@ -60,6 +64,8 @@ public class MessagingActivity extends AppCompatActivity {
 
     // User instance variables
     private String mUsername;
+    private String mCurrentUserId;
+    private String mChatUserId;
     private String mPhotoUrl;
 
     // UI instance variables
@@ -100,6 +106,40 @@ public class MessagingActivity extends AppCompatActivity {
                 mPhotoUrl = null;
             }
         }
+
+        mCurrentUserId = mFirebaseUser.getUid();
+        mChatUserId = getIntent().getStringExtra("targetUser");
+
+        mDatabaseReference.child("chat").child(mCurrentUserId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if (!dataSnapshot.hasChild(mChatUserId)) {
+                    Map chatAddMap = new HashMap();
+                    chatAddMap.put("seen", false);
+                    chatAddMap.put("timestamp", 0);
+
+                    Map chatUserMap = new HashMap();
+                    chatUserMap.put("chat/" + mCurrentUserId + "/" + mChatUserId, chatAddMap);
+                    chatUserMap.put("chat/" + mChatUserId + "/" + mCurrentUserId, chatAddMap);
+
+                    mDatabaseReference.updateChildren(chatUserMap, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                            if (databaseError != null) {
+                                Log.d(TAG, databaseError.getMessage());
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+
 
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
@@ -153,10 +193,13 @@ public class MessagingActivity extends AppCompatActivity {
             }
         };
 
+
+        DatabaseReference messagesReference = mDatabaseReference.child("messages").child(mCurrentUserId).child(mChatUserId);
+
         // Configure the Firebase Recycler Adapter
         FirebaseRecyclerOptions<Message> options =
                 new FirebaseRecyclerOptions.Builder<Message>()
-                        .setQuery(mDatabaseReference.child(MESSAGES_CHILD), parser)
+                        .setQuery(messagesReference, parser) //mDatabaseReference.child(MESSAGES_CHILD)
                         .build();
 
         // Create the Firebase Recycler Adapter
@@ -233,7 +276,29 @@ public class MessagingActivity extends AppCompatActivity {
 
                 // Create the message and push it to the database
                 Message message = new Message(mFirebaseUser.getUid(), mUsername, text, null, mPhotoUrl, time);
-                mDatabaseReference.child(MESSAGES_CHILD).push().setValue(message);
+                //mDatabaseReference.child(MESSAGES_CHILD).push().setValue(message);
+
+
+                String currentUserReference = "messages/" + mCurrentUserId + "/" + mChatUserId;
+                String chatUserReference = "messages/" + mChatUserId + "/" + mCurrentUserId;
+
+                DatabaseReference userMessagePush = mDatabaseReference.child("messages")
+                        .child(mCurrentUserId).child(mChatUserId).push();
+
+                String pushId = userMessagePush.getKey();
+
+                Map messageUserMap = new HashMap();
+                messageUserMap.put(currentUserReference + "/" + pushId, message);
+                messageUserMap.put(chatUserReference + "/" + pushId, message);
+
+                mDatabaseReference.updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                        if (databaseError != null) {
+                            Log.d(TAG, databaseError.getMessage());
+                        }
+                    }
+                });
 
                 // Clear the input field
                 mMessageEditText.setText("");

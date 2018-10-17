@@ -319,7 +319,8 @@ public class MessagingActivity extends AppCompatActivity {
                             new Message(mFirebaseUser.getUid(), mUsername, null, LOADING_IMAGE_URL,
                                     mPhotoUrl, TimeUtil.getCurrentTime());
 
-                    mDatabaseReference.child(MESSAGES_CHILD).push()
+                    // mDatabaseReference.child(MESSAGES_CHILD).push()
+                    mDatabaseReference.child("messages").child(mCurrentUserId).child(mChatUserId).push()
                             .setValue(tempMessage, new DatabaseReference.CompletionListener() {
                                 @Override
                                 public void onComplete(@Nullable DatabaseError databaseError,
@@ -368,7 +369,11 @@ public class MessagingActivity extends AppCompatActivity {
                             new Message(mFirebaseUser.getUid(), mFirebaseUser.getDisplayName(),
                                     null, downloadUri.toString(), mPhotoUrl,
                                     TimeUtil.getCurrentTime());
-                    mDatabaseReference.child(MESSAGES_CHILD).child(key).setValue(message);
+                    //mDatabaseReference.child(MESSAGES_CHILD).child(key).setValue(message);
+                    mDatabaseReference.child("messages").child(mCurrentUserId).child(mChatUserId)
+                            .child(key).setValue(message);
+                    mDatabaseReference.child("messages").child(mChatUserId).child(mCurrentUserId)
+                            .child(key).setValue(message);
                 } else {
                     Log.w(TAG, "Image upload task was not successful", task.getException());
                 }

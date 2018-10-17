@@ -1,11 +1,13 @@
 package au.edu.unimelb.eldercare.event;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
+import au.edu.unimelb.eldercare.MapActivity;
 import au.edu.unimelb.eldercare.R;
 
 public class ViewEventActivity extends EditEventActivity {
@@ -23,7 +25,6 @@ public class ViewEventActivity extends EditEventActivity {
         eventDescriptionTextbox.setEnabled(false);
         dateButton.setEnabled(false);
         timeButton.setEnabled(false);
-        findViewById(R.id.openMapButton).setVisibility(View.GONE);
         maxUserTextbox.setEnabled(false);
 
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -31,8 +32,6 @@ public class ViewEventActivity extends EditEventActivity {
 
         alterActivityByUserJoinState();
 
-        //TODO: remove this after implementing map
-        findViewById(R.id.openMapButton).setVisibility(View.GONE);
     }
 
     @Override
@@ -47,6 +46,14 @@ public class ViewEventActivity extends EditEventActivity {
 
     private boolean isRegistered(){
         return event.registeredUserId.get(userId) != null? true: false;
+    }
+
+    @Override
+    public void onClickLocation(View view){
+        Intent intent = new Intent(this, MapActivity.class);
+        intent.putExtra("location", location);
+        intent.putExtra("locationName", event.locationName);
+        startActivity(intent);
     }
 
     private void alterActivityByUserJoinState(){
@@ -75,4 +82,6 @@ public class ViewEventActivity extends EditEventActivity {
 
         event.unregisterUser(userId);
     }
+
+
 }

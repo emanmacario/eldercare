@@ -73,6 +73,8 @@ public class EditEventActivity extends AddEventActivity{
             String userId = dataSnapshot.getKey();
 
             event.registerUser(userId, registerState);
+
+            //TODO: count No. registered user
         }
 
         @Override

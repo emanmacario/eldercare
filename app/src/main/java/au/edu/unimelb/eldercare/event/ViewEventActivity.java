@@ -1,14 +1,18 @@
 package au.edu.unimelb.eldercare.event;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.Objects;
+
 import au.edu.unimelb.eldercare.MapActivity;
-import au.edu.unimelb.eldercare.R;
 
 public class ViewEventActivity extends EditEventActivity {
 
@@ -27,7 +31,7 @@ public class ViewEventActivity extends EditEventActivity {
         timeButton.setEnabled(false);
         maxUserTextbox.setEnabled(false);
 
-        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         userRef = mDatabase.child("users").child(userId);
 
         alterActivityByUserJoinState();
@@ -40,12 +44,13 @@ public class ViewEventActivity extends EditEventActivity {
             unregister();
         }else{
             register();
+            askAddEventToCalendar(view);
         }
         alterActivityByUserJoinState();
     }
 
     private boolean isRegistered(){
-        return event.registeredUserId.get(userId) != null? true: false;
+        return event.registeredUserId.get(userId) != null;
     }
 
     @Override
@@ -83,5 +88,29 @@ public class ViewEventActivity extends EditEventActivity {
         event.unregisterUser(userId);
     }
 
+    private void askAddEventToCalendar(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder.setTitle("Add event to calendar").setMessage("Do you want to add this event to your calendar?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                addEventToCalendar();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {}
+        });
+        builder.show();
+    }
+
+    private void addEventToCalendar(){
+        Intent intent = new Intent(Intent.ACTION_INSERT)
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, event.startingTime)
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, event.startingTime)
+                .putExtra(CalendarContract.Events.TITLE, event.eventName)
+                .putExtra(CalendarContract.Events.DESCRIPTION, event.eventDescription)
+                .putExtra(CalendarContract.Events.EVENT_LOCATION, event.locationName);
+        startActivity(intent);
+    }
 
 }

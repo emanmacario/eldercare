@@ -6,4 +6,7 @@
     <color name="ReseneNeptune">#77A8AB</color>
     <color name="ReseneAstra">#EDD5A6</color>
     <color name="LightGrey">#DDDDDD</color>
+    <color name="Red">#FF3333</color>
+    <color name="Green">#5CD65C</color>
+    <color name="White">#FFF</color>
 </resources>

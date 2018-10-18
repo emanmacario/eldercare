@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,8 +66,8 @@ public class IncomingCallActivity extends AppCompatActivity implements UserAcces
         mRemoteUserDisplayPhoto = findViewById(R.id.displayPicture);
         mRemoteUserDisplayName = findViewById(R.id.remoteUser);
 
-        Button answer = findViewById(R.id.answerButton);
-        Button decline = findViewById(R.id.declineButton);
+        ImageButton answer = findViewById(R.id.answerButton);
+        ImageButton decline = findViewById(R.id.declineButton);
         answer.setOnClickListener(mClickListener);
         decline.setOnClickListener(mClickListener);
 

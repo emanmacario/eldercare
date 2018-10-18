@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/LightGrey">
 
     <TextView
         android:id="@+id/EventsText"
@@ -33,7 +34,8 @@
         android:onClick="openViewEventsUI"
         android:text="@string/view_events"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/EventsText" />
+        app:layout_constraintTop_toBottomOf="@+id/EventsText"
+        android:background="@drawable/btn_rounded"/>
 
     <Button
         android:id="@+id/EditEventButton"
@@ -44,7 +46,8 @@
         android:onClick="openEditEventsUI"
         android:text="@string/edit_event"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ViewEventsButton" />
+        app:layout_constraintTop_toBottomOf="@+id/ViewEventsButton"
+        android:background="@drawable/btn_rounded"/>
 
     <Button
         android:id="@+id/AddEventButton"
@@ -55,6 +58,7 @@
         android:onClick="openAddEventsUI"
         android:text="@string/add_event"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/EventsText" />
+        app:layout_constraintTop_toBottomOf="@+id/EventsText"
+        android:background="@drawable/btn_rounded"/>
 
 </android.support.constraint.ConstraintLayout>

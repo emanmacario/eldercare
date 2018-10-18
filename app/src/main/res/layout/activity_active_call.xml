@@ -1,76 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/White"
     android:orientation="vertical"
-    android:weightSum="5"
-    android:background="#ffffffff">
+    android:weightSum="5">
 
-    <LinearLayout
+    <Space
         android:layout_width="match_parent"
-        android:layout_height="578dp"
-        android:layout_weight="1"
-        android:background="#fffafafa"
-        android:orientation="vertical">
+        android:layout_height="50dp" />
 
-        <TextView
-            android:id="@+id/remoteUser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="10dp"
-            android:text="Sample User"
-            android:textColor="@color/colorPrimary"
-            android:textSize="28sp" />
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/displayPicture"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/default_profile_display"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="0dp" />
 
-        <TextView
-            android:id="@+id/callState"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Ringing"
-            android:textAllCaps="true"
-            android:textColor="#000"
-            android:textSize="16sp" />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
 
-        <TextView
-            android:id="@+id/callDuration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="4dp"
-            android:text="00:00"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#000"
-            android:textSize="16sp" />
+    <TextView
+        android:id="@+id/remoteUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:text="Sample User"
+        android:textColor="@color/colorPrimary"
+        android:textSize="28sp" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="27dp" />
+    <TextView
+        android:id="@+id/callState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Ringing"
+        android:textAllCaps="true"
+        android:textColor="#000"
+        android:textSize="16sp" />
 
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/displayPicture"
-            android:layout_width="128dp"
-            android:layout_height="128dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/default_profile_display"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="0dp" />
+    <TextView
+        android:id="@+id/callDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="4dp"
+        android:text="00:00"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#000"
+        android:textSize="16sp" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="27dp" />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
 
-        <Button
-            android:id="@+id/hangupButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:paddingBottom="20dp"
-            android:paddingTop="20dp"
-            android:text="END CALL" />
-
-    </LinearLayout>
+    <ImageButton
+        android:id="@+id/hangupButton"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/circle_blue"
+        android:backgroundTint="@color/Red"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_call_end_black_48dp"
+        android:tint="#FFF" />
 
 </LinearLayout>

@@ -19,7 +19,13 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:textSize="12sp"
-        android:onClick="onUserProfileClick"/>
+        android:onClick="onUserProfileClick"
+        android:background="@drawable/btn_rounded"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="10dp"
+        android:layout_height="wrap_content">
+    </android.support.constraint.ConstraintLayout>
 
     <Button
         android:id="@+id/add_button"
@@ -27,6 +33,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:background="@drawable/btn_rounded"/>
 
 </LinearLayout>

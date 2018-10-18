@@ -2,7 +2,8 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/LightGrey">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -65,7 +66,7 @@
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:text="Call"
-                android:background="@color/ReseneNeptune"/>
+                android:background="@drawable/btn_rounded"/>
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="50dp"
@@ -77,7 +78,7 @@
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:text="Message"
-                android:background="@color/ReseneNeptune"/>
+                android:background="@drawable/btn_rounded"/>
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="50dp"
@@ -108,7 +109,7 @@
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:text="@string/UserAboutButton"
-                android:background="@color/ReseneNeptune"
+                android:background="@drawable/btn_rounded"
                 android:onClick="openOtherUserAboutActivity"/>
 
             <android.support.constraint.ConstraintLayout
@@ -121,7 +122,7 @@
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:text="Add Friend"
-                android:background="@color/ReseneNeptune"/>
+                android:background="@drawable/btn_rounded"/>
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="50dp"

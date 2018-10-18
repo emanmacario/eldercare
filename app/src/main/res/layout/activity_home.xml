@@ -1,0 +1,258 @@
+<com.sothree.slidinguppanel.SlidingUpPanelLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sliding_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    sothree:umanoPanelHeight="118dp"
+    sothree:umanoShadowHeight="4dp">
+
+    <!-- First child is the main layout. Set width and height to match_parent -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Main Content"
+        android:textSize="16sp" />
+
+    <!-- Second child is the sliding layout. Set width to match_parent
+         and height to a max height or match_parent -->
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0.5"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:clickable="false"
+            android:text="Explore"
+            android:textSize="16sp">
+        </TextView>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <!-- Profile button -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/profileButton"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:onClick="openUserProfileUI"
+                    android:background="@drawable/circle_blue"
+                    android:backgroundTint="@color/Green"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_person_black_48dp"
+                    android:tint="#FFF"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:text="@string/ProfileButton">
+                </TextView>
+            </LinearLayout>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <!-- Events Button -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/eventsButton"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:onClick="openEvents"
+                    android:background="@drawable/circle_blue"
+                    android:backgroundTint="@color/Red"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_event_black_48dp"
+                    android:tint="#FFF"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:text="@string/EventsButton">
+                </TextView>
+            </LinearLayout>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <!-- Friends button -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/friendsButton"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:onClick="openFriends"
+                    android:background="@drawable/circle_blue"
+                    android:backgroundTint="#48b3ff"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_people_black_48dp"
+                    android:tint="#FFF"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:text="Friends">
+                </TextView>
+            </LinearLayout>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <!-- User Search button -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/userSearchButton"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:onClick="openUserSearch"
+                    android:gravity="center_horizontal"
+                    android:background="@drawable/circle_blue"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_search_black_48dp"
+                    android:tint="#FFF"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:text="@string/UserSearchButton">
+                </TextView>
+            </LinearLayout>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <!-- Connected User button -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/connectedUserButton"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:onClick="openConnectedUser"
+                    android:background="@drawable/circle_blue"
+                    android:backgroundTint="#ffa31a"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_person_black_48dp"
+                    android:tint="#FFF"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:text="Connected User">
+                </TextView>
+            </LinearLayout>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <!-- Settings button -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/settingsButton"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:onClick="openSettings"
+                    android:background="@drawable/circle_blue"
+                    android:backgroundTint="#737373"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_settings_black_48dp"
+                    android:tint="#FFF"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:text="@string/SettingsButton">
+                </TextView>
+            </LinearLayout>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+    </LinearLayout>
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

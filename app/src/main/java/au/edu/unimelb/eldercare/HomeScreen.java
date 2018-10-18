@@ -27,6 +27,11 @@ public class HomeScreen extends AppCompatActivity {
         sinchService.buildSinchClient(this);
     }
 
+    public void openHome(View view) {
+        Intent intent = new Intent(HomeScreen.this, HomeActivity.class);
+        startActivity(intent);
+    }
+
     public void openUserProfileUI(View view) {
         String userId = AuthenticationService.getAuthenticationService().getUser().getUid();
         Intent intent = new Intent(HomeScreen.this, UserProfileUI.class);

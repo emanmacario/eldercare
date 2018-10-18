@@ -21,6 +21,7 @@ import com.sinch.android.rtc.calling.CallState;
 
 import java.util.List;
 
+import au.edu.unimelb.eldercare.helpers.AudioPlayer;
 import au.edu.unimelb.eldercare.service.UserService;
 import au.edu.unimelb.eldercare.user.User;
 import au.edu.unimelb.eldercare.usersearch.UserAccessor;
@@ -32,6 +33,7 @@ public class IncomingCallActivity extends AppCompatActivity implements UserAcces
 
     private VoiceCallService mSinchService;
     private String mCallId;
+    private AudioPlayer mAudioPlayer;
 
     private TextView mRemoteUserDisplayName;
     private CircleImageView mRemoteUserDisplayPhoto;
@@ -40,6 +42,9 @@ public class IncomingCallActivity extends AppCompatActivity implements UserAcces
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_incoming_call);
+
+        mAudioPlayer = new AudioPlayer(this);
+        mAudioPlayer.playRingtone();
 
         View.OnClickListener mClickListener = new View.OnClickListener() {
             @Override
@@ -57,10 +62,11 @@ public class IncomingCallActivity extends AppCompatActivity implements UserAcces
             }
         };
 
+        mRemoteUserDisplayPhoto = findViewById(R.id.displayPicture);
+        mRemoteUserDisplayName = findViewById(R.id.remoteUser);
 
-
-        Button answer = (Button) findViewById(R.id.answerButton);
-        Button decline = (Button) findViewById(R.id.declineButton);
+        Button answer = findViewById(R.id.answerButton);
+        Button decline = findViewById(R.id.declineButton);
         answer.setOnClickListener(mClickListener);
         decline.setOnClickListener(mClickListener);
 
@@ -68,9 +74,6 @@ public class IncomingCallActivity extends AppCompatActivity implements UserAcces
         mCallId = getIntent().getStringExtra("CALL_ID"); // TODO: refactor string into constant somewhere
         Call call = mSinchService.getCall(mCallId);
         call.addCallListener(new SinchCallListener());
-
-        mRemoteUserDisplayPhoto = (CircleImageView) findViewById(R.id.displayPicture);
-        mRemoteUserDisplayName = (TextView) findViewById(R.id.remoteUser);
 
         String mRemoteUserId = call.getRemoteUserId();
         UserService.getInstance().getSpecificUser(mRemoteUserId, this);
@@ -93,6 +96,7 @@ public class IncomingCallActivity extends AppCompatActivity implements UserAcces
     }
 
     private void answerClicked() {
+        mAudioPlayer.stopRingtone();
         Call call = mSinchService.getCall(mCallId);
         if (call != null) {
             try {
@@ -110,6 +114,7 @@ public class IncomingCallActivity extends AppCompatActivity implements UserAcces
     }
 
     private void declineClicked() {
+        mAudioPlayer.stopRingtone();
         Call call = mSinchService.getCall(mCallId);
         if (call != null) {
             call.hangup();
@@ -121,6 +126,7 @@ public class IncomingCallActivity extends AppCompatActivity implements UserAcces
         @Override
         public void onCallEnded(Call call) {
             Log.d(TAG, "Call ended");
+            mAudioPlayer.stopRingtone();
             finish();
         }
 

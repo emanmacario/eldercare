@@ -1,54 +1,27 @@
 package au.edu.unimelb.eldercare;
 
+import android.Manifest;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-//import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import android.location.Location;
-
 
 import com.directions.route.AbstractRouting;
 import com.directions.route.Route;
 import com.directions.route.RouteException;
 import com.directions.route.Routing;
 import com.directions.route.RoutingListener;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
-import android.Manifest;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
-import au.edu.unimelb.eldercare.service.TraceLocationService;
-import com.directions.route.*;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -56,28 +29,30 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-//import java.util.Map;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import au.edu.unimelb.eldercare.service.TraceLocationService;
 
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, RoutingListener {
 
-    protected EditText searchAddress;
+    protected EditText searchAddress = null;
+    protected LatLng eventLocation = null;
 
 
     @Override
@@ -116,7 +91,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     //vars
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
+    private FusedLocationProviderClient mFusedLocationProviderClient = null;
 
     //Firebase
     private FirebaseUser user;
@@ -138,6 +113,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         this.user = FirebaseAuth.getInstance().getCurrentUser();
         this.mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
 
+        this.mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
         //TODO: Add a toggle button
         userTracking = false;
         traceLocationService = TraceLocationService.getTraceLocationService();
@@ -155,12 +132,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             }
         });
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            String locationName = extras.getString("locationName");
+            eventLocation = extras.getParcelable("location");
+            if (searchAddress == null) {
+                searchAddress = findViewById(R.id.searchAddress);
+            }
+            searchAddress.setText(locationName);
+            this.route(searchAddress);
+        }
     }
 
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
 
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        if(mFusedLocationProviderClient == null) {
+            mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        }
 
         try {
             if (mLocationPermissionsGranted) {
@@ -313,18 +303,27 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void getRoute(LatLng startLatLng) throws IOException {
 
         //get the users inputted location
-        searchAddress = findViewById(R.id.searchAddress);
+        if (searchAddress == null) {
+            searchAddress = findViewById(R.id.searchAddress);
+        }
 
+        LatLng end;
+        if(eventLocation == null) {
+            //get the latitude and longitude for the search terms location
+            Geocoder gc = new Geocoder(this);
+            List<Address> list = gc.getFromLocationName(searchAddress.getText().toString(), 1);
+            Address add = list.get(0);
+            String locality = add.getLocality();
+            Toast.makeText(getApplicationContext(), locality, Toast.LENGTH_LONG).show();
 
-        //get the latitude and longitude for the search terms location
-        Geocoder gc = new Geocoder(this);
-        List<Address> list = gc.getFromLocationName(searchAddress.getText().toString(), 1);
-        Address add = list.get(0);
-        String locality = add.getLocality();
-        Toast.makeText(getApplicationContext(), locality ,Toast.LENGTH_LONG).show();
+            double lat = add.getLatitude();
+            double lon = add.getLongitude();
 
-        double lat = add.getLatitude();
-        double lon = add.getLongitude();
+            //use the lat and long to and create a route from the users current location to destination
+            end = new LatLng(lat, lon);
+        }else{
+            end = eventLocation;
+        }
 
         String apiKey = "";
         ApplicationInfo ai = null;
@@ -336,8 +335,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             e.printStackTrace();
         }
 
-        //use the lat and long to and create a route from the users current location to destination
-        LatLng end = new LatLng(lat, lon);
+
 
         Routing routing = new Routing.Builder()
                 .travelMode(AbstractRouting.TravelMode.DRIVING)

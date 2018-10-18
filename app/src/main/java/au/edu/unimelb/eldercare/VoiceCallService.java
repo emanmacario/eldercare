@@ -58,6 +58,11 @@ public class VoiceCallService {
     public void buildSinchClient(Context context) {
         this.context = context;
 
+        // Check if Sinch Client is already built
+        if (sinchClient != null) {
+            return;
+        }
+
         // Get id of current authenticated user
         FirebaseUser currentUser = AuthenticationService.getAuthenticationService().getUser();
         String userId = currentUser.getUid();

@@ -62,9 +62,15 @@ public class SearchAdaptor extends RecyclerView.Adapter<SearchAdaptor.ViewHolder
         TextView textView = viewHolder.nameTextView;
         textView.setText(user.getDisplayName());
         Button button = viewHolder.addButton;
+        //View Profile Button
+        Button viewProfileButton = viewHolder.viewProfileButton;
+        viewProfileButton.setTag(user.getUserId());
+        viewProfileButton.setText(R.string.viewProfile);
+        viewProfileButton.setEnabled(true);
         if (user.getUserId().equalsIgnoreCase(this.user.getUid())) {
             button.setText(R.string.friendAddButtonSelf);
             button.setEnabled(false);
+            viewProfileButton.setVisibility(View.GONE);
         } else if (findLoggedInUser(this.user.getUid()).getFriends().contains(user.getUserId())) {
             if (user.getFriends().contains(this.user.getUid())) {
                 button.setText(R.string.friendAddButtonAlreadyFriends);
@@ -78,12 +84,6 @@ public class SearchAdaptor extends RecyclerView.Adapter<SearchAdaptor.ViewHolder
             button.setOnClickListener(clicked);
             button.setTag(user);
         }
-        //View Profile Button
-        Button viewProfileButton = viewHolder.viewProfileButton;
-        viewProfileButton.setTag(user.getUserId());
-        viewProfileButton.setText(R.string.viewProfile);
-        viewProfileButton.setEnabled(true);
-        
     }
 
     @Override

@@ -66,7 +66,7 @@
                     android:gravity="center"
                     android:onClick="openChangeDNameActivity"
                     android:text="Change Display Name"
-                    android:background="@color/ReseneNeptune"
+                    android:background="@drawable/btn_rounded"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"/>
 
@@ -115,7 +115,7 @@
                     android:gravity="center"
                     android:onClick="openChangeEmailActivity"
                     android:text="Change Email Address"
-                    android:background="@color/ReseneNeptune"
+                    android:background="@drawable/btn_rounded"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"/>
             </LinearLayout>
@@ -156,7 +156,7 @@
                         android:id="@+id/ChangePasswordButton"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:background="@color/ReseneNeptune"
+                        android:background="@drawable/btn_rounded"
                         android:gravity="center"
                         android:text="Change Password"
                         android:paddingLeft="5dp"
@@ -199,7 +199,7 @@
                         android:id="@+id/ChangeUserTypeButton"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:background="@color/ReseneNeptune"
+                        android:background="@drawable/btn_rounded"
                         android:gravity="center"
                         android:text="Change User Type"
                         android:paddingLeft="5dp"
@@ -252,7 +252,7 @@
                     android:gravity="center"
                     android:onClick="openChangeConnectedUserActivity"
                     android:text="Change Connected User"
-                    android:background="@color/ReseneNeptune"
+                    android:background="@drawable/btn_rounded"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"/>
             </LinearLayout>
@@ -282,7 +282,7 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@color/ReseneNeptune"
+                        android:background="@drawable/btn_rounded"
                         android:text="Change User Bio"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"

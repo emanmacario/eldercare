@@ -86,7 +86,8 @@
         android:layout_marginEnd="70dp"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/playfair_display_bold"
-        android:text="@string/MessagesButton"
+        android:text="New Home Screen"
+        android:onClick="openHome"
         android:background="@color/ReseneNeptune"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/HomeText" />

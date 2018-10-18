@@ -4,25 +4,26 @@
     package="au.edu.unimelb.eldercare">
 
     <!-- Google Maps permissions -->
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <!-- Voice call permissions -->
     <uses-feature
         android:name="android.hardware.microphone"
         android:required="false" />
+
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- Android Image Cropper permissions -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -109,9 +110,7 @@
             android:label="Select User Type" />
         <activity
             android:name=".MapActivity"
-            android:label="Map page">
-        </activity>
-
+            android:label="Map page"></activity>
         <activity
             android:name=".user.ChangeConnectedUserActivity"
             android:label="Change Connected User" />
@@ -124,10 +123,9 @@
         <activity
             android:name=".VoiceCallActivity"
             android:label="Voice Call" />
-
         <activity
             android:name=".user.OtherUserProfileActivity"
-            android:label="Other User Profile"/>
+            android:label="Other User Profile" />
 
         <meta-data
             android:name="preloaded_fonts"
@@ -136,12 +134,11 @@
         <activity
             android:name=".IncomingCallActivity"
             android:label="Incoming Call" />
-
         <activity
             android:name=".ActiveCallActivity"
             android:label="Active Call" />
-
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
+        <activity android:name=".HomeActivity"></activity>
     </application>
 
 </manifest>

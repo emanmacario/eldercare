@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
-    sothree:umanoPanelHeight="68dp"
+    sothree:umanoPanelHeight="118dp"
     sothree:umanoShadowHeight="4dp">
 
     <!-- First child is the main layout. Set width and height to match_parent -->

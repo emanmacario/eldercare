@@ -52,7 +52,7 @@
         </activity>
         <activity
             android:name=".user.UserProfileUI"
-            android:label="@string/name_placeholder" />
+            android:label="Profile" />
         <activity
             android:name=".user.SettingsUI"
             android:label="@string/SettingsHeading" />

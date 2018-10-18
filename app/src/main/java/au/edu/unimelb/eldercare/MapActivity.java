@@ -306,6 +306,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
+        //Hides Keyboard
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
@@ -358,7 +359,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         routing.execute();
     }
 
-    //TODO hide keyboard when location is entered and clean up & comment code and fix layout
+    //TODO clean up & comment code and fix layout
 
     @Override
     public void onRoutingStart() {

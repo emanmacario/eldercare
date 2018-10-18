@@ -1,6 +1,7 @@
 package au.edu.unimelb.eldercare;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -14,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -100,6 +102,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     //User Tracking
     private Boolean userTracking;
     private TraceLocationService traceLocationService;
+
+    //Strings
+    private final String latitude = "latitude";
+    private final String longitude = "longitude";
+    private final String connectedUser = "ConnectedUser";
+    private final String location = "location";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -298,6 +306,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
     }
 
     private void getRoute(LatLng startLatLng) throws IOException {
@@ -377,10 +388,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             polyOptions.addAll(route.get(i).getPoints());
             Polyline polyline = mMap.addPolyline(polyOptions);
             polylines.add(polyline);
-
-            //shows information on the route for testing
-            //TODO remove for production
-            //Toast.makeText(getApplicationContext(),"Route "+ (i+1) +": distance - "+ route.get(i).getDistanceValue()+": duration - "+ route.get(i).getDurationValue(),Toast.LENGTH_SHORT).show();
         }
 
 
@@ -407,11 +414,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mMap.clear();
                 //Get the connected users email
-                String ConnectedUsersUid = dataSnapshot.child(user.getUid()).child("ConnectedUser").getValue(String.class);
+                String ConnectedUsersUid = dataSnapshot.child(user.getUid()).child(connectedUser).getValue(String.class);
                 if(ConnectedUsersUid != null){
                     //Using the connected users Uid, grab their location
-                    double lat = dataSnapshot.child(ConnectedUsersUid).child("location").child("latitude").getValue(double.class);
-                    double lon = dataSnapshot.child(ConnectedUsersUid).child("location").child("longitude").getValue(double.class);
+                    double lat = dataSnapshot.child(ConnectedUsersUid).child(location).child(latitude).getValue(double.class);
+                    double lon = dataSnapshot.child(ConnectedUsersUid).child(location).child(longitude).getValue(double.class);
 
                     //Place a marker on the map at the connected user's location
                     mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title("Hello World"));

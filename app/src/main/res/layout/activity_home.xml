@@ -56,10 +56,12 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
+
                 <ImageButton
                     android:id="@+id/profileButton"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
+                    android:onClick="openUserProfileUI"
                     android:background="@drawable/circle_blue"
                     android:backgroundTint="@color/Green"
                     android:scaleType="centerInside"
@@ -90,6 +92,7 @@
                     android:id="@+id/eventsButton"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
+                    android:onClick="openEvents"
                     android:background="@drawable/circle_blue"
                     android:backgroundTint="@color/Red"
                     android:scaleType="centerInside"
@@ -120,6 +123,7 @@
                     android:id="@+id/friendsButton"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
+                    android:onClick="openFriends"
                     android:background="@drawable/circle_blue"
                     android:backgroundTint="#48b3ff"
                     android:scaleType="centerInside"
@@ -166,6 +170,7 @@
                     android:id="@+id/userSearchButton"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
+                    android:onClick="openUserSearch"
                     android:gravity="center_horizontal"
                     android:background="@drawable/circle_blue"
                     android:backgroundTint="@color/colorPrimary"
@@ -192,10 +197,12 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
+
                 <ImageButton
                     android:id="@+id/connectedUserButton"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
+                    android:onClick="openConnectedUser"
                     android:background="@drawable/circle_blue"
                     android:backgroundTint="#ffa31a"
                     android:scaleType="centerInside"
@@ -226,6 +233,7 @@
                     android:id="@+id/settingsButton"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
+                    android:onClick="openSettings"
                     android:background="@drawable/circle_blue"
                     android:backgroundTint="#737373"
                     android:scaleType="centerInside"

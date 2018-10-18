@@ -137,8 +137,10 @@
         <activity
             android:name=".ActiveCallActivity"
             android:label="Active Call" />
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
-        <activity android:name=".HomeActivity"></activity>
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
+        <activity
+            android:name=".HomeActivity" />
     </application>
 
 </manifest>

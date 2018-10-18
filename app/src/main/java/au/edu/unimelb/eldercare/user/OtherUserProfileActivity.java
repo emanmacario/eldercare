@@ -43,6 +43,8 @@ public class OtherUserProfileActivity extends AppCompatActivity implements UserA
     Button userCallButton;
     Button userMessageButton;
 
+    private String mDisplayName;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +92,7 @@ public class OtherUserProfileActivity extends AppCompatActivity implements UserA
             public void onClick(View view) {
                 Intent intent = new Intent(OtherUserProfileActivity.this, MessagingActivity.class);
                 intent.putExtra("targetUser", profileUserId);
+                intent.putExtra("displayName", mDisplayName);
                 startActivity(intent);
             }
         });
@@ -102,8 +105,8 @@ public class OtherUserProfileActivity extends AppCompatActivity implements UserA
 
     @Override
     public void userLoaded(User value) {
-        String userName = value.getDisplayName();
-        userProfileName.setText(userName);
+        mDisplayName = value.getDisplayName();
+        userProfileName.setText(mDisplayName);
 
         String userBioString = value.getUserBio();
         userProfileBio.setText(userBioString);

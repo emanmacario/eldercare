@@ -1,10 +1,13 @@
 package au.edu.unimelb.eldercare;
 
+import android.content.Context;
 import android.content.Intent;
+import android.drm.DrmStore;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -84,6 +87,23 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messaging);
+
+        String displayName = getIntent().getStringExtra("displayName");
+
+
+        ActionBar actionBar = getSupportActionBar();
+        assert(actionBar != null);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        assert(inflater != null);
+        final ViewGroup nullParent = null;
+        View view = inflater.inflate(R.layout.chat_action_bar, nullParent);
+        actionBar.setCustomView(view);
+
+        TextView titleView = findViewById(R.id.custom_bar_title);
+        titleView.setText(displayName);
+
 
 
 
@@ -348,6 +368,7 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
             }
         }
     }
+
 
     @Override
     public void userListLoaded(List<User> users) {

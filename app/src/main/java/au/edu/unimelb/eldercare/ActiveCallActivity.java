@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -41,18 +42,18 @@ public class ActiveCallActivity extends AppCompatActivity implements UserAccesso
     private TextView mCallDuration;
     private TextView mCallerName;
     private CircleImageView mCallerDisplayPhoto;
-    private Button mEndCallButton;
+    private ImageButton mEndCallButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_active_call);
 
-        mCallState = (TextView) findViewById(R.id.callState);
-        mCallDuration = (TextView) findViewById(R.id.callDuration);
-        mCallerName = (TextView) findViewById(R.id.remoteUser);
-        mCallerDisplayPhoto = (CircleImageView) findViewById(R.id.displayPicture);
-        mEndCallButton = (Button) findViewById(R.id.hangupButton);
+        mCallState = findViewById(R.id.callState);
+        mCallDuration = findViewById(R.id.callDuration);
+        mCallerName = findViewById(R.id.remoteUser);
+        mCallerDisplayPhoto = findViewById(R.id.displayPicture);
+        mEndCallButton = findViewById(R.id.hangupButton);
 
         mCallDuration.setVisibility(TextView.GONE);
         mEndCallButton.setOnClickListener(new View.OnClickListener() {

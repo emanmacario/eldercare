@@ -76,7 +76,7 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
     private String mPhotoUrl;
 
     // UI instance variables
-    private Button mSendButton;
+    private ImageButton mSendButton;
     private ImageButton mAddImageButton;
     private RecyclerView mMessageRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
@@ -90,8 +90,11 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
 
         String displayName = getIntent().getStringExtra("displayName");
 
-
         ActionBar actionBar = getSupportActionBar();
+        assert(actionBar != null);
+        actionBar.setTitle(displayName);
+
+        /*
         assert(actionBar != null);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowCustomEnabled(true);
@@ -103,9 +106,7 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
 
         TextView titleView = findViewById(R.id.custom_bar_title);
         titleView.setText(displayName);
-
-
-
+        */
 
         // Initialise Firebase instance variables
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -173,7 +174,7 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
         mMessageRecyclerView.setHasFixedSize(false);
         mMessageRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        mSendButton = (Button) findViewById(R.id.button_chatbox_send);
+        mSendButton = findViewById(R.id.button_chatbox_send);
         mMessageEditText = (EditText) findViewById(R.id.edittext_chatbox);
         mMessageEditText.addTextChangedListener(new TextWatcher() {
             @Override

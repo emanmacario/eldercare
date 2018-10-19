@@ -159,7 +159,7 @@ public class UserProfileUI extends AppCompatActivity implements UserAccessor {
 
         String displayPhotoUrl = user.getDisplayPhoto();
         if (displayPhotoUrl != null) {
-            Glide.with(this)
+            Glide.with(getApplicationContext())
                     .load(displayPhotoUrl)
                     .into(mDisplayPhoto);
         }

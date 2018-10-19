@@ -89,7 +89,7 @@ public class IncomingCallActivity extends AppCompatActivity implements UserAcces
     public void userLoaded(User user) {
         String displayPhotoUrl = user.getDisplayPhoto();
         if (displayPhotoUrl != null) {
-            Glide.with(this)
+            Glide.with(getApplicationContext())
                     .load(displayPhotoUrl)
                     .into(mRemoteUserDisplayPhoto);
         }

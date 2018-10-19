@@ -113,7 +113,7 @@ public class OtherUserProfileActivity extends AppCompatActivity implements UserA
 
         String displayPhotoUrl = value.getDisplayPhoto();
         if (displayPhotoUrl != null) {
-            Glide.with(this)
+            Glide.with(getApplicationContext())
                     .load(displayPhotoUrl)
                     .into(userDisplayPhoto);
         }

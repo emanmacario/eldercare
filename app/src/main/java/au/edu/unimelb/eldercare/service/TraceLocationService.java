@@ -47,7 +47,7 @@ public class TraceLocationService {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        mDatabase = userDatabase.child(this.user.getUid());
+        mDatabase = userDatabase.child(user.getUid());
 
         mLocationCallback = new LocationCallback() {
             @Override

@@ -148,6 +148,9 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
             searchAddress.setText(locationName);
             this.route(searchAddress);
         }
+
+        TraceLocationService.getTraceLocationService().startTracing(getApplicationContext());
+
     }
 
     @Override

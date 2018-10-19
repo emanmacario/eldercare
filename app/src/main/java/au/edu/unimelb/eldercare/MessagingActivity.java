@@ -1,10 +1,13 @@
 package au.edu.unimelb.eldercare;
 
+import android.content.Context;
 import android.content.Intent;
+import android.drm.DrmStore;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -73,7 +76,7 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
     private String mPhotoUrl;
 
     // UI instance variables
-    private Button mSendButton;
+    private ImageButton mSendButton;
     private ImageButton mAddImageButton;
     private RecyclerView mMessageRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
@@ -85,7 +88,25 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messaging);
 
+        String displayName = getIntent().getStringExtra("displayName");
 
+        ActionBar actionBar = getSupportActionBar();
+        assert(actionBar != null);
+        actionBar.setTitle(displayName);
+
+        /*
+        assert(actionBar != null);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        assert(inflater != null);
+        final ViewGroup nullParent = null;
+        View view = inflater.inflate(R.layout.chat_action_bar, nullParent);
+        actionBar.setCustomView(view);
+
+        TextView titleView = findViewById(R.id.custom_bar_title);
+        titleView.setText(displayName);
+        */
 
         // Initialise Firebase instance variables
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -153,7 +174,7 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
         mMessageRecyclerView.setHasFixedSize(false);
         mMessageRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        mSendButton = (Button) findViewById(R.id.button_chatbox_send);
+        mSendButton = findViewById(R.id.button_chatbox_send);
         mMessageEditText = (EditText) findViewById(R.id.edittext_chatbox);
         mMessageEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -348,6 +369,7 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
             }
         }
     }
+
 
     @Override
     public void userListLoaded(List<User> users) {

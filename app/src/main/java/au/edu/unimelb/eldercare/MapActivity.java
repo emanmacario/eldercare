@@ -350,7 +350,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
         Routing routing = new Routing.Builder()
-                .travelMode(AbstractRouting.TravelMode.DRIVING)
+                .travelMode(AbstractRouting.TravelMode.WALKING) // TODO: Please
                 .withListener(this)
                 .alternativeRoutes(false)
                 .waypoints(end, startLatLng)

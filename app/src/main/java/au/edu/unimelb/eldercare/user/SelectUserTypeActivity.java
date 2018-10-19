@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import au.edu.unimelb.eldercare.HomeActivity;
 import au.edu.unimelb.eldercare.HomeScreen;
 import au.edu.unimelb.eldercare.R;
 
@@ -56,21 +58,24 @@ public class SelectUserTypeActivity extends AppCompatActivity {
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //Gets the user object of the current user
-                User user = dataSnapshot.getValue(User.class);
-                //Set the userType of the user object from the value in the database
-                user.setUserType(dataSnapshot.child("userType").getValue(String.class));
 
-                //If there already exists a user type, make sure that radio button is selected
-                switch (user.getUserType()){
-                    case "Dependant":
-                        DependantRadio.toggle();
-                        break;
-                    case "Carer":
-                        CarerRadio.toggle();
-                        break;
-                    default:
-                        break;
+                String userType = dataSnapshot.child("userType").getValue(String.class);
+                if(userType == null){
+                    Toast toast = Toast.makeText(SelectUserTypeActivity.this, "Please set user type", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+                else{
+                    //If there already exists a user type, make sure that radio button is selected
+                    switch (userType){
+                        case "Dependant":
+                            DependantRadio.toggle();
+                            break;
+                        case "Carer":
+                            CarerRadio.toggle();
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
 
@@ -106,7 +111,7 @@ public class SelectUserTypeActivity extends AppCompatActivity {
             }
 
             //Now open Home Screen
-            Intent intent = new Intent(SelectUserTypeActivity.this, HomeScreen.class);
+            Intent intent = new Intent(SelectUserTypeActivity.this, HomeActivity.class);
             startActivity(intent);
         }
 

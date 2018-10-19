@@ -116,7 +116,7 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
         getLocationPermission();
 
         this.user = FirebaseAuth.getInstance().getCurrentUser();
-        this.mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+        this.mDatabase = FirebaseDatabase.getInstance().getReference().child("users"); // TODO: Make new reference please
 
         this.mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -200,8 +200,10 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
      * @param email
      */
     private void writeNewUser(String userId, String name, String email){
-        User user = new User(name, email, "", "");
-        mDatabase.child("users").child(userId).setValue(user);
+        mDatabase.child(userId).child("displayName").setValue(name);
+        mDatabase.child(userId).child("email").setValue(email);
+        mDatabase.child(userId).child("userType").setValue("");
+        mDatabase.child(userId).child("ConnectedUser").setValue("");
     }
 
     // Google maps implementation
@@ -463,7 +465,7 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
 
 
         Routing routing = new Routing.Builder()
-                .travelMode(AbstractRouting.TravelMode.DRIVING)
+                .travelMode(AbstractRouting.TravelMode.WALKING)
                 .withListener(this)
                 .alternativeRoutes(false)
                 .waypoints(end, startLatLng)

@@ -57,6 +57,7 @@ import java.util.List;
 import au.edu.unimelb.eldercare.event.EventsUI;
 import au.edu.unimelb.eldercare.service.AuthenticationListener;
 import au.edu.unimelb.eldercare.service.AuthenticationService;
+import au.edu.unimelb.eldercare.user.OtherUserProfileActivity;
 import au.edu.unimelb.eldercare.service.TraceLocationService;
 import au.edu.unimelb.eldercare.user.SelectUserTypeActivity;
 import au.edu.unimelb.eldercare.user.SettingsUI;
@@ -559,6 +560,26 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
 
     public void openConnectedUser(View view) {
         // TODO: Complete this and open connected user intent
+        DatabaseReference mDatabaseUser = mDatabase.child("users").child(this.user.getUid());
+        mDatabaseUser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String connectedUserID = dataSnapshot.child("ConnectedUser").getValue(String.class);
+                if(connectedUserID == null){
+                    Toast toast = Toast.makeText(HomeActivity.this, "No Connected User", Toast.LENGTH_LONG);
+                    toast.show();
+                    return;
+                }
+                Intent intent = new Intent(HomeActivity.this, OtherUserProfileActivity.class);
+                intent.putExtra("targetUser", connectedUserID);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void openUserProfileUI(View view) {

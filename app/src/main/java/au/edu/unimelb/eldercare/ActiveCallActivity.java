@@ -90,7 +90,7 @@ public class ActiveCallActivity extends AppCompatActivity implements UserAccesso
 
         String displayPhotoUrl = user.getDisplayPhoto();
         if (displayPhotoUrl != null) {
-            Glide.with(this)
+            Glide.with(getApplicationContext())
                     .load(displayPhotoUrl)
                     .into(mCallerDisplayPhoto);
         }

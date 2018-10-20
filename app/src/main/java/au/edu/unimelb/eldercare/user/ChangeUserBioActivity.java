@@ -45,15 +45,16 @@ public class ChangeUserBioActivity extends AppCompatActivity {
 
     /**
      * Updates the Users Bio on the database
+     *
      * @param view
      */
-    public void updateUserBio(View view){
+    public void updateUserBio(View view) {
         //get the text entered in the EditText
         String newUserBioString = newUserBio.getText().toString();
 
         //Check that bio is less than 200 characters
         int userBioLength = newUserBioString.length();
-        if(userBioLength > 200){
+        if (userBioLength > 200) {
             Toast toast = Toast.makeText(ChangeUserBioActivity.this, "@string/bio_too_long", Toast.LENGTH_LONG);
             toast.show();
             return;

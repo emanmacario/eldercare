@@ -50,6 +50,7 @@ public class VoiceCallService {
 
     /**
      * Builds a Sinch Client for a given authenticated user
+     *
      * @param context the context from which to build the Sinch Client
      */
     public void buildSinchClient(Context context) {

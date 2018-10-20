@@ -22,7 +22,7 @@ import au.edu.unimelb.eldercare.R;
 
 import static au.edu.unimelb.eldercare.helpers.EmailValidator.isEmailValid;
 
-public class ChangeConnectedUserActivity extends AppCompatActivity{
+public class ChangeConnectedUserActivity extends AppCompatActivity {
 
     //On Screen Texts
     private TextView currentConnectedUser;
@@ -71,12 +71,12 @@ public class ChangeConnectedUserActivity extends AppCompatActivity{
         });
     }
 
-    public void updateConnectedUser(View view){
+    public void updateConnectedUser(View view) {
         //Get the text entered in the EditText
         String newConnectedUserEmail = newConnectedUser.getText().toString();
 
         //Checks that the email entered is a valid email
-        if(!isEmailValid(newConnectedUserEmail)){
+        if (!isEmailValid(newConnectedUserEmail)) {
             Toast toast = Toast.makeText(ChangeConnectedUserActivity.this, R.string.invalid_email, Toast.LENGTH_LONG);
             toast.show();
             return;
@@ -90,7 +90,7 @@ public class ChangeConnectedUserActivity extends AppCompatActivity{
                 //get connected user type
                 String connectedUserType = dataSnapshot.child("userType").getValue(String.class);
                 //check that it's different to the current user's type
-                if(connectedUserType.equals(currentUserType)){
+                if (connectedUserType.equals(currentUserType)) {
                     Toast toast = Toast.makeText(ChangeConnectedUserActivity.this, R.string.same_user_types, Toast.LENGTH_LONG);
                     toast.show();
                     return;

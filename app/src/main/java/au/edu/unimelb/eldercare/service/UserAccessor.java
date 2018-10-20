@@ -1,4 +1,4 @@
-package au.edu.unimelb.eldercare.usersearch;
+package au.edu.unimelb.eldercare.service;
 
 import au.edu.unimelb.eldercare.user.User;
 

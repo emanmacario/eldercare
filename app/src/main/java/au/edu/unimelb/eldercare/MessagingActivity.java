@@ -17,7 +17,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
+import au.edu.unimelb.eldercare.helpers.TimeUtil;
+import au.edu.unimelb.eldercare.messaging.Message;
+import au.edu.unimelb.eldercare.messaging.MessageViewHolder;
+import au.edu.unimelb.eldercare.messaging.ReceivedMessageViewHolder;
+import au.edu.unimelb.eldercare.messaging.SentMessageViewHolder;
+import au.edu.unimelb.eldercare.service.UserAccessor;
+import au.edu.unimelb.eldercare.service.UserService;
+import au.edu.unimelb.eldercare.user.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
@@ -26,11 +33,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.*;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -38,15 +41,6 @@ import com.google.firebase.storage.UploadTask;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import au.edu.unimelb.eldercare.helpers.TimeUtil;
-import au.edu.unimelb.eldercare.messaging.Message;
-import au.edu.unimelb.eldercare.messaging.MessageViewHolder;
-import au.edu.unimelb.eldercare.messaging.ReceivedMessageViewHolder;
-import au.edu.unimelb.eldercare.messaging.SentMessageViewHolder;
-import au.edu.unimelb.eldercare.service.UserService;
-import au.edu.unimelb.eldercare.user.User;
-import au.edu.unimelb.eldercare.usersearch.UserAccessor;
 
 public class MessagingActivity extends AppCompatActivity implements UserAccessor {
 
@@ -85,7 +79,7 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
         String displayName = getIntent().getStringExtra("displayName");
 
         ActionBar actionBar = getSupportActionBar();
-        assert(actionBar != null);
+        assert (actionBar != null);
         actionBar.setTitle(displayName);
 
         /*
@@ -158,7 +152,6 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-
 
 
         mLinearLayoutManager = new LinearLayoutManager(this);

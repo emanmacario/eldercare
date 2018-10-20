@@ -54,14 +54,15 @@ public class ChangeEmailActivity extends AppCompatActivity {
 
     /**
      * Updates a users email address on the database
+     *
      * @param view
      */
-    public void updateEmailAddress(View view){
+    public void updateEmailAddress(View view) {
         //Get the Text entered in the EditText
         String newEmail = newEmailAddress.getText().toString();
 
         //Validate Email Address
-        if(!isEmailValid(newEmail)){
+        if (!isEmailValid(newEmail)) {
             Toast toast = Toast.makeText(ChangeEmailActivity.this, "@string/invalid_email", Toast.LENGTH_LONG);
             toast.show();
             return;

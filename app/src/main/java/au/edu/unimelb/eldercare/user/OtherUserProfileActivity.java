@@ -9,20 +9,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
-import com.sinch.android.rtc.MissingPermissionException;
-import com.sinch.android.rtc.calling.Call;
-
-import java.util.List;
-
 import au.edu.unimelb.eldercare.ActiveCallActivity;
 import au.edu.unimelb.eldercare.MessagingActivity;
 import au.edu.unimelb.eldercare.R;
 import au.edu.unimelb.eldercare.VoiceCallService;
 import au.edu.unimelb.eldercare.service.UserService;
-import au.edu.unimelb.eldercare.usersearch.UserAccessor;
+import au.edu.unimelb.eldercare.service.UserAccessor;
+import com.bumptech.glide.Glide;
+import com.sinch.android.rtc.MissingPermissionException;
+import com.sinch.android.rtc.calling.Call;
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import java.util.List;
 
 public class OtherUserProfileActivity extends AppCompatActivity implements UserAccessor {
 
@@ -73,7 +71,7 @@ public class OtherUserProfileActivity extends AppCompatActivity implements UserA
                     startActivity(intent);
                 } catch (MissingPermissionException e) {
                     ActivityCompat.requestPermissions(OtherUserProfileActivity.this,
-                            new String[] {e.getRequiredPermission()}, 0);
+                            new String[]{e.getRequiredPermission()}, 0);
                 }
             }
         });

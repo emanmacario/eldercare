@@ -10,7 +10,7 @@ import android.widget.TextView;
 import au.edu.unimelb.eldercare.helpers.TimeUtil;
 import au.edu.unimelb.eldercare.service.UserService;
 import au.edu.unimelb.eldercare.user.User;
-import au.edu.unimelb.eldercare.usersearch.UserAccessor;
+import au.edu.unimelb.eldercare.service.UserAccessor;
 import com.bumptech.glide.Glide;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.calling.Call;

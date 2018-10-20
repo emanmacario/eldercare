@@ -60,27 +60,27 @@ public class SettingsUI extends AppCompatActivity {
         });
     }
 
-    public void openChangeDNameActivity(View view){
+    public void openChangeDNameActivity(View view) {
         Intent intent = new Intent(SettingsUI.this, ChangeDNameActivity.class);
         startActivity(intent);
     }
 
-    public void openChangeEmailActivity(View view){
+    public void openChangeEmailActivity(View view) {
         Intent intent = new Intent(SettingsUI.this, ChangeEmailActivity.class);
         startActivity(intent);
     }
 
-    public void openChangeUserTypeActivity(View view){
+    public void openChangeUserTypeActivity(View view) {
         Intent intent = new Intent(SettingsUI.this, SelectUserTypeActivity.class);
         startActivity(intent);
     }
 
-    public void openChangeConnectedUserActivity(View view){
+    public void openChangeConnectedUserActivity(View view) {
         Intent intent = new Intent(SettingsUI.this, ChangeConnectedUserActivity.class);
         startActivity(intent);
     }
 
-    public void openChangeUserBioActivity(View view){
+    public void openChangeUserBioActivity(View view) {
         Intent intent = new Intent(SettingsUI.this, ChangeUserBioActivity.class);
         startActivity(intent);
     }

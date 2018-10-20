@@ -7,17 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import au.edu.unimelb.eldercare.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import au.edu.unimelb.eldercare.R;
-import au.edu.unimelb.eldercare.user.User;
+import com.google.firebase.database.*;
 
 public class ChangeDNameActivity extends AppCompatActivity {
 
@@ -61,9 +54,10 @@ public class ChangeDNameActivity extends AppCompatActivity {
 
     /**
      * Updates the display name on the database
+     *
      * @param view
      */
-    public void updateDisplayName(View view){
+    public void updateDisplayName(View view) {
         String newDName = newDisplayName.getText().toString();
         mDatabase.child("displayName").setValue(newDName);
     }

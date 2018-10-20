@@ -2,28 +2,26 @@ package au.edu.unimelb.eldercare;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import au.edu.unimelb.eldercare.helpers.AudioPlayer;
+import au.edu.unimelb.eldercare.service.UserAccessor;
+import au.edu.unimelb.eldercare.service.UserService;
+import au.edu.unimelb.eldercare.user.User;
 import com.bumptech.glide.Glide;
 import com.sinch.android.rtc.MissingPermissionException;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.calling.Call;
 import com.sinch.android.rtc.calling.CallListener;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import java.util.List;
-
-import au.edu.unimelb.eldercare.helpers.AudioPlayer;
-import au.edu.unimelb.eldercare.service.UserService;
-import au.edu.unimelb.eldercare.user.User;
-import au.edu.unimelb.eldercare.usersearch.UserAccessor;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class IncomingCallActivity extends AppCompatActivity implements UserAccessor {
 

@@ -65,9 +65,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
             if (userTracking) {
-               trackUser();
-            }
-            else {
+                trackUser();
+            } else {
                 mMap.clear();
             }
         }
@@ -120,7 +119,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(userTracking){
+                if (userTracking) {
                     trackUser();
                 }
             }
@@ -132,7 +131,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
 
         Bundle extras = getIntent().getExtras();
-        if(extras != null){
+        if (extras != null) {
             String locationName = extras.getString("locationName");
             eventLocation = extras.getParcelable("location");
             if (searchAddress == null) {
@@ -146,7 +145,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
 
-        if(mFusedLocationProviderClient == null) {
+        if (mFusedLocationProviderClient == null) {
             mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         }
 
@@ -297,7 +296,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
 
         //Hides Keyboard
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
     }
@@ -310,7 +309,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         LatLng end;
-        if(eventLocation == null) {
+        if (eventLocation == null) {
             //get the latitude and longitude for the search terms location
             Geocoder gc = new Geocoder(this);
             List<Address> list = gc.getFromLocationName(searchAddress.getText().toString(), 1);
@@ -323,7 +322,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             //use the lat and long to and create a route from the users current location to destination
             end = new LatLng(lat, lon);
-        }else{
+        } else {
             end = eventLocation;
         }
 
@@ -336,7 +335,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-
 
 
         Routing routing = new Routing.Builder()
@@ -382,7 +380,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
 
-
     }
 
     @Override
@@ -393,12 +390,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         polylines.clear();
     }
 
-    public void toggleUserTracking(View view){
+    public void toggleUserTracking(View view) {
         userTracking = !userTracking;
         onMapReady(mMap);
     }
 
-    private void trackUser(){
+    private void trackUser() {
         traceLocationService.startTracing(MapActivity.this);
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -406,15 +403,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 mMap.clear();
                 //Get the connected users email
                 String ConnectedUsersUid = dataSnapshot.child(user.getUid()).child(connectedUser).getValue(String.class);
-                if(ConnectedUsersUid != null){
+                if (ConnectedUsersUid != null) {
                     //Using the connected users Uid, grab their location
                     double lat = dataSnapshot.child(ConnectedUsersUid).child(location).child(latitude).getValue(double.class);
                     double lon = dataSnapshot.child(ConnectedUsersUid).child(location).child(longitude).getValue(double.class);
 
                     //Place a marker on the map at the connected user's location
                     mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title("Hello World"));
-                }
-                else{
+                } else {
                     Toast noConnectedUserToast = Toast.makeText(MapActivity.this, "No User to Track", Toast.LENGTH_LONG);
                     noConnectedUserToast.show();
                 }

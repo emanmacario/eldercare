@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import au.edu.unimelb.eldercare.R;
-import au.edu.unimelb.eldercare.usersearch.UserAccessor;
+import au.edu.unimelb.eldercare.service.UserAccessor;
 import au.edu.unimelb.eldercare.service.UserService;
 import de.hdodenhof.circleimageview.CircleImageView;
 

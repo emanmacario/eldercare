@@ -113,7 +113,7 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(userTracking){
+                if (userTracking) {
                     trackUser();
                 }
             }
@@ -125,7 +125,7 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
         });
 
         Bundle extras = getIntent().getExtras();
-        if(extras != null){
+        if (extras != null) {
             String locationName = extras.getString("locationName");
             eventLocation = extras.getParcelable("location");
             if (searchAddress == null) {
@@ -156,7 +156,7 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.exists()){
+                if (!dataSnapshot.exists()) {
                     //Once a user is authenticated and they don't already exist,
                     //create a new user on the database
                     writeNewUser(user.getUid(), user.getDisplayName(), user.getEmail());
@@ -167,7 +167,8 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         };
         userRef.addListenerForSingleValueEvent(eventListener);
 
@@ -184,11 +185,12 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
 
     /**
      * Function creates a new User and creates the user on the realtime database
+     *
      * @param userId
      * @param name
      * @param email
      */
-    private void writeNewUser(String userId, String name, String email){
+    private void writeNewUser(String userId, String name, String email) {
         mDatabase.child(userId).child("displayName").setValue(name);
         mDatabase.child(userId).child("email").setValue(email);
         mDatabase.child(userId).child("userType").setValue("");
@@ -197,7 +199,7 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
 
     // Google maps implementation
 
-    private void init(){
+    private void init() {
         Button mapBtn = findViewById(R.id.MapButton);
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -227,31 +229,28 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
 
             if (userTracking) {
                 trackUser();
-            }
-            else {
+            } else {
                 mMap.clear();
             }
         }
     }
 
     //check if device can use maps
-    public boolean isServicesOK(){
+    public boolean isServicesOK() {
         Log.d(TAG, "isServicesOK: checking google services version");
 
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(HomeActivity.this);
 
-        if(available == ConnectionResult.SUCCESS){
+        if (available == ConnectionResult.SUCCESS) {
             //user can make map requests
             Log.d(TAG, "isServicesOK: Google Play Services is working");
             return true;
-        }
-        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+        } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
             //resolvable error occured
             Log.d(TAG, "isServicesOK: a fixable error occured");
             Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(HomeActivity.this, available, ERROR_DIALOG_REQUEST);
             dialog.show();
-        }
-        else{
+        } else {
             Toast.makeText(this, "You cant make map requests", Toast.LENGTH_SHORT).show();
         }
         return false;
@@ -260,7 +259,7 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
 
-        if(mFusedLocationProviderClient == null) {
+        if (mFusedLocationProviderClient == null) {
             mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         }
 
@@ -411,7 +410,7 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
         });
 
         //Hides Keyboard
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
     }
@@ -424,7 +423,7 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
         }
 
         LatLng end;
-        if(eventLocation == null) {
+        if (eventLocation == null) {
             //get the latitude and longitude for the search terms location
             Geocoder gc = new Geocoder(this);
             List<Address> list = gc.getFromLocationName(searchAddress.getText().toString(), 1);
@@ -437,7 +436,7 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
 
             //use the lat and long to and create a route from the users current location to destination
             end = new LatLng(lat, lon);
-        }else{
+        } else {
             end = eventLocation;
         }
 
@@ -450,7 +449,6 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-
 
 
         Routing routing = new Routing.Builder()
@@ -496,7 +494,6 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
         }
 
 
-
     }
 
     @Override
@@ -507,12 +504,12 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
         polylines.clear();
     }
 
-    public void toggleUserTracking(View view){
+    public void toggleUserTracking(View view) {
         userTracking = !userTracking;
         onMapReady(mMap);
     }
 
-    private void trackUser(){
+    private void trackUser() {
         traceLocationService.startTracing(HomeActivity.this);
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -520,15 +517,14 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
                 mMap.clear();
                 //Get the connected users email
                 String ConnectedUsersUid = dataSnapshot.child(user.getUid()).child(connectedUser).getValue(String.class);
-                if(ConnectedUsersUid != null){
+                if (ConnectedUsersUid != null) {
                     //Using the connected users Uid, grab their location
                     double lat = dataSnapshot.child(ConnectedUsersUid).child(location).child(latitude).getValue(double.class);
                     double lon = dataSnapshot.child(ConnectedUsersUid).child(location).child(longitude).getValue(double.class);
 
                     //Place a marker on the map at the connected user's location
                     mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title("Hello World"));
-                }
-                else{
+                } else {
                     Toast noConnectedUserToast = Toast.makeText(HomeActivity.this, "No User to Track", Toast.LENGTH_LONG);
                     noConnectedUserToast.show();
                 }
@@ -553,7 +549,7 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String connectedUserID = dataSnapshot.child("ConnectedUser").getValue(String.class);
-                if(connectedUserID == null){
+                if (connectedUserID == null) {
                     Toast toast = Toast.makeText(HomeActivity.this, "No Connected User", Toast.LENGTH_LONG);
                     toast.show();
                     return;
@@ -577,7 +573,7 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
         startActivity(intent);
     }
 
-    public void openSettings(View view){
+    public void openSettings(View view) {
         Intent intent = new Intent(HomeActivity.this, SettingsUI.class);
         startActivity(intent);
     }

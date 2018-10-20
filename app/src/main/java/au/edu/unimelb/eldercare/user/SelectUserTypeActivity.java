@@ -36,7 +36,7 @@ public class SelectUserTypeActivity extends AppCompatActivity {
     private static final int DependantRadioID = 102;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //sets the correct layout
         setContentView(R.layout.select_user_type_activity);
@@ -58,13 +58,12 @@ public class SelectUserTypeActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 String userType = dataSnapshot.child("userType").getValue(String.class);
-                if(userType == null){
+                if (userType == null) {
                     Toast toast = Toast.makeText(SelectUserTypeActivity.this, "Please set user type", Toast.LENGTH_LONG);
                     toast.show();
-                }
-                else{
+                } else {
                     //If there already exists a user type, make sure that radio button is selected
-                    switch (userType){
+                    switch (userType) {
                         case "Dependant":
                             DependantRadio.toggle();
                             break;
@@ -86,14 +85,14 @@ public class SelectUserTypeActivity extends AppCompatActivity {
 
     /**
      * Sets the user type value on the database before moving to the home screen
+     *
      * @param view
      */
-    public void openHomeScreen(View view){
+    public void openHomeScreen(View view) {
         //Make sure that a user type has been selected
-        if(UserTypeRadio.getCheckedRadioButtonId() == -1){
+        if (UserTypeRadio.getCheckedRadioButtonId() == -1) {
             //No User Type has been selected
-        }
-        else{
+        } else {
             //Get the radio button that is clicked at set the value in the database
             int UserTypeID = UserTypeRadio.getCheckedRadioButtonId();
             switch (UserTypeID) {

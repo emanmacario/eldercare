@@ -2,7 +2,6 @@ package au.edu.unimelb.eldercare.user;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -12,13 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.sinch.android.rtc.MissingPermissionException;
 import com.sinch.android.rtc.calling.Call;
 
@@ -27,7 +19,6 @@ import java.util.List;
 import au.edu.unimelb.eldercare.ActiveCallActivity;
 import au.edu.unimelb.eldercare.MessagingActivity;
 import au.edu.unimelb.eldercare.R;
-import au.edu.unimelb.eldercare.VoiceCallActivity;
 import au.edu.unimelb.eldercare.VoiceCallService;
 import au.edu.unimelb.eldercare.service.UserService;
 import au.edu.unimelb.eldercare.usersearch.UserAccessor;
@@ -35,13 +26,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OtherUserProfileActivity extends AppCompatActivity implements UserAccessor {
 
-    TextView userProfileName;
-    TextView userProfileBio;
-    CircleImageView userDisplayPhoto;
-    Button userAboutButton;
-    Button userAddFriendButton;
-    Button userCallButton;
-    Button userMessageButton;
+    private TextView userProfileName;
+    private TextView userProfileBio;
+    private CircleImageView userDisplayPhoto;
+    private Button userAboutButton;
+    private Button userAddFriendButton;
+    private Button userCallButton;
+    private Button userMessageButton;
 
     private String mDisplayName;
 

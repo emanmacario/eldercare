@@ -2,31 +2,18 @@ package au.edu.unimelb.eldercare;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.media.AudioManager;
-import android.speech.tts.Voice;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.sinch.android.rtc.MissingPermissionException;
-import com.sinch.android.rtc.PushPair;
-import com.sinch.android.rtc.Sinch;
-import com.sinch.android.rtc.SinchClient;
 import com.sinch.android.rtc.calling.Call;
-import com.sinch.android.rtc.calling.CallClient;
-import com.sinch.android.rtc.calling.CallClientListener;
-import com.sinch.android.rtc.calling.CallListener;
-import java.util.List;
 
 public class VoiceCallActivity extends AppCompatActivity {
 
@@ -42,7 +29,7 @@ public class VoiceCallActivity extends AppCompatActivity {
         setContentView(R.layout.activity_voice_call);
 
         // Set button properties
-        callButton = (Button) findViewById(R.id.button);
+        callButton = findViewById(R.id.button);
         callButton.setEnabled(false);
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +56,7 @@ public class VoiceCallActivity extends AppCompatActivity {
             }
         });
 
-        recipientIdEditText = (EditText) findViewById(R.id.edittext_recipientid);
+        recipientIdEditText = findViewById(R.id.edittext_recipientid);
         recipientIdEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {

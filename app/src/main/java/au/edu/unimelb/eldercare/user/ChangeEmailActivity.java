@@ -8,27 +8,19 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import au.edu.unimelb.eldercare.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import au.edu.unimelb.eldercare.R;
-import au.edu.unimelb.eldercare.user.User;
-import au.edu.unimelb.eldercare.helpers.EmailValidifier;
+import com.google.firebase.database.*;
 
 import static au.edu.unimelb.eldercare.helpers.EmailValidifier.isEmailValid;
 
 public class ChangeEmailActivity extends AppCompatActivity {
 
-    TextView currentEmailAddress;
-    EditText newEmailAddress;
-    FirebaseUser user;
-    DatabaseReference mDatabase;
+    private TextView currentEmailAddress;
+    private EditText newEmailAddress;
+    private FirebaseUser user;
+    private DatabaseReference mDatabase;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

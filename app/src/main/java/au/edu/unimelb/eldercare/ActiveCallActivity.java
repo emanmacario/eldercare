@@ -1,34 +1,25 @@
 package au.edu.unimelb.eldercare;
 
 import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.sinch.android.rtc.PushPair;
-import com.sinch.android.rtc.calling.Call;
-import com.sinch.android.rtc.calling.CallListener;
-import com.sinch.android.rtc.calling.CallState;
-
-import org.w3c.dom.Text;
-
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import au.edu.unimelb.eldercare.helpers.TimeUtil;
 import au.edu.unimelb.eldercare.service.UserService;
 import au.edu.unimelb.eldercare.user.User;
 import au.edu.unimelb.eldercare.usersearch.UserAccessor;
+import com.bumptech.glide.Glide;
+import com.sinch.android.rtc.PushPair;
+import com.sinch.android.rtc.calling.Call;
+import com.sinch.android.rtc.calling.CallListener;
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ActiveCallActivity extends AppCompatActivity implements UserAccessor {
 
@@ -42,7 +33,6 @@ public class ActiveCallActivity extends AppCompatActivity implements UserAccesso
     private TextView mCallDuration;
     private TextView mCallerName;
     private CircleImageView mCallerDisplayPhoto;
-    private ImageButton mEndCallButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +43,7 @@ public class ActiveCallActivity extends AppCompatActivity implements UserAccesso
         mCallDuration = findViewById(R.id.callDuration);
         mCallerName = findViewById(R.id.remoteUser);
         mCallerDisplayPhoto = findViewById(R.id.displayPicture);
-        mEndCallButton = findViewById(R.id.hangupButton);
+        ImageButton mEndCallButton = findViewById(R.id.hangupButton);
 
         mCallDuration.setVisibility(TextView.GONE);
         mEndCallButton.setOnClickListener(new View.OnClickListener() {

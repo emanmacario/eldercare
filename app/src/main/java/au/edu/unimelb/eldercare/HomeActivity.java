@@ -9,24 +9,24 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.directions.route.AbstractRouting;
-import com.directions.route.Route;
-import com.directions.route.RouteException;
-import com.directions.route.Routing;
-import com.directions.route.RoutingListener;
+import au.edu.unimelb.eldercare.event.EventsUI;
+import au.edu.unimelb.eldercare.service.AuthenticationListener;
+import au.edu.unimelb.eldercare.service.AuthenticationService;
+import au.edu.unimelb.eldercare.service.TraceLocationService;
+import au.edu.unimelb.eldercare.user.*;
+import com.directions.route.*;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -44,33 +44,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import au.edu.unimelb.eldercare.event.EventsUI;
-import au.edu.unimelb.eldercare.service.AuthenticationListener;
-import au.edu.unimelb.eldercare.service.AuthenticationService;
-import au.edu.unimelb.eldercare.user.OtherUserProfileActivity;
-import au.edu.unimelb.eldercare.service.TraceLocationService;
-import au.edu.unimelb.eldercare.user.SelectUserTypeActivity;
-import au.edu.unimelb.eldercare.user.SettingsUI;
-import au.edu.unimelb.eldercare.user.User;
-import au.edu.unimelb.eldercare.user.UserProfileUI;
-import au.edu.unimelb.eldercare.user.UserSearchUI;
-
 import static au.edu.unimelb.eldercare.service.AuthenticationService.RC_SIGN_IN;
 
 public class HomeActivity extends AppCompatActivity implements AuthenticationListener, OnMapReadyCallback, RoutingListener {
 
-    protected EditText searchAddress = null;
-    protected LatLng eventLocation = null;
+    private EditText searchAddress = null;
+    private LatLng eventLocation = null;
 
     // Firebase variables
     private FirebaseUser user;
@@ -213,7 +198,7 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
     // Google maps implementation
 
     private void init(){
-        Button mapBtn = (Button) findViewById(R.id.MapButton);
+        Button mapBtn = findViewById(R.id.MapButton);
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -290,8 +275,8 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
                             Log.d(TAG, "onComplete: found location!");
                             Location currentLocation = (Location) task.getResult();
 
-                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                                    DEFAULT_ZOOM);
+                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())
+                            );
 
                         } else {
                             Log.d(TAG, "onComplete: current location is null");
@@ -306,9 +291,9 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
 
     }
 
-    private void moveCamera(LatLng latLng, float zoom) {
+    private void moveCamera(LatLng latLng) {
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, HomeActivity.DEFAULT_ZOOM));
     }
 
     private void initMap() {
@@ -352,8 +337,8 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
                 if (grantResults.length > 0) {
                     for (int grantResult : grantResults) {
                         if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                            for (int i = 0; i < grantResults.length; i++) {
-                                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                            for (int grantResult1 : grantResults) {
+                                if (grantResult1 != PackageManager.PERMISSION_GRANTED) {
                                     mLocationPermissionsGranted = false;
                                     Log.d(TAG, "onRequestPermissionsResult: permission failed");
                                     return;
@@ -389,7 +374,7 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
     //protected Location mLastLocation;
     //mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-    public void route(View view) {
+    private void route(View view) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -409,8 +394,8 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
                     Log.d(TAG, "onComplete: found location!");
                     Location currentLocation = (Location) task.getResult();
 
-                    moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                            DEFAULT_ZOOM);
+                    moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())
+                    );
 
                     try {
                         getRoute(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
@@ -527,7 +512,7 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
         onMapReady(mMap);
     }
 
-    public void trackUser(){
+    private void trackUser(){
         traceLocationService.startTracing(HomeActivity.this);
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override

@@ -18,12 +18,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.directions.route.AbstractRouting;
-import com.directions.route.Route;
-import com.directions.route.RouteException;
-import com.directions.route.Routing;
-import com.directions.route.RoutingListener;
+import au.edu.unimelb.eldercare.service.TraceLocationService;
+import com.directions.route.*;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -38,23 +34,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import au.edu.unimelb.eldercare.service.TraceLocationService;
-
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, RoutingListener {
 
-    protected EditText searchAddress = null;
-    protected LatLng eventLocation = null;
+    private EditText searchAddress = null;
+    private LatLng eventLocation = null;
 
 
     @Override
@@ -171,8 +161,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             Log.d(TAG, "onComplete: found location!");
                             Location currentLocation = (Location) task.getResult();
 
-                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                                    DEFAULT_ZOOM);
+                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())
+                            );
 
                         } else {
                             Log.d(TAG, "onComplete: current location is null");
@@ -187,9 +177,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    private void moveCamera(LatLng latLng, float zoom) {
+    private void moveCamera(LatLng latLng) {
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, MapActivity.DEFAULT_ZOOM));
     }
 
     private void initMap() {
@@ -233,8 +223,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if (grantResults.length > 0) {
                     for (int grantResult : grantResults) {
                         if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                            for (int i = 0; i < grantResults.length; i++) {
-                                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                            for (int grantResult1 : grantResults) {
+                                if (grantResult1 != PackageManager.PERMISSION_GRANTED) {
                                     mLocationPermissionsGranted = false;
                                     Log.d(TAG, "onRequestPermissionsResult: permission failed");
                                     return;
@@ -270,7 +260,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     //protected Location mLastLocation;
     //mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-    public void route(View view) {
+    private void route(View view) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -290,8 +280,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     Log.d(TAG, "onComplete: found location!");
                     Location currentLocation = (Location) task.getResult();
 
-                    moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                            DEFAULT_ZOOM);
+                    moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())
+                    );
 
                     try {
                         getRoute(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
@@ -408,7 +398,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         onMapReady(mMap);
     }
 
-    public void trackUser(){
+    private void trackUser(){
         traceLocationService.startTracing(MapActivity.this);
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override

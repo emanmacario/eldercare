@@ -19,19 +19,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import au.edu.unimelb.eldercare.HomeActivity;
-import au.edu.unimelb.eldercare.HomeScreen;
 import au.edu.unimelb.eldercare.R;
 
 public class SelectUserTypeActivity extends AppCompatActivity {
 
-    Button confirmButton;
-    RadioGroup UserTypeRadio;
-    RadioButton CarerRadio;
-    RadioButton DependantRadio;
+    private Button confirmButton;
+    private RadioGroup UserTypeRadio;
+    private RadioButton CarerRadio;
+    private RadioButton DependantRadio;
 
     //Firebase References
     private DatabaseReference mDatabase;
-    private FirebaseUser user;
 
     //These IDs identify which radio button is selected
     private static final int CarerRadioID = 101;
@@ -52,8 +50,8 @@ public class SelectUserTypeActivity extends AppCompatActivity {
         CarerRadio.setId(CarerRadioID);
         DependantRadio.setId(DependantRadioID);
 
-        this.user = FirebaseAuth.getInstance().getCurrentUser();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(this.user.getUid());
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -94,7 +92,6 @@ public class SelectUserTypeActivity extends AppCompatActivity {
         //Make sure that a user type has been selected
         if(UserTypeRadio.getCheckedRadioButtonId() == -1){
             //No User Type has been selected
-            return;
         }
         else{
             //Get the radio button that is clicked at set the value in the database

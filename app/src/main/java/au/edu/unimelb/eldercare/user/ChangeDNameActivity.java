@@ -21,10 +21,10 @@ import au.edu.unimelb.eldercare.user.User;
 
 public class ChangeDNameActivity extends AppCompatActivity {
 
-    TextView currentDisplayName;
-    EditText newDisplayName;
-    FirebaseUser user;
-    DatabaseReference mDatabase;
+    private TextView currentDisplayName;
+    private EditText newDisplayName;
+    private FirebaseUser user;
+    private DatabaseReference mDatabase;
 
 
     @Override

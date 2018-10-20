@@ -23,11 +23,11 @@ import java.util.HashMap;
 import au.edu.unimelb.eldercare.R;
 
 public class ViewEventsActivity extends AppCompatActivity {
-    protected HashMap<String, Event> allEvents;
-    protected LayoutInflater inflater;
-    protected ViewGroup container;
-    protected DatabaseReference eventDB = FirebaseDatabase.getInstance().getReference().child("events");
-    protected ChildEventListener childEventListener = new eventsListener();
+    private HashMap<String, Event> allEvents;
+    private LayoutInflater inflater;
+    private ViewGroup container;
+    private DatabaseReference eventDB = FirebaseDatabase.getInstance().getReference().child("events");
+    ChildEventListener childEventListener = new eventsListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class ViewEventsActivity extends AppCompatActivity {
 
     public class eventsListener implements ChildEventListener{
 
-        protected Button viewButton;
+        Button viewButton;
 
         @Override
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -103,16 +103,16 @@ public class ViewEventsActivity extends AppCompatActivity {
             finish();
         }
 
-        protected Boolean filter(Event newEvent){
+        Boolean filter(Event newEvent){
             return true;
         }
 
         public class ButtonClickListener implements View.OnClickListener {
 
-            protected Event event;
-            protected Class activity = ViewEventActivity.class;
+            Event event;
+            Class activity = ViewEventActivity.class;
 
-            public void setEvent(Event event){
+            void setEvent(Event event){
                 this.event = event;
             }
 

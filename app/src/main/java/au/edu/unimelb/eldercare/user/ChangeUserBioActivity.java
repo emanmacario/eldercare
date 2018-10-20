@@ -19,13 +19,13 @@ import au.edu.unimelb.eldercare.R;
 
 public class ChangeUserBioActivity extends AppCompatActivity {
 
-    TextView editBioHeading;
-    EditText newUserBio;
-    Button confirmButton;
+    private TextView editBioHeading;
+    private EditText newUserBio;
+    private Button confirmButton;
 
     //Firebase references
-    FirebaseUser user;
-    DatabaseReference mDatabase;
+    private FirebaseUser user;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

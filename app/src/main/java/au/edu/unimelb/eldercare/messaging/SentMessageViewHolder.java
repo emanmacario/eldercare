@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
@@ -28,9 +27,9 @@ public class SentMessageViewHolder extends MessageViewHolder {
 
     public SentMessageViewHolder(View view) {
         super(view);
-        this.messageText = (TextView) view.findViewById(R.id.text_message_body);
-        this.timeText = (TextView) view.findViewById(R.id.text_message_time);
-        this.messageImage = (RoundedImageView) view.findViewById(R.id.image_message_view);
+        this.messageText = view.findViewById(R.id.text_message_body);
+        this.timeText = view.findViewById(R.id.text_message_time);
+        this.messageImage = view.findViewById(R.id.image_message_view);
     }
 
     @Override

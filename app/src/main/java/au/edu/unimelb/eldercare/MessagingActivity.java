@@ -1,8 +1,6 @@
 package au.edu.unimelb.eldercare;
 
-import android.content.Context;
 import android.content.Intent;
-import android.drm.DrmStore;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,10 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -66,7 +62,6 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
     // Firebase instance variables
     private DatabaseReference mDatabaseReference;
     private FirebaseRecyclerAdapter<Message, MessageViewHolder> mFirebaseAdapter;
-    private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 
     // User instance variables
@@ -77,7 +72,6 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
 
     // UI instance variables
     private ImageButton mSendButton;
-    private ImageButton mAddImageButton;
     private RecyclerView mMessageRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     private EditText mMessageEditText;
@@ -109,7 +103,7 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
         */
 
         // Initialise Firebase instance variables
-        mFirebaseAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -170,12 +164,12 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
 
-        mMessageRecyclerView = (RecyclerView) findViewById(R.id.reyclerview_message_list);
+        mMessageRecyclerView = findViewById(R.id.reyclerview_message_list);
         mMessageRecyclerView.setHasFixedSize(false);
         mMessageRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         mSendButton = findViewById(R.id.button_chatbox_send);
-        mMessageEditText = (EditText) findViewById(R.id.edittext_chatbox);
+        mMessageEditText = findViewById(R.id.edittext_chatbox);
         mMessageEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -195,7 +189,7 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
             }
         });
 
-        mAddImageButton = (ImageButton) findViewById(R.id.button_image_add);
+        ImageButton mAddImageButton = findViewById(R.id.button_image_add);
         mAddImageButton.setOnClickListener(new ImageButton.OnClickListener() {
             @Override
             public void onClick(View view) {

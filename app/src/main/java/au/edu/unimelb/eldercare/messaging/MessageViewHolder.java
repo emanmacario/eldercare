@@ -9,7 +9,7 @@ import android.view.View;
  */
 public abstract class MessageViewHolder extends RecyclerView.ViewHolder {
 
-    public MessageViewHolder(View view) {
+    MessageViewHolder(View view) {
         super(view);
     }
 

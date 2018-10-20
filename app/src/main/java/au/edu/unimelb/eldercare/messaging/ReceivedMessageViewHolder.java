@@ -35,11 +35,11 @@ public class ReceivedMessageViewHolder extends MessageViewHolder implements User
 
     public ReceivedMessageViewHolder(View view) {
         super(view);
-        this.messageText = (TextView) view.findViewById(R.id.text_message_body);
-        this.timeText = (TextView) view.findViewById(R.id.text_message_time);
-        this.nameText = (TextView) view.findViewById(R.id.text_message_name);
-        this.profileImage = (CircleImageView) view.findViewById(R.id.image_message_profile);
-        this.messageImage = (RoundedImageView) view.findViewById(R.id.image_message_view);
+        this.messageText = view.findViewById(R.id.text_message_body);
+        this.timeText = view.findViewById(R.id.text_message_time);
+        this.nameText = view.findViewById(R.id.text_message_name);
+        this.profileImage = view.findViewById(R.id.image_message_profile);
+        this.messageImage = view.findViewById(R.id.image_message_view);
     }
 
     @Override

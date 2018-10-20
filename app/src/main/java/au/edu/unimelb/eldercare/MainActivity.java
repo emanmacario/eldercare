@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.TextView;
 import au.edu.unimelb.eldercare.service.AuthenticationListener;
 import au.edu.unimelb.eldercare.service.AuthenticationService;
 import au.edu.unimelb.eldercare.user.SelectUserTypeActivity;
@@ -15,7 +14,6 @@ import au.edu.unimelb.eldercare.user.User;
 
 
 import android.app.Dialog;
-import android.nfc.Tag;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -144,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
     //google maps implementation
 
     private void init(){
-        Button mapBtn = (Button) findViewById(R.id.MapButton);
+        Button mapBtn = findViewById(R.id.MapButton);
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

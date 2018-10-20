@@ -2,7 +2,6 @@ package au.edu.unimelb.eldercare.service;
 
 import android.content.Context;
 import android.location.Location;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -10,20 +9,13 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
-
-import au.edu.unimelb.eldercare.user.User;
 
 public class TraceLocationService {
 
@@ -34,7 +26,6 @@ public class TraceLocationService {
     private LocationCallback mLocationCallback;
 
     private DatabaseReference mDatabase;
-    private FirebaseUser user;
 
     private TraceLocationService(){
         Log.d(this.getClass().getSimpleName(), "creating service");
@@ -45,7 +36,7 @@ public class TraceLocationService {
 
         DatabaseReference userDatabase = FirebaseDatabase.getInstance().getReference().child("users");
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         mDatabase = userDatabase.child(user.getUid());
 
@@ -59,7 +50,7 @@ public class TraceLocationService {
                 }
                 Log.d(this.getClass().getSimpleName(), locationResult.getLastLocation().toString());
                 uploadLocation(locationResult.getLastLocation());
-            };
+            }
         };
     }
 
@@ -100,7 +91,7 @@ public class TraceLocationService {
 
 
 
-    public void restartTracing(){
+    private void restartTracing(){
         try{
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
             Log.d(this.getClass().getSimpleName(), "requesting update");

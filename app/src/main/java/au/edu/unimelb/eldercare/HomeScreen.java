@@ -1,16 +1,12 @@
 package au.edu.unimelb.eldercare;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import au.edu.unimelb.eldercare.event.EventsUI;
 import au.edu.unimelb.eldercare.service.AuthenticationService;
-import au.edu.unimelb.eldercare.service.TraceLocationService;
 import au.edu.unimelb.eldercare.user.SettingsUI;
 import au.edu.unimelb.eldercare.user.UserProfileUI;
 import au.edu.unimelb.eldercare.user.UserSearchUI;

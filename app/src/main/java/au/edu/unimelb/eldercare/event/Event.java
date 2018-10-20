@@ -19,14 +19,14 @@ class Event implements Parcelable{
     public String creator;
 
     public Event(){
-        this.registeredUserId = new HashMap<String, String>();
+        this.registeredUserId = new HashMap<>();
     }
 
     public Event(String eventName, Long startingTime, HashMap<String, Double> location){
         this.eventName = eventName;
         this.startingTime = startingTime;
         this.location = location;
-        this.registeredUserId = new HashMap<String, String>();
+        this.registeredUserId = new HashMap<>();
     }
 
     public String registerUser(String userId, String state){
@@ -49,7 +49,7 @@ class Event implements Parcelable{
     }
 
     @SuppressWarnings("unchecked")
-    protected Event(Parcel in) {
+    Event(Parcel in) {
         eventId = in.readString();
         eventName = in.readString();
         eventDescription = in.readString();

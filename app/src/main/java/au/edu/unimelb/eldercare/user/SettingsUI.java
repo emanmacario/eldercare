@@ -24,17 +24,14 @@ public class SettingsUI extends AppCompatActivity {
     private TextView currentConnectedUser;
 
 
-    private FirebaseUser user;
-    private DatabaseReference mDatabase;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Sets the screen on open
         setContentView(R.layout.settings_ui);
 
-        this.user = FirebaseAuth.getInstance().getCurrentUser();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(this.user.getUid());
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
 
         currentDisplayName = findViewById(R.id.currentDisplayName);
         currentEmailAddress = findViewById(R.id.CurrentEmailAddress);

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -34,27 +33,27 @@ import au.edu.unimelb.eldercare.R;
 
 public class AddEventActivity extends AppCompatActivity {
 
-    protected DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private int currentYear;
     private int currentMonth;
     private int currentDay;
     private int currentHour;
-    protected EditText eventNameTextbox;
-    protected EditText eventDescriptionTextbox;
-    protected EditText maxUserTextbox;
-    protected Button dateButton;
-    protected Button timeButton;
-    protected String eventDate;
-    protected String eventTime;
-    final protected int PLACE_PICKER_REQUEST = 1;
-    protected String locationName;
-    protected LatLng location;
-    protected LatLngBounds openLocation = null;
-    protected TextView locationText;
-    protected Calendar calendar;
-    protected String confirmText = "Are you sure you want to submit this event?";
-    protected String alertTitleText = "Confirm Submit";
-    protected DatabaseReference eventRef = mDatabase.child("events").push();
+    EditText eventNameTextbox;
+    EditText eventDescriptionTextbox;
+    EditText maxUserTextbox;
+    Button dateButton;
+    Button timeButton;
+    private String eventDate;
+    private String eventTime;
+    private final int PLACE_PICKER_REQUEST = 1;
+    private String locationName;
+    LatLng location;
+    LatLngBounds openLocation = null;
+    TextView locationText;
+    private Calendar calendar;
+    String confirmText = "Are you sure you want to submit this event?";
+    String alertTitleText = "Confirm Submit";
+    DatabaseReference eventRef = mDatabase.child("events").push();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +86,7 @@ public class AddEventActivity extends AppCompatActivity {
         eventTime = currentTime + ":00";
     }
 
-    protected void submitNewEvent(View view){
+    void submitNewEvent(View view){
         String eventName = eventNameTextbox.getText().toString();
 
         Long startingTime = Timestamp.valueOf(eventDate + " " + eventTime).getTime();
@@ -175,7 +174,7 @@ public class AddEventActivity extends AppCompatActivity {
     }
 
     //TODO: add warning text tell user to fill the form
-    protected boolean someFieldMissing(){
+    private boolean someFieldMissing(){
         boolean isMissing = false;
         if (isEmptyField(eventNameTextbox)) {
             isMissing = true;

@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
-
+import au.edu.unimelb.eldercare.R;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.firebase.database.ChildEventListener;
@@ -17,9 +17,10 @@ import com.google.firebase.database.DatabaseError;
 
 import java.sql.Timestamp;
 
-import au.edu.unimelb.eldercare.R;
-
-public class EditEventActivity extends AddEventActivity{
+/**
+ * Provides UI services for editing events
+ */
+public class EditEventActivity extends AddEventActivity {
 
     Event event;
 

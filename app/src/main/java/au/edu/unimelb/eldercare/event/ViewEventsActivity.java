@@ -11,23 +11,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import au.edu.unimelb.eldercare.R;
+import com.google.firebase.database.*;
 
 import java.util.HashMap;
 
-import au.edu.unimelb.eldercare.R;
-
+/**
+ * Provides UI services for viewing all events
+ */
 public class ViewEventsActivity extends AppCompatActivity {
     private HashMap<String, Event> allEvents;
     private LayoutInflater inflater;
     private ViewGroup container;
     private DatabaseReference eventDB = FirebaseDatabase.getInstance().getReference().child("events");
-    ChildEventListener childEventListener = new eventsListener();
+    ChildEventListener childEventListener = new EventsListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +39,10 @@ public class ViewEventsActivity extends AppCompatActivity {
 
     }
 
-    public class eventsListener implements ChildEventListener{
+    /**
+     * Listener for changes to event information
+     */
+    public class EventsListener implements ChildEventListener {
 
         Button viewButton;
 
@@ -52,8 +52,8 @@ public class ViewEventsActivity extends AppCompatActivity {
             allEvents.put(dataSnapshot.getKey(), newEvent);
 
             View newBox = inflater.inflate(R.layout.event_box,
-                                          container,
-                                          false);
+                    container,
+                    false);
             container.addView(newBox);
             if (!filter(newEvent)) {
                 newBox.setVisibility(View.GONE);
@@ -103,7 +103,7 @@ public class ViewEventsActivity extends AppCompatActivity {
             finish();
         }
 
-        Boolean filter(Event newEvent){
+        Boolean filter(Event newEvent) {
             return true;
         }
 
@@ -112,7 +112,7 @@ public class ViewEventsActivity extends AppCompatActivity {
             Event event;
             Class activity = ViewEventActivity.class;
 
-            void setEvent(Event event){
+            void setEvent(Event event) {
                 this.event = event;
             }
 
@@ -124,7 +124,7 @@ public class ViewEventsActivity extends AppCompatActivity {
             }
         }
 
-        public ButtonClickListener getOnClickListener(){
+        public ButtonClickListener getOnClickListener() {
             return new ButtonClickListener();
         }
     }

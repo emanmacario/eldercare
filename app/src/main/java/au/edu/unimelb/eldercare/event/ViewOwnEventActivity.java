@@ -12,28 +12,31 @@ import com.google.firebase.database.DataSnapshot;
 
 import au.edu.unimelb.eldercare.R;
 
+/**
+ * Provides UI services for viewing events you own
+ */
 public class ViewOwnEventActivity extends ViewEventsActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
-        super.childEventListener = new ownEventsListener();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.childEventListener = new OwnEventsListener();
         super.onCreate(savedInstanceState);
-        ((TextView)findViewById(R.id.allEventText)).setText("List of created event");
+        ((TextView) findViewById(R.id.allEventText)).setText(R.string.eventCreatedList);
     }
 
-    public class ownEventsListener extends eventsListener{
+    public class OwnEventsListener extends EventsListener {
         @Override
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             super.onChildAdded(dataSnapshot, s);
-            viewButton.setText("Edit");
+            viewButton.setText(R.string.eventEditButton);
         }
 
         @Override
-        protected Boolean filter(Event newEvent){
+        protected Boolean filter(Event newEvent) {
             return newEvent.creator.equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
         }
 
-        public class EditButtonClickListener extends ButtonClickListener{
+        public class EditButtonClickListener extends ButtonClickListener {
             @Override
             public void onClick(View view) {
                 super.activity = EditEventActivity.class;
@@ -42,7 +45,7 @@ public class ViewOwnEventActivity extends ViewEventsActivity {
         }
 
         @Override
-        public ButtonClickListener getOnClickListener(){
+        public ButtonClickListener getOnClickListener() {
             return new EditButtonClickListener();
         }
     }

@@ -20,7 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import au.edu.unimelb.eldercare.R;
 
-import static au.edu.unimelb.eldercare.helpers.EmailValidifier.isEmailValid;
+import static au.edu.unimelb.eldercare.helpers.EmailValidator.isEmailValid;
 
 public class ChangeConnectedUserActivity extends AppCompatActivity{
 

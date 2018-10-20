@@ -2,6 +2,7 @@ package au.edu.unimelb.eldercare.helpers;
 
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
+
 import java.util.Date;
 import java.util.Locale;
 
@@ -13,6 +14,7 @@ public class TimeUtil {
 
     /**
      * Returns a string formatted to display the current local time
+     *
      * @param time current UNIX time in seconds
      * @return timeString
      */
@@ -31,6 +33,7 @@ public class TimeUtil {
 
     /**
      * Returns the current UNIX time in seconds
+     *
      * @return current time
      */
     public static long getCurrentTime() {
@@ -40,6 +43,7 @@ public class TimeUtil {
     /**
      * Returns a formatted string displaying the total number of
      * minutes and seconds, given a total duration in seconds.
+     *
      * @param totalSeconds the total number of seconds elapsed
      * @return formatted time string
      */

@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
 
-import static au.edu.unimelb.eldercare.helpers.EmailValidifier.isEmailValid;
+import static au.edu.unimelb.eldercare.helpers.EmailValidator.isEmailValid;
 
 public class ChangeEmailActivity extends AppCompatActivity {
 

@@ -8,9 +8,10 @@ import android.net.Uri;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 
+/**
+ * Provides functionality around playing ringtone for incoming calls
+ */
 public class AudioPlayer {
-
-    private static final String TAG = "AudioPlayer";
 
     private Context mContext;
     private MediaPlayer mPlayer;
@@ -22,7 +23,7 @@ public class AudioPlayer {
 
     public void playRingtone() {
         AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
-        assert(audioManager != null);
+        assert (audioManager != null);
 
         // Check if silent mode or vibrate is on
         switch (audioManager.getRingerMode()) {

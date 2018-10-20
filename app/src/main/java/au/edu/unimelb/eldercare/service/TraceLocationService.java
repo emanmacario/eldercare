@@ -17,6 +17,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
+/**
+ * Provides services around location tracking
+ */
 public class TraceLocationService {
 
     private static TraceLocationService instance;
@@ -27,7 +30,7 @@ public class TraceLocationService {
 
     private DatabaseReference mDatabase;
 
-    private TraceLocationService(){
+    private TraceLocationService() {
         Log.d(this.getClass().getSimpleName(), "creating service");
 
         mLocationRequest = LocationRequest.create();
@@ -54,6 +57,10 @@ public class TraceLocationService {
         };
     }
 
+    /**
+     * Returns (and, if necessary, creates) the singleton location tracing service
+     * @return The singleton location service
+     */
     public static TraceLocationService getTraceLocationService() {
         if (instance == null) {
             instance = new TraceLocationService();
@@ -61,51 +68,55 @@ public class TraceLocationService {
         return instance;
     }
 
-    public void startTracing(Context context){
+    /**
+     * Commences tracing for the current user
+     * @param context The global Android context
+     */
+    public void startTracing(Context context) {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
 
 
         try {
             mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
-                                Log.d(this.getClass().getSimpleName(), "getLastLocation");
-                                Log.d(this.getClass().getSimpleName(), location.toString());
-                                uploadLocation(location);
-                            }else{
-                                Log.d(this.getClass().getSimpleName(), "no location!! make a fake one");
-                                location = new Location("");
-                                location.setLatitude(-38);
-                                location.setLongitude(145);
-                                uploadLocation(location);
-                            }
-                        }
-                    });
-        } catch (SecurityException e){
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        Log.d(this.getClass().getSimpleName(), "getLastLocation");
+                        Log.d(this.getClass().getSimpleName(), location.toString());
+                        uploadLocation(location);
+                    } else {
+                        Log.d(this.getClass().getSimpleName(), "no location!! make a fake one");
+                        location = new Location("");
+                        location.setLatitude(-38);
+                        location.setLongitude(145);
+                        uploadLocation(location);
+                    }
+                }
+            });
+        } catch (SecurityException e) {
             Log.e(this.getClass().getSimpleName(), "permission plz");
         }
 
         restartTracing();
     }
 
-
-
-    private void restartTracing(){
-        try{
+    private void restartTracing() {
+        try {
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
             Log.d(this.getClass().getSimpleName(), "requesting update");
-        }catch (SecurityException e){
+        } catch (SecurityException e) {
             Log.e(this.getClass().getSimpleName(), "permission plz");
         }
     }
 
-    public void stopTracing(){
+    /**
+     * Stops tracing for the current user
+     */
+    public void stopTracing() {
         mFusedLocationClient.removeLocationUpdates(mLocationCallback);
     }
 
-
-    private void uploadLocation(final Location location){
+    private void uploadLocation(final Location location) {
         HashMap<String, Double> locationMap = new HashMap<>();
         locationMap.put("latitude", location.getLatitude());
         locationMap.put("longitude", location.getLongitude());

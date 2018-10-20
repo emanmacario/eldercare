@@ -21,6 +21,12 @@ class Event implements Parcelable {
     public int maxUser;
     public String creator;
 
+    // Default constructure required for Firebase
+    @SuppressWarnings("unused")
+    public Event() {
+
+    }
+
     /**
      * Create a new event object without persisting to the database
      *

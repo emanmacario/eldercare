@@ -14,12 +14,26 @@ public class Message {
     private String imageUrl;
     private long time;
 
+    @SuppressWarnings("unused")
     // Default constructor needed for Firebase
     public Message() {
     }
 
-    public Message(String senderId, String senderDisplayName, String text, String imageUrl,
-                   String photoUrl, long time) {
+    /**
+     * Create a new message
+     * @param senderId The uid of the sender
+     * @param senderDisplayName The friendly name of the sender
+     * @param text The text of the message (can be null)
+     * @param imageUrl The URL to an image attached to the message
+     * @param photoUrl (Deprecated) The URL to a photo attached to the message
+     * @param time The UNIX epoch time the message was sent
+     */
+    public Message(String senderId,
+                   String senderDisplayName,
+                   String text,
+                   String imageUrl,
+                   String photoUrl,
+                   long time) {
         this.senderId = senderId;
         this.senderDisplayName = senderDisplayName;
         this.text = text;

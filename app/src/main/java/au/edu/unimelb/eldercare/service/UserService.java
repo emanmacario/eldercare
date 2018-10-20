@@ -12,11 +12,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Provides an interface for user access
+ */
 public class UserService {
     private static final String TAG = "UserService";
     private static UserService ourInstance = new UserService();
     private final DatabaseReference databaseReference;
 
+    /**
+     * Get the singleton User Service
+     * @return The singleton instance of the User Service
+     */
     public static UserService getInstance() {
         return ourInstance;
     }
@@ -25,6 +32,10 @@ public class UserService {
         databaseReference = FirebaseDatabase.getInstance().getReference().child("users/");
     }
 
+    /**
+     * Gets all known users in the database
+     * @param sender The UserAccessor that is attempting to retrieve data
+     */
     public void getAllUsers(final UserAccessor sender) {
         Log.d(TAG, "getAllUsers: beginning query");
         databaseReference.orderByChild("displayName").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -46,11 +57,16 @@ public class UserService {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                // Do nothing
             }
         });
     }
 
+    /**
+     * Gets a specific user from the database
+     * @param userId The uid of the user
+     * @param sender The UserAccessor that is attempting to retrieve data
+     */
     public void getSpecificUser(String userId, final UserAccessor sender) {
         databaseReference.child(userId).addValueEventListener(new ValueEventListener() {
             @Override
@@ -68,6 +84,10 @@ public class UserService {
         });
     }
 
+    /**
+     * Persist a specific user into the database
+     * @param thisUser The user being persisted
+     */
     public void saveUser(User thisUser) {
         Map<String, Object> updateMap = new HashMap<>();
         updateMap.put(thisUser.getUserId(), thisUser);

@@ -1,22 +1,15 @@
 package au.edu.unimelb.eldercare.messaging;
 
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.makeramen.roundedimageview.RoundedImageView;
-
 import au.edu.unimelb.eldercare.R;
 import au.edu.unimelb.eldercare.helpers.TimeUtil;
+import com.makeramen.roundedimageview.RoundedImageView;
 
+/**
+ * Handles display of outgoing messages
+ */
 public class SentMessageViewHolder extends MessageViewHolder {
 
     private static final String TAG = "SentMessageViewHolder";
@@ -45,32 +38,7 @@ public class SentMessageViewHolder extends MessageViewHolder {
         } else if (message.getImageUrl() != null) {
 
             String imageUrl = message.getImageUrl();
-            if (imageUrl.startsWith("gs://")) {
-                StorageReference storageReference
-                        = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl);
-
-                storageReference.getDownloadUrl().addOnCompleteListener(
-                        new OnCompleteListener<Uri>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Uri> task) {
-                                if (task.isSuccessful()) {
-                                    assert(task.getResult() != null);
-                                    String downloadUrl = task.getResult().toString();
-                                    Glide.with(messageImage.getContext())
-                                            .load(downloadUrl)
-                                            .into(messageImage);
-                                } else {
-                                    Log.w(TAG, "Getting download URL was not successful",
-                                            task.getException());
-                                }
-                            }
-                        }
-                );
-            } else {
-                Glide.with(messageImage.getContext())
-                        .load(message.getImageUrl())
-                        .into(messageImage);
-            }
+            MessagingUtilities.handleImageMessage(message, imageUrl, messageImage, TAG);
             messageImage.setVisibility(ImageView.VISIBLE);
             messageText.setVisibility(TextView.GONE);
             timeText.setVisibility(TextView.VISIBLE);

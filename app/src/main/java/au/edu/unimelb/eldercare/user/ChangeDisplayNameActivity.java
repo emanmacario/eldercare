@@ -1,7 +1,6 @@
 package au.edu.unimelb.eldercare.user;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -17,7 +16,7 @@ import com.google.firebase.database.*;
 
 import java.util.List;
 
-public class ChangeDisplayNameActivity extends AppCompatActivity implements UserAccessor{
+public class ChangeDisplayNameActivity extends AppCompatActivity implements UserAccessor {
 
     private TextView currentDisplayName;
     private EditText newDisplayName;
@@ -29,7 +28,7 @@ public class ChangeDisplayNameActivity extends AppCompatActivity implements User
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //sets correct layout file
-        setContentView(R.layout.change_d_name_activity);
+        setContentView(R.layout.change_display_name_activity);
 
         currentDisplayName = findViewById(R.id.DisplayName);
         newDisplayName = findViewById(R.id.NewDisplayName);

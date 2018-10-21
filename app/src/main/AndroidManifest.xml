@@ -86,7 +86,7 @@
             android:name=".event.EditEventActivity"
             android:label="Edit Event" />
         <activity
-            android:name=".user.ChangeDNameActivity"
+            android:name=".user.ChangeDisplayNameActivity"
             android:label="@string/changeDNameHeading" />
         <activity
             android:name=".user.ChangeEmailActivity"

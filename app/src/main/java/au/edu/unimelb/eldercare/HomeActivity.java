@@ -123,7 +123,6 @@ public class HomeActivity extends AppCompatActivity implements UserAccessor, Aut
 
         //TODO: Add a toggle button
         userTracking = false;
-        traceLocationService = TraceLocationService.getTraceLocationService();
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -149,9 +148,6 @@ public class HomeActivity extends AppCompatActivity implements UserAccessor, Aut
             searchAddress.setText(locationName);
             this.route(searchAddress);
         }
-
-        TraceLocationService.getTraceLocationService().startTracing(getApplicationContext());
-
     }
 
     @Override
@@ -190,6 +186,10 @@ public class HomeActivity extends AppCompatActivity implements UserAccessor, Aut
         // Create the Sinch Client for the current authenticated user
         VoiceCallService sinchService = VoiceCallService.getInstance();
         sinchService.buildSinchClient(this);
+
+        traceLocationService = TraceLocationService.getTraceLocationService();
+
+        TraceLocationService.getTraceLocationService().startTracing(getApplicationContext());
 
         UserService.getInstance().getSpecificUser(this.user.getUid(), this);
     }

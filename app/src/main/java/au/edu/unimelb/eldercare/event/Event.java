@@ -24,7 +24,7 @@ class Event implements Parcelable {
     // Default constructure required for Firebase
     @SuppressWarnings("unused")
     public Event() {
-
+        this.registeredUserId = new HashMap<>();
     }
 
     /**

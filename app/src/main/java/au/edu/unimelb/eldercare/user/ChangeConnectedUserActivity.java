@@ -18,11 +18,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
+
 import au.edu.unimelb.eldercare.R;
+import au.edu.unimelb.eldercare.service.UserAccessor;
+import au.edu.unimelb.eldercare.service.UserService;
 
 import static au.edu.unimelb.eldercare.helpers.EmailValidator.isEmailValid;
 
-public class ChangeConnectedUserActivity extends AppCompatActivity {
+public class ChangeConnectedUserActivity extends AppCompatActivity implements UserAccessor {
 
     //On Screen Texts
     private TextView currentConnectedUser;
@@ -44,31 +48,14 @@ public class ChangeConnectedUserActivity extends AppCompatActivity {
         currentConnectedUser = findViewById(R.id.CurrentConnectedUser);
         newConnectedUser = findViewById(R.id.NewConnectedUser);
 
-        //Sets up the firebase variables
-        this.user = FirebaseAuth.getInstance().getCurrentUser();
-        mDatabaseCurrUser = FirebaseDatabase.getInstance().getReference().child("users").child(this.user.getUid());
+        //Gets the current user
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        UserService.getInstance().getSpecificUser(userID, this);
+
+        //Gets Database Reference
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mDatabaseCurrUser = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("users");
-
-        //Set Current Connected User Text from the database
-        mDatabaseCurrUser.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //Gets the user object that is the current user
-                User user = dataSnapshot.getValue(User.class);
-                //Grabs the value of connected user from the database and sets it to the object
-                user.setConnectedUser(dataSnapshot.child("ConnectedUser").getValue(String.class));
-                //Uses this to set the value of the TextView
-                String ConnectedUserID = user.getConnectedUser();
-                currentConnectedUser.setText(ConnectedUserID);
-                //set the current user type
-                currentUserType = dataSnapshot.child("userType").getValue(String.class);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 
     public void updateConnectedUser(View view) {
@@ -115,6 +102,30 @@ public class ChangeConnectedUserActivity extends AppCompatActivity {
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public void userListLoaded(List<User> users) {
+        //not used
+    }
+
+    @Override
+    public void userLoaded(User value) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+        String ConnectedUserID = value.getConnectedUser();
+        mDatabase.child(ConnectedUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User ConnectedUser = dataSnapshot.getValue(User.class);
+                String ConnectedUserName = ConnectedUser.getDisplayName();
+                currentConnectedUser.setText(ConnectedUserName);
             }
 
             @Override

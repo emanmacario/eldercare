@@ -18,23 +18,15 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import au.edu.unimelb.eldercare.MainActivity;
 import au.edu.unimelb.eldercare.R;
 import au.edu.unimelb.eldercare.helpers.TimeUtil;
-import au.edu.unimelb.eldercare.messaging.Message;
-import au.edu.unimelb.eldercare.messaging.MessageViewHolder;
-import au.edu.unimelb.eldercare.messaging.ReceivedMessageViewHolder;
-import au.edu.unimelb.eldercare.messaging.SentMessageViewHolder;
-import au.edu.unimelb.eldercare.service.UserAccessor;
-import au.edu.unimelb.eldercare.service.UserService;
-import au.edu.unimelb.eldercare.user.User;
+import au.edu.unimelb.eldercare.service.AuthenticationService;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
 import com.google.firebase.storage.FirebaseStorage;
@@ -42,15 +34,13 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class MessagingActivity extends AppCompatActivity implements UserAccessor {
+public class MessagingActivity extends AppCompatActivity {
 
     // Static variables and constants
     private static final String TAG = "MessagingActivity";
-    private static final String MESSAGES_CHILD = "messages";
-    private static final String ANONYMOUS_NAME = "anonymous";
+    private static final String MESSAGES = "messages";
     private static final String LOADING_IMAGE_URL = "gs://comp30022colombia.appspot.com/spinningwheel.gif";
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
@@ -65,7 +55,6 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
     private String mUsername;
     private String mCurrentUserId;
     private String mChatUserId;
-    private String mPhotoUrl;
 
     // UI instance variables
     private ImageButton mSendButton;
@@ -79,84 +68,122 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
         super.onCreate(savedInstanceState);
         setContentView(au.edu.unimelb.eldercare.R.layout.activity_messaging);
 
-        String displayName = getIntent().getStringExtra("displayName");
-
-        ActionBar actionBar = getSupportActionBar();
-        assert (actionBar != null);
-        actionBar.setTitle(displayName);
-
-        /*
-        assert(actionBar != null);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowCustomEnabled(true);
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        assert(inflater != null);
-        final ViewGroup nullParent = null;
-        View view = inflater.inflate(R.layout.chat_action_bar, nullParent);
-        actionBar.setCustomView(view);
-
-        TextView titleView = findViewById(R.id.custom_bar_title);
-        titleView.setText(displayName);
-        */
-
         // Initialise Firebase instance variables
-        FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        mFirebaseUser = AuthenticationService.getAuthenticationService().getUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mUsername = mFirebaseUser.getDisplayName();
 
-        // Check if user is authenticated
-        if (mFirebaseUser == null) {
-            // Not signed in, return to login activity
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        } else {
-            // Signed in, get user information
-            if (mFirebaseUser.getDisplayName() != null) {
-                mUsername = mFirebaseUser.getDisplayName();
-            } else {
-                mUsername = ANONYMOUS_NAME;
-            }
-
-            if (mFirebaseUser.getPhotoUrl() != null) {
-                mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
-            }
-        }
-
+        // Get both ids of chat users
         mCurrentUserId = mFirebaseUser.getUid();
         mChatUserId = getIntent().getStringExtra("targetUser");
-        UserService.getInstance().getSpecificUser(mCurrentUserId, this);
 
-        mDatabaseReference.child("chat").child(mCurrentUserId).addValueEventListener(new ValueEventListener() {
+        // Set action bar title to remote chat user's display name
+        setActionBarTitle();
+
+        // Initialise the Firebase Recycler Adapter
+        initialiseFirebaseAdapter();
+
+        // Set UI views references
+        setViewReferences();
+    }
+
+    /**
+     * Initialises and configures the Firebase Recycler Adapter
+     */
+    private void initialiseFirebaseAdapter() {
+        // Create a parser to parse new messages in the database into a Message object
+        SnapshotParser<Message> parser = new SnapshotParser<Message>() {
+            @NonNull
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public Message parseSnapshot(@NonNull DataSnapshot snapshot) {
+                Message message = snapshot.getValue(Message.class);
+                if (message != null) {
+                    message.setId(snapshot.getKey());
+                }
+                return message;
+            }
+        };
 
-                if (!dataSnapshot.hasChild(mChatUserId)) {
-                    Map chatAddMap = new HashMap();
-                    chatAddMap.put("seen", false);
-                    chatAddMap.put("timestamp", 0);
+        // Get a database reference to the messaging thread between users
+        DatabaseReference messagesReference = mDatabaseReference
+                .child(MESSAGES)
+                .child(mCurrentUserId)
+                .child(mChatUserId);
 
-                    Map chatUserMap = new HashMap();
-                    chatUserMap.put("chat/" + mCurrentUserId + "/" + mChatUserId, chatAddMap);
-                    chatUserMap.put("chat/" + mChatUserId + "/" + mCurrentUserId, chatAddMap);
+        // Configure the Firebase Recycler Adapter
+        FirebaseRecyclerOptions<Message> options =
+                new FirebaseRecyclerOptions.Builder<Message>()
+                        .setQuery(messagesReference, parser)
+                        .build();
 
-                    mDatabaseReference.updateChildren(chatUserMap, new DatabaseReference.CompletionListener() {
-                        @Override
-                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                            if (databaseError != null) {
-                                Log.d(TAG, databaseError.getMessage());
-                            }
-                        }
-                    });
+        // Create the Firebase Recycler Adapter
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(options) {
+            @NonNull
+            @Override
+            public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                Log.d(TAG, "onCreateViewHolder called");
+
+                LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+
+                // Create a new instance of a view holder. In this case, we
+                // will use custom layouts for each sent or received message item
+                if (viewType == VIEW_TYPE_MESSAGE_SENT) {
+                    View view = inflater.inflate(au.edu.unimelb.eldercare.R.layout.item_message_sent, parent, false);
+                    return new SentMessageViewHolder(view);
+                } else {
+                    View view = inflater.inflate(R.layout.item_message_received, parent, false);
+                    return new ReceivedMessageViewHolder(view);
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onBindViewHolder(@NonNull MessageViewHolder holder, int position,
+                                         @NonNull Message message) {
+                Log.d(TAG, "onBindViewHolder called");
+                holder.bind(message);
+            }
+
+            @Override
+            public void onDataChanged() {
+                Log.d(TAG, "Child added to 'messages'");
+            }
+
+            @Override
+            public int getItemViewType(int position) {
+                String senderId = getItem(position).getSenderId();
+                String mFirebaseUserId = mFirebaseUser.getUid();
+
+                if (senderId.equals(mFirebaseUserId)) {
+                    return VIEW_TYPE_MESSAGE_SENT;
+                }
+                return VIEW_TYPE_MESSAGE_RECEIVED;
+            }
+        };
+
+        mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+
+                int messageCount = mFirebaseAdapter.getItemCount();
+                int lastVisiblePosition = mLinearLayoutManager.findLastCompletelyVisibleItemPosition();
+
+                // If the recycler view is initially being loaded or the user is
+                // at the bottom of the list, scroll to the bottom of the list
+                // to show the newly added message.
+                if (lastVisiblePosition == -1 || (positionStart >= (messageCount - 1)
+                        && lastVisiblePosition == (positionStart - 1))) {
+                    mMessageRecyclerView.scrollToPosition(positionStart);
+                }
             }
         });
+    }
 
-
+    /**
+     * Sets reference to all UI view elements. Creates
+     * on click listeners for corresponding buttons.
+     */
+    private void setViewReferences() {
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
 
@@ -196,131 +223,15 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
             }
         });
 
-        // Create a parser to parse new messages in the database into a Message object
-        SnapshotParser<Message> parser = new SnapshotParser<Message>() {
-            @NonNull
-            @Override
-            public Message parseSnapshot(@NonNull DataSnapshot snapshot) {
-                Message message = snapshot.getValue(Message.class);
-                if (message != null) {
-                    message.setId(snapshot.getKey());
-                }
-                return message;
-            }
-        };
-
-
-        DatabaseReference messagesReference = mDatabaseReference.child("messages").child(mCurrentUserId).child(mChatUserId);
-
-        // Configure the Firebase Recycler Adapter
-        FirebaseRecyclerOptions<Message> options =
-                new FirebaseRecyclerOptions.Builder<Message>()
-                        .setQuery(messagesReference, parser) //mDatabaseReference.child(MESSAGES_CHILD)
-                        .build();
-
-        // Create the Firebase Recycler Adapter
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(options) {
-            @NonNull
-            @Override
-            public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-                Log.d(TAG, "onCreateViewHolder called");
-                LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-
-                // Create a new instance of a view holder. In this case, we
-                // will use custom layouts for each sent or received message item
-                if (viewType == VIEW_TYPE_MESSAGE_SENT) {
-                    View view = inflater.inflate(au.edu.unimelb.eldercare.R.layout.item_message_sent, parent, false);
-                    return new SentMessageViewHolder(view);
-                } else {
-                    View view = inflater.inflate(R.layout.item_message_received, parent, false);
-                    return new ReceivedMessageViewHolder(view);
-                }
-            }
-
-            @Override
-            public void onBindViewHolder(@NonNull MessageViewHolder holder, int position,
-                                         @NonNull Message message) {
-                Log.d(TAG, "onBindViewHolder called");
-                holder.bind(message);
-            }
-
-            @Override
-            public void onDataChanged() {
-                Log.d(TAG, "Child added to 'messages'");
-            }
-
-            @Override
-            public int getItemViewType(int position) {
-
-                String senderId = getItem(position).getSenderId();
-                String mFirebaseUserId = mFirebaseUser.getUid();
-
-                if (senderId.equals(mFirebaseUserId)) {
-                    return VIEW_TYPE_MESSAGE_SENT;
-                }
-                return VIEW_TYPE_MESSAGE_RECEIVED;
-            }
-        };
-
-
-        mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                super.onItemRangeInserted(positionStart, itemCount);
-
-                int messageCount = mFirebaseAdapter.getItemCount();
-                int lastVisiblePosition = mLinearLayoutManager.findLastCompletelyVisibleItemPosition();
-
-                // If the recycler view is initially being loaded or the user is
-                // at the bottom of the list, scroll to the bottom of the list
-                // to show the newly added message.
-                if (lastVisiblePosition == -1 || (positionStart >= (messageCount - 1)
-                        && lastVisiblePosition == (positionStart - 1))) {
-                    mMessageRecyclerView.scrollToPosition(positionStart);
-                }
-            }
-        });
-        mMessageRecyclerView.setAdapter(mFirebaseAdapter);
-
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Get user's input text message and current time in UNIX time
-                String text = mMessageEditText.getText().toString();
-                long time = TimeUtil.getCurrentTime();
-
-                // Create the message and push it to the database
-                Message message = new Message(mFirebaseUser.getUid(), mUsername, text, null, mPhotoUrl, time);
-                //mDatabaseReference.child(MESSAGES_CHILD).push().setValue(message);
-
-
-                String currentUserReference = "messages/" + mCurrentUserId + "/" + mChatUserId;
-                String chatUserReference = "messages/" + mChatUserId + "/" + mCurrentUserId;
-
-                DatabaseReference userMessagePush = mDatabaseReference.child("messages")
-                        .child(mCurrentUserId).child(mChatUserId).push();
-
-                String pushId = userMessagePush.getKey();
-
-                Map messageUserMap = new HashMap();
-                messageUserMap.put(currentUserReference + "/" + pushId, message);
-                messageUserMap.put(chatUserReference + "/" + pushId, message);
-
-                mDatabaseReference.updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                        if (databaseError != null) {
-                            Log.d(TAG, databaseError.getMessage());
-                        }
-                    }
-                });
-
-                // Clear the input field
-                mMessageEditText.setText("");
+                sendMessage();
             }
         });
+        mMessageRecyclerView.setAdapter(mFirebaseAdapter);
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -331,18 +242,20 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
             if (resultCode == RESULT_OK) {
                 if (data != null) {
                     final Uri uri = data.getData();
+                    assert(uri != null);
                     Message tempMessage =
                             new Message(mFirebaseUser.getUid(), mUsername, null, LOADING_IMAGE_URL,
-                                    mPhotoUrl, TimeUtil.getCurrentTime());
+                                    null, TimeUtil.getCurrentTime());
 
                     // mDatabaseReference.child(MESSAGES_CHILD).push()
-                    mDatabaseReference.child("messages").child(mCurrentUserId).child(mChatUserId).push()
+                    mDatabaseReference.child(MESSAGES).child(mCurrentUserId).child(mChatUserId).push()
                             .setValue(tempMessage, new DatabaseReference.CompletionListener() {
                                 @Override
                                 public void onComplete(@Nullable DatabaseError databaseError,
                                                        @NonNull DatabaseReference databaseReference) {
                                     if (databaseError == null) {
                                         String key = databaseReference.getKey();
+                                        assert(key != null);
                                         StorageReference storageReference =
                                                 FirebaseStorage.getInstance()
                                                         .getReference(mFirebaseUser.getUid())
@@ -360,22 +273,53 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
         }
     }
 
+    /**
+     * Sends the contents of the input text field (if non-empty)
+     * to the remote chat user, by creating a Message object
+     * and pushing it to the Firebase Realtime Database.
+     */
+    private void sendMessage() {
+        // Get user's input text message and current time in UNIX time
+        String text = mMessageEditText.getText().toString();
+        long time = TimeUtil.getCurrentTime();
 
-    @Override
-    public void userListLoaded(List<User> users) {
-        // Not used
+        // Create the message and push it to the database
+        Message message = new Message(mFirebaseUser.getUid(), mUsername, text, null, null, time);
+
+        String currentUserReference = MESSAGES + "/" + mCurrentUserId + "/" + mChatUserId;
+        String chatUserReference = MESSAGES + "/" + mChatUserId + "/" + mCurrentUserId;
+
+        DatabaseReference userMessagePush
+                = mDatabaseReference.child(MESSAGES)
+                                    .child(mCurrentUserId)
+                                    .child(mChatUserId)
+                                    .push();
+
+        String pushId = userMessagePush.getKey();
+
+        Map<String, Object> messageUserMap = new HashMap<>();
+        messageUserMap.put(currentUserReference + "/" + pushId, message);
+        messageUserMap.put(chatUserReference + "/" + pushId, message);
+
+        mDatabaseReference.updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    Log.d(TAG, databaseError.getMessage());
+                }
+            }
+        });
+
+        // Clear the input field
+        mMessageEditText.setText("");
     }
 
-    @Override
-    public void userLoaded(User user) {
-        mPhotoUrl = user.getDisplayPhoto();
-    }
 
     private void storeImage(final StorageReference storageReference, Uri uri, final String key) {
         // Create new task to asynchronously upload from content URI to this storage reference
         UploadTask uploadTask = storageReference.putFile(uri);
 
-        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+        uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
             public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                 if (!task.isSuccessful()) {
@@ -392,20 +336,37 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
+                    assert(downloadUri != null);
                     Message message =
                             new Message(mFirebaseUser.getUid(), mFirebaseUser.getDisplayName(),
-                                    null, downloadUri.toString(), mPhotoUrl,
+                                    null, downloadUri.toString(), null,
                                     TimeUtil.getCurrentTime());
-                    //mDatabaseReference.child(MESSAGES_CHILD).child(key).setValue(message);
-                    mDatabaseReference.child("messages").child(mCurrentUserId).child(mChatUserId)
-                            .child(key).setValue(message);
-                    mDatabaseReference.child("messages").child(mChatUserId).child(mCurrentUserId)
-                            .child(key).setValue(message);
+
+                    // Push the message to the database
+                    mDatabaseReference.child(MESSAGES)
+                                      .child(mCurrentUserId)
+                                      .child(mChatUserId)
+                                      .child(key)
+                                      .setValue(message);
+
+                    mDatabaseReference.child(MESSAGES)
+                                      .child(mChatUserId)
+                                      .child(mCurrentUserId)
+                                      .child(key)
+                                      .setValue(message);
                 } else {
                     Log.w(TAG, "Image upload task was not successful", task.getException());
                 }
             }
         });
+    }
+
+    private void setActionBarTitle() {
+        String displayName = getIntent().getStringExtra("displayName");
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(displayName);
+        }
     }
 
     @Override

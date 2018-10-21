@@ -15,8 +15,8 @@ public class Message {
     private long time;
 
     @SuppressWarnings("unused")
-    // Default constructor needed for Firebase
     public Message() {
+        // Default constructor needed for Firebase
     }
 
     /**

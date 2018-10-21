@@ -53,12 +53,6 @@
             android:name=".user.SettingsUI"
             android:label="@string/SettingsHeading" />
         <activity
-            android:name=".HomeScreen"
-            android:label="@string/HomeText" />
-        <activity
-            android:name=".FrequentContactsUI"
-            android:label="@string/frequentContactsHeading" />
-        <activity
             android:name=".user.UserSearchUI"
             android:label="@string/title_activity_user_search_ui"
             android:parentActivityName=".HomeScreen">
@@ -98,7 +92,7 @@
             android:name=".user.ChangeEmailActivity"
             android:label="Change Email Address" />
         <activity
-            android:name=".MessagingActivity"
+            android:name=".messaging.MessagingActivity"
             android:label="Messaging" />
         <activity
             android:name=".user.SelectUserTypeActivity"
@@ -116,9 +110,6 @@
             android:name=".user.AboutActivity"
             android:label="About Page" />
         <activity
-            android:name=".VoiceCallActivity"
-            android:label="Voice Call" />
-        <activity
             android:name=".user.OtherUserProfileActivity"
             android:label="Other User Profile" />
 
@@ -127,10 +118,10 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity
-            android:name=".IncomingCallActivity"
+            android:name=".voicecall.IncomingCallActivity"
             android:label="Incoming Call" />
         <activity
-            android:name=".ActiveCallActivity"
+            android:name=".voicecall.ActiveCallActivity"
             android:label="Active Call" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />

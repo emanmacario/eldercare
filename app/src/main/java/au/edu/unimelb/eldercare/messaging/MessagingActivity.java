@@ -1,4 +1,4 @@
-package au.edu.unimelb.eldercare;
+package au.edu.unimelb.eldercare.messaging;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -17,6 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+
+import au.edu.unimelb.eldercare.MainActivity;
+import au.edu.unimelb.eldercare.R;
 import au.edu.unimelb.eldercare.helpers.TimeUtil;
 import au.edu.unimelb.eldercare.messaging.Message;
 import au.edu.unimelb.eldercare.messaging.MessageViewHolder;
@@ -74,7 +77,7 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_messaging);
+        setContentView(au.edu.unimelb.eldercare.R.layout.activity_messaging);
 
         String displayName = getIntent().getStringExtra("displayName");
 
@@ -157,12 +160,12 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
 
-        mMessageRecyclerView = findViewById(R.id.reyclerview_message_list);
+        mMessageRecyclerView = findViewById(au.edu.unimelb.eldercare.R.id.reyclerview_message_list);
         mMessageRecyclerView.setHasFixedSize(false);
         mMessageRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        mSendButton = findViewById(R.id.button_chatbox_send);
-        mMessageEditText = findViewById(R.id.edittext_chatbox);
+        mSendButton = findViewById(au.edu.unimelb.eldercare.R.id.button_chatbox_send);
+        mMessageEditText = findViewById(au.edu.unimelb.eldercare.R.id.edittext_chatbox);
         mMessageEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -182,7 +185,7 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
             }
         });
 
-        ImageButton mAddImageButton = findViewById(R.id.button_image_add);
+        ImageButton mAddImageButton = findViewById(au.edu.unimelb.eldercare.R.id.button_image_add);
         mAddImageButton.setOnClickListener(new ImageButton.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -227,7 +230,7 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
                 // Create a new instance of a view holder. In this case, we
                 // will use custom layouts for each sent or received message item
                 if (viewType == VIEW_TYPE_MESSAGE_SENT) {
-                    View view = inflater.inflate(R.layout.item_message_sent, parent, false);
+                    View view = inflater.inflate(au.edu.unimelb.eldercare.R.layout.item_message_sent, parent, false);
                     return new SentMessageViewHolder(view);
                 } else {
                     View view = inflater.inflate(R.layout.item_message_received, parent, false);

@@ -1,4 +1,4 @@
-package au.edu.unimelb.eldercare;
+package au.edu.unimelb.eldercare.voicecall;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,15 +10,19 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import au.edu.unimelb.eldercare.R;
 import au.edu.unimelb.eldercare.helpers.AudioPlayer;
 import au.edu.unimelb.eldercare.service.UserAccessor;
 import au.edu.unimelb.eldercare.service.UserService;
+import au.edu.unimelb.eldercare.service.VoiceCallService;
 import au.edu.unimelb.eldercare.user.User;
 import com.bumptech.glide.Glide;
 import com.sinch.android.rtc.MissingPermissionException;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.calling.Call;
 import com.sinch.android.rtc.calling.CallListener;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package au.edu.unimelb.eldercare;
+package au.edu.unimelb.eldercare.voicecall;
 
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -7,8 +7,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import au.edu.unimelb.eldercare.R;
 import au.edu.unimelb.eldercare.helpers.TimeUtil;
 import au.edu.unimelb.eldercare.service.UserService;
+import au.edu.unimelb.eldercare.service.VoiceCallService;
 import au.edu.unimelb.eldercare.user.User;
 import au.edu.unimelb.eldercare.service.UserAccessor;
 import com.bumptech.glide.Glide;

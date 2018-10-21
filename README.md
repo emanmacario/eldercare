@@ -71,3 +71,11 @@ users can see and join. While creating an event, you can set the event's name, d
 location, and the maximum number of users which can join the event. These events can be added
 to the user's Google calendar, which is then responsible for sending push notifications to
 the user once the time of the event is near.
+
+### Add Friends
+The user can also search for other users, then send them friend requests. Once the request is accepted
+by the other user, this will be registered in our database.
+
+
+# Unit Testing
+LOL

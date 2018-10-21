@@ -82,6 +82,10 @@ public class AddEventActivity extends AppCompatActivity {
         eventTime = currentTime + ":00";
     }
 
+    /**
+     * Gets the values entered in fields, creates an event and adds it to the database
+     * @param view
+     */
     void submitNewEvent(View view) {
         String eventName = eventNameTextbox.getText().toString();
 
@@ -105,6 +109,10 @@ public class AddEventActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Opens the datePickerDialog and allows the user to change the date of the event
+     * @param view
+     */
     public void onClickDate(View view) {
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -117,6 +125,10 @@ public class AddEventActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    /**
+     * Opens the timePickerDialog and allows the user to change the time of the event
+     * @param view
+     */
     public void onClickTime(View view) {
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -129,10 +141,19 @@ public class AddEventActivity extends AppCompatActivity {
         timePickerDialog.show();
     }
 
+    /**
+     * Checks if the event is filled out correctly, checks for confirmation and also
+     * allows the user to add the event to their phone's calendar
+     * @param view
+     */
     public void onClickSubmit(View view) {
+        //Checks that the event is filled correctly
         if (someFieldMissing()) {
+            Toast toast = Toast.makeText(this, "Some Field is Empty", Toast.LENGTH_LONG);
+            toast.show();
             return;
         }
+        //Sets up the confirmation alert
         final View currentView = view;
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
         builder.setTitle(alertTitleText).setMessage(confirmText);
@@ -148,6 +169,13 @@ public class AddEventActivity extends AppCompatActivity {
         builder.show();
     }
 
+    /**
+     * Builds a place picker to allow the user to set the location of the event
+     * via the GoogleMaps API
+     * @param view
+     * @throws GooglePlayServicesNotAvailableException
+     * @throws GooglePlayServicesRepairableException
+     */
     public void onClickLocation(View view) throws GooglePlayServicesNotAvailableException, GooglePlayServicesRepairableException {
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
         if (openLocation != null) {
@@ -170,7 +198,10 @@ public class AddEventActivity extends AppCompatActivity {
         }
     }
 
-    //TODO: add warning text tell user to fill the form
+    /**
+     * Checks all fields to see that they are filled
+     * @return
+     */
     private boolean someFieldMissing() {
         boolean isMissing = false;
         if (isEmptyField(eventNameTextbox)) {

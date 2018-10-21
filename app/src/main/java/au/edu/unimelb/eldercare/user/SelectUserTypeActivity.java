@@ -18,10 +18,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
+
 import au.edu.unimelb.eldercare.HomeActivity;
 import au.edu.unimelb.eldercare.R;
+import au.edu.unimelb.eldercare.service.UserAccessor;
+import au.edu.unimelb.eldercare.service.UserService;
 
-public class SelectUserTypeActivity extends AppCompatActivity {
+public class SelectUserTypeActivity extends AppCompatActivity implements UserAccessor{
 
     private Button confirmButton;
     private RadioGroup UserTypeRadio;
@@ -50,37 +54,13 @@ public class SelectUserTypeActivity extends AppCompatActivity {
         CarerRadio.setId(CarerRadioID);
         DependantRadio.setId(DependantRadioID);
 
+        //Gets the current User
+        String mUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        UserService.getInstance().getSpecificUser(mUser, this);
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
 
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                String userType = dataSnapshot.child("userType").getValue(String.class);
-                if (userType == null) {
-                    Toast toast = Toast.makeText(SelectUserTypeActivity.this, "Please set user type", Toast.LENGTH_LONG);
-                    toast.show();
-                } else {
-                    //If there already exists a user type, make sure that radio button is selected
-                    switch (userType) {
-                        case "Dependant":
-                            DependantRadio.toggle();
-                            break;
-                        case "Carer":
-                            CarerRadio.toggle();
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 
     /**
@@ -109,6 +89,32 @@ public class SelectUserTypeActivity extends AppCompatActivity {
             //Now open Home Screen
             Intent intent = new Intent(SelectUserTypeActivity.this, HomeActivity.class);
             startActivity(intent);
+        }
+
+    }
+
+    @Override
+    public void userListLoaded(List<User> users) {
+        //not used
+    }
+
+    @Override
+    public void userLoaded(User value) {
+        String mUserType = value.getUserType();
+
+        if(mUserType == null){
+        }
+        else{
+            switch (mUserType){
+                case "Dependant":
+                    DependantRadio.toggle();
+                    break;
+                case "Carer":
+                    CarerRadio.toggle();
+                    break;
+                default:
+                    break;
+            }
         }
 
     }

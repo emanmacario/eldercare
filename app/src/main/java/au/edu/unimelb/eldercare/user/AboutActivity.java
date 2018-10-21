@@ -14,15 +14,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
+
 import au.edu.unimelb.eldercare.R;
+import au.edu.unimelb.eldercare.service.UserAccessor;
+import au.edu.unimelb.eldercare.service.UserService;
 
-public class AboutActivity extends AppCompatActivity {
-
-    //Static Text Views
-    private TextView AboutPageHeading;
-    private TextView AboutNameStatic;
-    private TextView AboutEmailStatic;
-    private TextView AboutUserTypeStatic;
+public class AboutActivity extends AppCompatActivity implements UserAccessor {
 
     //Variable Text Views
     private TextView AboutNameUser;
@@ -37,44 +35,33 @@ public class AboutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //Set the correct Layout
         setContentView(R.layout.about_activity);
 
-        //Static Text Views
-        AboutPageHeading = findViewById(R.id.AboutPageHeading);
-        AboutNameStatic = findViewById(R.id.AboutNameStatic);
-        AboutEmailStatic = findViewById(R.id.AboutEmailStatic);
-        AboutUserTypeStatic = findViewById(R.id.AboutUserTypeStatic);
+        //Get the current users id
+        final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        UserService.getInstance().getSpecificUser(userID, this);
 
         //Variable Text Views
         AboutNameUser = findViewById(R.id.AboutNameUser);
         AboutEmailUser = findViewById(R.id.AboutEmailUser);
         AboutUserTypeUser = findViewById(R.id.AboutUserTypeUser);
 
-        //Database and User references
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(this.user.getUid());
+    }
 
-        //This Listener gets values from the database snapshot and sets the appropriate text views
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
+    @Override
+    public void userListLoaded(List<User> users) {
+        //not used
+    }
 
-                String userName = user.getDisplayName();
-                String userEmail = user.getEmail();
-                String userType = user.getUserType();
+    @Override
+    public void userLoaded(User value) {
+        String mDisplayName= value.getDisplayName();
+        AboutNameUser.setText(mDisplayName);
 
-                AboutNameUser.setText(userName);
-                AboutEmailUser.setText(userEmail);
-                AboutUserTypeUser.setText(userType);
-            }
+        String mEmail = value.getEmail();
+        AboutEmailUser.setText(mEmail);
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        String mUserType = value.getUserType();
+        AboutUserTypeUser.setText(mUserType);
     }
 }

@@ -55,6 +55,10 @@ public class ViewEventActivity extends EditEventActivity {
         return event.registeredUserId.get(userId) != null;
     }
 
+    /**
+     * Shows the location of the event using the GoogleMaps API
+     * @param view
+     */
     @Override
     public void onClickLocation(View view) {
         Intent intent = new Intent(this, MapActivity.class);
@@ -63,6 +67,9 @@ public class ViewEventActivity extends EditEventActivity {
         startActivity(intent);
     }
 
+    /**
+     * Based on whether the user is joining or leaving event, show appropriate alert
+     */
     private void alterActivityByUserJoinState() {
         if (isRegistered()) {
             submitEventButton.setText(R.string.eventUnregister);
@@ -90,6 +97,10 @@ public class ViewEventActivity extends EditEventActivity {
         event.unregisterUser(userId);
     }
 
+    /**
+     * Prompt the user to add the event to their personal calendar. Will allow for notifications.
+     * @param view
+     */
     private void askAddEventToCalendar(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
         builder.setTitle("Add event to calendar").setMessage("Do you want to add this event to your calendar?");
@@ -105,6 +116,9 @@ public class ViewEventActivity extends EditEventActivity {
         builder.show();
     }
 
+    /**
+     * Opens the calendar application on the phone, pre-filling the fields to add the event
+     */
     private void addEventToCalendar() {
         Intent intent = new Intent(Intent.ACTION_INSERT)
                 .setData(CalendarContract.Events.CONTENT_URI)

@@ -71,7 +71,7 @@ public class IncomingCallActivity extends AppCompatActivity implements UserAcces
         decline.setOnClickListener(mClickListener);
 
         mSinchService = VoiceCallService.getInstance();
-        mCallId = getIntent().getStringExtra("CALL_ID"); // TODO: refactor string into constant somewhere
+        mCallId = getIntent().getStringExtra(VoiceCallService.CALL_ID);
         Call call = mSinchService.getCall(mCallId);
         call.addCallListener(new SinchCallListener());
 
@@ -102,7 +102,7 @@ public class IncomingCallActivity extends AppCompatActivity implements UserAcces
             try {
                 call.answer();
                 Intent intent = new Intent(this, ActiveCallActivity.class);
-                intent.putExtra("CALL_ID", mCallId);
+                intent.putExtra(VoiceCallService.CALL_ID, mCallId);
                 startActivity(intent);
                 finish();
             } catch (MissingPermissionException e) {

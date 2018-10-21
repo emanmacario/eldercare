@@ -19,6 +19,7 @@ import au.edu.unimelb.eldercare.voicecall.IncomingCallActivity;
  */
 public class VoiceCallService implements SinchServiceInterface {
 
+    public static final String CALL_ID = "callId";
     private static final String TAG = "VoiceCallService";
     private static final String APP_KEY = "0a9ff560-c6ed-4d85-a4ab-1143c50eb1ae";
     private static final String APP_SECRET = "BqjIJOCIhEynByd5ApgSoA==";
@@ -60,16 +61,15 @@ public class VoiceCallService implements SinchServiceInterface {
 
         // Instantiate a SinchClient using the SinchClientBuilder
         sinchClient = Sinch.getSinchClientBuilder()
-                .context(context) // TODO: Make sure this works with parameterised context
+                .context(context)
                 .userId(userId)
-                .applicationKey(APP_KEY) // TODO: Don't commit keys
+                .applicationKey(APP_KEY)
                 .applicationSecret(APP_SECRET)
                 .environmentHost(ENVIRONMENT)
                 .build();
 
         // Verify manifest in runtime during development
-        // This can be removed when application is ready for release
-        sinchClient.checkManifest(); // TODO: Delete this
+        sinchClient.checkManifest();
 
         // Enable app-app calling, then start the client
         sinchClient.setSupportCalling(true);
@@ -89,7 +89,7 @@ public class VoiceCallService implements SinchServiceInterface {
 
             Intent intent = new Intent(context, IncomingCallActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra("CALL_ID", call.getCallId());
+            intent.putExtra(VoiceCallService.CALL_ID, call.getCallId());
 
             context.startActivity(intent);
         }

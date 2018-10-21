@@ -13,19 +13,19 @@ Team Colombia consists of members:
   
 Our project was supervised by tutor William Voorsluys.
 
-# Android Application
+## Android Application
 The minimum required version of Android is Oreo.
 Before checking out the project, please ensure you have installed Android 8.0 SDK and
 Google Play Services from the Android SDK Manager.
 
-# Application Summary & Usage
+## Application Summary & Usage
 On start-up of the application, the user will be taken to the login page. From there,
 they can choose to register a new account, or sign in with an existing account. If the
 user is successfully authenticated, they will be taken to the main user interface of the
 application, where they will be greeted with a map and a sliding up panel where they can
 access all the features of the application.
 
-# Features
+## Features
 In this section, we will describe the functionality of core features within our application.
 
 ### Authentication
@@ -77,5 +77,5 @@ The user can also search for other users, then send them friend requests. Once t
 by the other user, this will be registered in our database.
 
 
-# Unit Testing
-LOL
+## Unit Testing
+Unit tests for our application can be found in the directory `test/java/au/edu/unimelb/eldercare`.

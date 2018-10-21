@@ -17,7 +17,7 @@ import com.google.firebase.database.*;
 
 import java.util.List;
 
-public class ChangeDNameActivity extends AppCompatActivity implements UserAccessor{
+public class ChangeDisplayNameActivity extends AppCompatActivity implements UserAccessor{
 
     private TextView currentDisplayName;
     private EditText newDisplayName;

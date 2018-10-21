@@ -1,7 +1,6 @@
 package au.edu.unimelb.eldercare;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -18,7 +17,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import au.edu.unimelb.eldercare.event.EventsUI;
@@ -29,8 +27,6 @@ import au.edu.unimelb.eldercare.service.VoiceCallService;
 
 import com.directions.route.*;
 import com.firebase.ui.auth.IdpResponse;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -43,7 +39,6 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
 
@@ -65,37 +60,36 @@ import static au.edu.unimelb.eldercare.service.AuthenticationService.RC_SIGN_IN;
 
 public class HomeActivity extends AppCompatActivity implements UserAccessor, AuthenticationListener, OnMapReadyCallback, RoutingListener {
 
-    private EditText searchAddress = null;
-    private LatLng eventLocation = null;
-
-    // Firebase variables
-    private FirebaseUser user;
-    private DatabaseReference mDatabase;
-
-    // Google Maps API variables
+    // Class constants
     private static final String TAG = "MainActivity";
-    private static final int ERROR_DIALOG_REQUEST = 9001;
-
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
+    private static final int[] COLORS = new int[]{R.color.primary_dark_material_light};
+    private static final String latitude = "latitude";
+    private static final String longitude = "longitude";
+    private static final String connectedUser = "ConnectedUser";
+    private static final String location = "location";
 
-    //vars
+    // Firebase instance variables
+    private FirebaseUser user;
+    private DatabaseReference mDatabase;
+    private DatabaseReference mUsersRef;
+
+    // Google Maps API instance variables
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient = null;
+    private EditText searchAddress = null;
+    private LatLng eventLocation = null;
+    private List<Polyline> polylines;
 
-    //User Tracking
+    // User Tracking instance variables
     private Boolean userTracking;
     private TraceLocationService traceLocationService;
-
-    //Strings
-    private final String latitude = "latitude";
-    private final String longitude = "longitude";
-    private final String connectedUser = "ConnectedUser";
-    private final String location = "location";
     private String ConnectedUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,25 +97,18 @@ public class HomeActivity extends AppCompatActivity implements UserAccessor, Aut
         setContentView(R.layout.activity_home);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mUsersRef = mDatabase.child("users");
         user = AuthenticationService.getAuthenticationService().getUser();
         if (user == null) {
             AuthenticationService.getAuthenticationService().startAuthentication(this);
         }
 
-        //route lines
-        polylines = new ArrayList<>();
-
         getLocationPermission();
-
-        this.user = FirebaseAuth.getInstance().getCurrentUser();
-        this.mDatabase = FirebaseDatabase.getInstance().getReference().child("users"); // TODO: Make new reference please
-
-        this.mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
-        //TODO: Add a toggle button
+        polylines = new ArrayList<>();
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         userTracking = false;
 
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        mUsersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (userTracking) {
@@ -158,17 +145,16 @@ public class HomeActivity extends AppCompatActivity implements UserAccessor, Aut
     @Override
     public void userAuthenticated(final FirebaseUser user) {
         this.user = user;
-        //Note, have to check if the user already exists so that their data doesn't get overridden
-        //every time they login
-        DatabaseReference userRef = mDatabase.child(this.user.getUid());
+
+        // Check if user already exists so that their data is not overridden on every single login
+        DatabaseReference userRef = mDatabase.child("users").child(this.user.getUid());
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
-                    //Once a user is authenticated and they don't already exist,
-                    //create a new user on the database
+                    // Once new user is authenticated, add them to the database
                     writeNewUser(user.getUid(), user.getDisplayName(), user.getEmail());
-                    //Also need to select user type so go to this activity
+                    // Allow the new authenticated user to select their user type
                     Intent intent = new Intent(HomeActivity.this, SelectUserTypeActivity.class);
                     startActivity(intent);
                 }
@@ -184,16 +170,17 @@ public class HomeActivity extends AppCompatActivity implements UserAccessor, Aut
         VoiceCallService sinchService = VoiceCallService.getInstance();
         sinchService.buildSinchClient(this);
 
+        // Initialise the Trace Location Service
         traceLocationService = TraceLocationService.getTraceLocationService();
+        traceLocationService.startTracing(getApplicationContext());
 
-        TraceLocationService.getTraceLocationService().startTracing(getApplicationContext());
-
+        // Load connected user details
         UserService.getInstance().getSpecificUser(this.user.getUid(), this);
     }
 
     @Override
     public void userListLoaded(List<User> users) {
-
+        // Not used
     }
 
     @Override
@@ -206,33 +193,20 @@ public class HomeActivity extends AppCompatActivity implements UserAccessor, Aut
         AuthenticationService.getAuthenticationService().startAuthentication(this);
     }
 
-
     /**
-     * Function creates a new User and creates the user on the realtime database
+     * Writes a new user to the Firebase Realtime Database
      *
-     * @param userId
-     * @param name
-     * @param email
+     * @param userId The id of the authenticated user
+     * @param displayName The name of the user
+     * @param email The email of the user
      */
-    private void writeNewUser(String userId, String name, String email) {
-        mDatabase.child(userId).child("displayName").setValue(name);
-        mDatabase.child(userId).child("email").setValue(email);
-        mDatabase.child(userId).child("userType").setValue("");
-        mDatabase.child(userId).child("ConnectedUser").setValue("");
+    private void writeNewUser(String userId, String displayName, String email) {
+        mUsersRef.child(userId).child("displayName").setValue(displayName);
+        mUsersRef.child(userId).child("email").setValue(email);
+        mUsersRef.child(userId).child("userType").setValue("");
+        mUsersRef.child(userId).child("ConnectedUser").setValue("");
     }
 
-    // Google maps implementation
-
-    private void init() {
-        Button mapBtn = findViewById(R.id.MapButton);
-        mapBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, MapActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -259,27 +233,7 @@ public class HomeActivity extends AppCompatActivity implements UserAccessor, Aut
         }
     }
 
-    //check if device can use maps
-    public boolean isServicesOK() {
-        Log.d(TAG, "isServicesOK: checking google services version");
-
-        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(HomeActivity.this);
-
-        if (available == ConnectionResult.SUCCESS) {
-            //user can make map requests
-            Log.d(TAG, "isServicesOK: Google Play Services is working");
-            return true;
-        } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
-            //resolvable error occured
-            Log.d(TAG, "isServicesOK: a fixable error occured");
-            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(HomeActivity.this, available, ERROR_DIALOG_REQUEST);
-            dialog.show();
-        } else {
-            Toast.makeText(this, "You cant make map requests", Toast.LENGTH_SHORT).show();
-        }
-        return false;
-    }
-
+    @SuppressWarnings("unchecked")
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
 
@@ -378,14 +332,9 @@ public class HomeActivity extends AppCompatActivity implements UserAccessor, Aut
         }
     }
 
-
-    private List<Polyline> polylines;
-    private static final int[] COLORS = new int[]{R.color.primary_dark_material_light};
-
     @Override
     public void onRoutingFailure(RouteException e) {
         // The Routing request failed
-        //progressDialog.dismiss();
         if (e != null) {
             Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
         } else {
@@ -394,18 +343,10 @@ public class HomeActivity extends AppCompatActivity implements UserAccessor, Aut
 
     }
 
-    //protected Location mLastLocation;
-    //mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
+    @SuppressWarnings("unchecked")
     private void route(View view) {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
 
@@ -433,22 +374,22 @@ public class HomeActivity extends AppCompatActivity implements UserAccessor, Aut
             }
         });
 
-        //Hides Keyboard
+        // Hide keyboard
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     private void getRoute(LatLng startLatLng) throws IOException {
-
-        //get the users inputted location
+        // Get the users inputted location
         if (searchAddress == null) {
             searchAddress = findViewById(R.id.searchAddress);
         }
 
         LatLng end;
         if (eventLocation == null) {
-            //get the latitude and longitude for the search terms location
+            // Get the latitude and longitude for the search terms location
             Geocoder gc = new Geocoder(this);
             List<Address> list = gc.getFromLocationName(searchAddress.getText().toString(), 1);
             Address add = list.get(0);
@@ -458,14 +399,14 @@ public class HomeActivity extends AppCompatActivity implements UserAccessor, Aut
             double lat = add.getLatitude();
             double lon = add.getLongitude();
 
-            //use the lat and long to and create a route from the users current location to destination
+            // Use the lat and long to and create a route from the users current location to destination
             end = new LatLng(lat, lon);
         } else {
             end = eventLocation;
         }
 
         String apiKey = "";
-        ApplicationInfo ai = null;
+        ApplicationInfo ai;
         try {
             ai = getPackageManager().getApplicationInfo(this.getPackageName(), PackageManager.GET_META_DATA);
             Bundle bundle = ai.metaData;
@@ -473,7 +414,6 @@ public class HomeActivity extends AppCompatActivity implements UserAccessor, Aut
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-
 
         Routing routing = new Routing.Builder()
                 .travelMode(AbstractRouting.TravelMode.WALKING)
@@ -485,17 +425,13 @@ public class HomeActivity extends AppCompatActivity implements UserAccessor, Aut
         routing.execute();
     }
 
-    //TODO clean up & comment code and fix layout
-
     @Override
     public void onRoutingStart() {
-
     }
 
-
+    @SuppressWarnings("deprecation")
     @Override
     public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
-
         if (polylines.size() > 0) {
             for (Polyline poly : polylines) {
                 poly.remove();
@@ -503,12 +439,10 @@ public class HomeActivity extends AppCompatActivity implements UserAccessor, Aut
         }
 
         polylines = new ArrayList<>();
-        //add route(s) to the map.
+        // Add route(s) to the map.
         for (int i = 0; i < route.size(); i++) {
-
-            //In case of more than 5 alternative routes
+            // In case of more than five alternative routes
             int colorIndex = i % COLORS.length;
-
             PolylineOptions polyOptions = new PolylineOptions();
             polyOptions.color(getResources().getColor(COLORS[colorIndex]));
             polyOptions.width(10 + i * 3);
@@ -516,8 +450,6 @@ public class HomeActivity extends AppCompatActivity implements UserAccessor, Aut
             Polyline polyline = mMap.addPolyline(polyOptions);
             polylines.add(polyline);
         }
-
-
     }
 
     @Override
@@ -535,68 +467,43 @@ public class HomeActivity extends AppCompatActivity implements UserAccessor, Aut
 
     private void trackUser() {
         traceLocationService.startTracing(HomeActivity.this);
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        mUsersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mMap.clear();
-                //Get the connected users email
+                // Get the connected user's email
                 String ConnectedUsersUid = dataSnapshot.child(user.getUid()).child(connectedUser).getValue(String.class);
                 if (ConnectedUsersUid != null) {
-                    //Using the connected users Uid, grab their location
+                    // Using the connected users Uid, grab their location
                     double lat = dataSnapshot.child(ConnectedUsersUid).child(location).child(latitude).getValue(double.class);
                     double lon = dataSnapshot.child(ConnectedUsersUid).child(location).child(longitude).getValue(double.class);
 
-                    //Place a marker on the map at the connected user's location
+                    // Place a marker on the map at the connected user's location
                     mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title("Hello World"));
                 } else {
                     Toast noConnectedUserToast = Toast.makeText(HomeActivity.this, "No User to Track", Toast.LENGTH_LONG);
                     noConnectedUserToast.show();
                 }
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
 
     public void openFriends(View view) {
-        // TODO: Complete this and open friends list intent
     }
 
     public void openConnectedUser(View view) {
-        // TODO: Complete this and open connected user intent
-        DatabaseReference mDatabaseUser = mDatabase.child("users").child(this.user.getUid());
-        mDatabaseUser.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String connectedUserID = dataSnapshot.child("ConnectedUser").getValue(String.class);
-                if (connectedUserID == null) {
-                    Toast toast = Toast.makeText(HomeActivity.this, "No Connected User", Toast.LENGTH_LONG);
-                    toast.show();
-                    return;
-                }
-                Intent intent = new Intent(HomeActivity.this, OtherUserProfileActivity.class);
-                intent.putExtra("targetUser", connectedUserID);
-                startActivity(intent);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        /*
-        DatabaseReference mDatabaseUser = mDatabase.child(this.user.getUid());
-        DatabaseReference mDatabaseConnectedUser = mDatabaseUser.child("ConnectedUser");
-        String ConnectedUserID = mDatabaseConnectedUser.getKey();
-        */
-
-        Intent intent = new Intent(HomeActivity.this, OtherUserProfileActivity.class);
-        intent.putExtra("targetUser", ConnectedUser);
-        startActivity(intent);
+        if (ConnectedUser != null) {
+            Intent intent = new Intent(HomeActivity.this, OtherUserProfileActivity.class);
+            intent.putExtra("targetUser", ConnectedUser);
+            startActivity(intent);
+        } else {
+            Toast toast = Toast.makeText(HomeActivity.this, "No Connected User", Toast.LENGTH_LONG);
+            toast.show();
+        }
     }
 
     public void openUserProfileUI(View view) {
@@ -620,5 +527,4 @@ public class HomeActivity extends AppCompatActivity implements UserAccessor, Aut
         Intent intent = new Intent(HomeActivity.this, UserSearchUI.class);
         startActivity(intent);
     }
-
 }

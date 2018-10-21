@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,7 +20,7 @@ import au.edu.unimelb.eldercare.R;
 import au.edu.unimelb.eldercare.service.UserAccessor;
 import au.edu.unimelb.eldercare.service.UserService;
 
-public class SettingsUI extends AppCompatActivity implements UserAccessor{
+public class SettingsUI extends AppCompatActivity implements UserAccessor {
 
     private TextView currentDisplayName;
     private TextView currentEmailAddress;
@@ -45,7 +44,7 @@ public class SettingsUI extends AppCompatActivity implements UserAccessor{
     }
 
     public void openChangeDNameActivity(View view) {
-        Intent intent = new Intent(SettingsUI.this, ChangeDNameActivity.class);
+        Intent intent = new Intent(SettingsUI.this, ChangeDisplayNameActivity.class);
         startActivity(intent);
     }
 

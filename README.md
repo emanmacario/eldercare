@@ -17,8 +17,8 @@ Our project was supervised by tutor **William Voorsluys**.
 The **minimum required version** of Android is **Oreo**.
 
 Before checking out the project, please ensure you have installed **Android 8.0 SDK** and
-**Google Play Services** from the Android SDK Manager. Note that the minimum targeted SDK version
-is **API Level 26**, whereas the actual target version is **API Level 28**.
+**Google Play Services** from the **Android SDK Manager**. Note that the **minimum targeted SDK version**
+is **API Level 26**, whereas the **actual target version** is **API Level 28**.
 
 ## Application Summary & Usage
 On start-up of the application, the user will be taken to the login page. From there,

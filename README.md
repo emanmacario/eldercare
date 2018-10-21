@@ -14,7 +14,7 @@ Team Colombia consists of members:
 Our project was supervised by tutor **William Voorsluys**.
 
 ## Android Application
-The minimum required version of Android is **Oreo**.
+The **minimum required version** of Android is **Oreo**.
 
 Before checking out the project, please ensure you have installed **Android 8.0 SDK** and
 **Google Play Services** from the Android SDK Manager. Note that the minimum targeted SDK version

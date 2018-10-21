@@ -25,7 +25,8 @@ import au.edu.unimelb.eldercare.event.EventsUI;
 import au.edu.unimelb.eldercare.service.AuthenticationListener;
 import au.edu.unimelb.eldercare.service.AuthenticationService;
 import au.edu.unimelb.eldercare.service.TraceLocationService;
-import au.edu.unimelb.eldercare.user.*;
+import au.edu.unimelb.eldercare.service.VoiceCallService;
+
 import com.directions.route.*;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.common.ConnectionResult;
@@ -50,12 +51,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import au.edu.unimelb.eldercare.event.EventsUI;
-import au.edu.unimelb.eldercare.service.AuthenticationListener;
-import au.edu.unimelb.eldercare.service.AuthenticationService;
 import au.edu.unimelb.eldercare.service.UserService;
 import au.edu.unimelb.eldercare.user.OtherUserProfileActivity;
-import au.edu.unimelb.eldercare.service.TraceLocationService;
 import au.edu.unimelb.eldercare.user.SelectUserTypeActivity;
 import au.edu.unimelb.eldercare.user.SettingsUI;
 import au.edu.unimelb.eldercare.user.User;

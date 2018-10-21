@@ -1,29 +1,23 @@
-package au.edu.unimelb.eldercare;
+package au.edu.unimelb.eldercare.service;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.sinch.android.rtc.Sinch;
 import com.sinch.android.rtc.SinchClient;
 import com.sinch.android.rtc.calling.Call;
 import com.sinch.android.rtc.calling.CallClient;
 import com.sinch.android.rtc.calling.CallClientListener;
 
-import au.edu.unimelb.eldercare.service.AuthenticationService;
+import au.edu.unimelb.eldercare.voicecall.IncomingCallActivity;
 
 
 /**
  * Provides voice call services for ElderCare
  */
-public class VoiceCallService {
+public class VoiceCallService implements SinchServiceInterface {
 
     private static final String TAG = "VoiceCallService";
     private static final String APP_KEY = "0a9ff560-c6ed-4d85-a4ab-1143c50eb1ae";
@@ -32,7 +26,6 @@ public class VoiceCallService {
 
     private Context context;
     private SinchClient sinchClient;
-    private String displayName;
 
     private static VoiceCallService instance;
 
@@ -88,13 +81,6 @@ public class VoiceCallService {
         sinchClient.getCallClient().addCallClientListener(new SinchCallClientListener());
     }
 
-    public SinchClient getSinchClient() {
-        if (sinchClient == null) {
-            return null;
-        }
-        return sinchClient;
-    }
-
     private class SinchCallClientListener implements CallClientListener {
 
         @Override
@@ -114,25 +100,6 @@ public class VoiceCallService {
             return null;
         }
         return sinchClient.getCallClient().callUser(userId);
-    }
-
-    public String getDisplayName(String userId) {
-
-        DatabaseReference databaseReference
-                = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
-
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                displayName = dataSnapshot.child("displayName").getValue(String.class);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-
-        return displayName;
     }
 
     public Call getCall(String callId) {

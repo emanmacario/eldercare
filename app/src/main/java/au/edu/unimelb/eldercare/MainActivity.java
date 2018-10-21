@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
                     return true;
                 case R.id.navigation_home_screen:
                     mTextMessage.setText(R.string.HomeText);
-                    startActivity(new Intent(MainActivity.this, HomeScreen.class));
+                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
             }
             return false;
         }
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
                     startActivity(intent);
                 } else {
                     //User already has user type, go straight to home screen
-                    Intent intent = new Intent(MainActivity.this, HomeScreen.class);
+                    Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                     startActivity(intent);
                 }
             }

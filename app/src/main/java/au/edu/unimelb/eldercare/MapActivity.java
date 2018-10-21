@@ -18,12 +18,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.directions.route.AbstractRouting;
-import com.directions.route.Route;
-import com.directions.route.RouteException;
-import com.directions.route.Routing;
-import com.directions.route.RoutingListener;
+import au.edu.unimelb.eldercare.service.TraceLocationService;
+import com.directions.route.*;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -38,23 +34,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import au.edu.unimelb.eldercare.service.TraceLocationService;
-
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, RoutingListener {
 
-    protected EditText searchAddress = null;
-    protected LatLng eventLocation = null;
+    private EditText searchAddress = null;
+    private LatLng eventLocation = null;
 
 
     @Override
@@ -75,9 +65,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
             if (userTracking) {
-               trackUser();
-            }
-            else {
+                trackUser();
+            } else {
                 mMap.clear();
             }
         }
@@ -130,7 +119,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(userTracking){
+                if (userTracking) {
                     trackUser();
                 }
             }
@@ -142,7 +131,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
 
         Bundle extras = getIntent().getExtras();
-        if(extras != null){
+        if (extras != null) {
             String locationName = extras.getString("locationName");
             eventLocation = extras.getParcelable("location");
             if (searchAddress == null) {
@@ -156,7 +145,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
 
-        if(mFusedLocationProviderClient == null) {
+        if (mFusedLocationProviderClient == null) {
             mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         }
 
@@ -171,8 +160,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             Log.d(TAG, "onComplete: found location!");
                             Location currentLocation = (Location) task.getResult();
 
-                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                                    DEFAULT_ZOOM);
+                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())
+                            );
 
                         } else {
                             Log.d(TAG, "onComplete: current location is null");
@@ -187,9 +176,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    private void moveCamera(LatLng latLng, float zoom) {
+    private void moveCamera(LatLng latLng) {
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, MapActivity.DEFAULT_ZOOM));
     }
 
     private void initMap() {
@@ -233,8 +222,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if (grantResults.length > 0) {
                     for (int grantResult : grantResults) {
                         if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                            for (int i = 0; i < grantResults.length; i++) {
-                                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                            for (int grantResult1 : grantResults) {
+                                if (grantResult1 != PackageManager.PERMISSION_GRANTED) {
                                     mLocationPermissionsGranted = false;
                                     Log.d(TAG, "onRequestPermissionsResult: permission failed");
                                     return;
@@ -270,7 +259,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     //protected Location mLastLocation;
     //mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-    public void route(View view) {
+    private void route(View view) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -290,8 +279,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     Log.d(TAG, "onComplete: found location!");
                     Location currentLocation = (Location) task.getResult();
 
-                    moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                            DEFAULT_ZOOM);
+                    moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())
+                    );
 
                     try {
                         getRoute(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
@@ -307,7 +296,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
 
         //Hides Keyboard
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
     }
@@ -320,7 +309,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         LatLng end;
-        if(eventLocation == null) {
+        if (eventLocation == null) {
             //get the latitude and longitude for the search terms location
             Geocoder gc = new Geocoder(this);
             List<Address> list = gc.getFromLocationName(searchAddress.getText().toString(), 1);
@@ -333,7 +322,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             //use the lat and long to and create a route from the users current location to destination
             end = new LatLng(lat, lon);
-        }else{
+        } else {
             end = eventLocation;
         }
 
@@ -346,7 +335,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-
 
 
         Routing routing = new Routing.Builder()
@@ -392,7 +380,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
 
-
     }
 
     @Override
@@ -403,12 +390,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         polylines.clear();
     }
 
-    public void toggleUserTracking(View view){
+    public void toggleUserTracking(View view) {
         userTracking = !userTracking;
         onMapReady(mMap);
     }
 
-    public void trackUser(){
+    private void trackUser() {
         traceLocationService.startTracing(MapActivity.this);
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -416,15 +403,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 mMap.clear();
                 //Get the connected users email
                 String ConnectedUsersUid = dataSnapshot.child(user.getUid()).child(connectedUser).getValue(String.class);
-                if(ConnectedUsersUid != null){
+                if (ConnectedUsersUid != null) {
                     //Using the connected users Uid, grab their location
                     double lat = dataSnapshot.child(ConnectedUsersUid).child(location).child(latitude).getValue(double.class);
                     double lon = dataSnapshot.child(ConnectedUsersUid).child(location).child(longitude).getValue(double.class);
 
                     //Place a marker on the map at the connected user's location
                     mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title("Hello World"));
-                }
-                else{
+                } else {
                     Toast noConnectedUserToast = Toast.makeText(MapActivity.this, "No User to Track", Toast.LENGTH_LONG);
                     noConnectedUserToast.show();
                 }

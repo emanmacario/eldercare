@@ -8,15 +8,10 @@ import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.TimePicker;
-
+import android.widget.*;
+import au.edu.unimelb.eldercare.R;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
@@ -30,31 +25,31 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.sql.Timestamp;
 import java.util.HashMap;
 
-import au.edu.unimelb.eldercare.R;
-
+/**
+ * Provides UI services for creating new events
+ */
 public class AddEventActivity extends AppCompatActivity {
 
-    protected DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private int currentYear;
     private int currentMonth;
     private int currentDay;
     private int currentHour;
-    protected EditText eventNameTextbox;
-    protected EditText eventDescriptionTextbox;
-    protected EditText maxUserTextbox;
-    protected Button dateButton;
-    protected Button timeButton;
-    protected String eventDate;
-    protected String eventTime;
-    final protected int PLACE_PICKER_REQUEST = 1;
-    protected String locationName;
-    protected LatLng location;
-    protected LatLngBounds openLocation = null;
-    protected TextView locationText;
-    protected Calendar calendar;
-    protected String confirmText = "Are you sure you want to submit this event?";
-    protected String alertTitleText = "Confirm Submit";
-    protected DatabaseReference eventRef = mDatabase.child("events").push();
+    EditText eventNameTextbox;
+    EditText eventDescriptionTextbox;
+    EditText maxUserTextbox;
+    Button dateButton;
+    Button timeButton;
+    private String eventDate;
+    private String eventTime;
+    private final int PLACE_PICKER_REQUEST = 1;
+    private String locationName;
+    LatLng location;
+    LatLngBounds openLocation = null;
+    TextView locationText;
+    String confirmText = "Are you sure you want to submit this event?";
+    String alertTitleText = "Confirm Submit";
+    DatabaseReference eventRef = mDatabase.child("events").push();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +62,7 @@ public class AddEventActivity extends AppCompatActivity {
         eventDescriptionTextbox = findViewById(R.id.eventDescriptionTextbox);
         maxUserTextbox = findViewById(R.id.maxUserTextbox);
 
-        calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         currentYear = calendar.get(Calendar.YEAR);
         currentMonth = calendar.get(Calendar.MONTH);
         currentDay = calendar.get(Calendar.DAY_OF_MONTH);
@@ -87,7 +82,7 @@ public class AddEventActivity extends AppCompatActivity {
         eventTime = currentTime + ":00";
     }
 
-    protected void submitNewEvent(View view){
+    void submitNewEvent(View view) {
         String eventName = eventNameTextbox.getText().toString();
 
         Long startingTime = Timestamp.valueOf(eventDate + " " + eventTime).getTime();
@@ -110,7 +105,7 @@ public class AddEventActivity extends AppCompatActivity {
         finish();
     }
 
-    public void onClickDate(View view){
+    public void onClickDate(View view) {
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -122,7 +117,7 @@ public class AddEventActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    public void onClickTime(View view){
+    public void onClickTime(View view) {
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hour, int minute) {
@@ -134,8 +129,8 @@ public class AddEventActivity extends AppCompatActivity {
         timePickerDialog.show();
     }
 
-    public void onClickSubmit(View view){
-        if(someFieldMissing()){
+    public void onClickSubmit(View view) {
+        if (someFieldMissing()) {
             return;
         }
         final View currentView = view;
@@ -147,7 +142,8 @@ public class AddEventActivity extends AppCompatActivity {
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {}
+            public void onClick(DialogInterface dialog, int which) {
+            }
         });
         builder.show();
     }
@@ -165,7 +161,7 @@ public class AddEventActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_PICKER_REQUEST) {
-            if(resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(this, data);
                 locationName = place.getName().toString();
                 locationText.setText(locationName);
@@ -175,7 +171,7 @@ public class AddEventActivity extends AppCompatActivity {
     }
 
     //TODO: add warning text tell user to fill the form
-    protected boolean someFieldMissing(){
+    private boolean someFieldMissing() {
         boolean isMissing = false;
         if (isEmptyField(eventNameTextbox)) {
             isMissing = true;
@@ -192,7 +188,7 @@ public class AddEventActivity extends AppCompatActivity {
         return isMissing;
     }
 
-    private boolean isEmptyField(EditText editText){
+    private boolean isEmptyField(EditText editText) {
         return editText.getText().toString().equals("");
     }
 }

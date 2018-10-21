@@ -8,27 +8,19 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import au.edu.unimelb.eldercare.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.*;
 
-import au.edu.unimelb.eldercare.R;
-import au.edu.unimelb.eldercare.user.User;
-import au.edu.unimelb.eldercare.helpers.EmailValidifier;
-
-import static au.edu.unimelb.eldercare.helpers.EmailValidifier.isEmailValid;
+import static au.edu.unimelb.eldercare.helpers.EmailValidator.isEmailValid;
 
 public class ChangeEmailActivity extends AppCompatActivity {
 
-    TextView currentEmailAddress;
-    EditText newEmailAddress;
-    FirebaseUser user;
-    DatabaseReference mDatabase;
+    private TextView currentEmailAddress;
+    private EditText newEmailAddress;
+    private FirebaseUser user;
+    private DatabaseReference mDatabase;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,14 +54,15 @@ public class ChangeEmailActivity extends AppCompatActivity {
 
     /**
      * Updates a users email address on the database
+     *
      * @param view
      */
-    public void updateEmailAddress(View view){
+    public void updateEmailAddress(View view) {
         //Get the Text entered in the EditText
         String newEmail = newEmailAddress.getText().toString();
 
         //Validate Email Address
-        if(!isEmailValid(newEmail)){
+        if (!isEmailValid(newEmail)) {
             Toast toast = Toast.makeText(ChangeEmailActivity.this, "@string/invalid_email", Toast.LENGTH_LONG);
             toast.show();
             return;

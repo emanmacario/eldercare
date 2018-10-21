@@ -16,7 +16,7 @@ public class UserSearchUI extends AppCompatActivity {
 
     public void onUserProfileClick(View view) {
         Intent intent = new Intent(UserSearchUI.this, OtherUserProfileActivity.class);
-        intent.putExtra("targetUser", (String)view.getTag());
+        intent.putExtra("targetUser", (String) view.getTag());
         startActivity(intent);
     }
 

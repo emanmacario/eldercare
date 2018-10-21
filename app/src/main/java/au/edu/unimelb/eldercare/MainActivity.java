@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.TextView;
 import au.edu.unimelb.eldercare.service.AuthenticationListener;
 import au.edu.unimelb.eldercare.service.AuthenticationService;
 import au.edu.unimelb.eldercare.user.SelectUserTypeActivity;
@@ -15,7 +14,6 @@ import au.edu.unimelb.eldercare.user.User;
 
 
 import android.app.Dialog;
-import android.nfc.Tag;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -102,15 +100,14 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.exists()){
+                if (!dataSnapshot.exists()) {
                     //Once a user is authenticated and they don't already exist,
                     //create a new user on the database
                     writeNewUser(user.getUid(), user.getDisplayName(), user.getEmail());
                     //Also need to select user type so go to this activity
                     Intent intent = new Intent(MainActivity.this, SelectUserTypeActivity.class);
                     startActivity(intent);
-                }
-                else{
+                } else {
                     //User already has user type, go straight to home screen
                     Intent intent = new Intent(MainActivity.this, HomeScreen.class);
                     startActivity(intent);
@@ -118,7 +115,8 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         };
         userRef.addListenerForSingleValueEvent(eventListener);
 
@@ -132,19 +130,20 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
 
     /**
      * Function creates a new User and creates the user on the realtime database
+     *
      * @param userId
      * @param name
      * @param email
      */
-    private void writeNewUser(String userId, String name, String email){
+    private void writeNewUser(String userId, String name, String email) {
         User user = new User(name, email, "", "");
         mDatabase.child("users").child(userId).setValue(user);
     }
 
     //google maps implementation
 
-    private void init(){
-        Button mapBtn = (Button) findViewById(R.id.MapButton);
+    private void init() {
+        Button mapBtn = findViewById(R.id.MapButton);
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -155,23 +154,21 @@ public class MainActivity extends AppCompatActivity implements AuthenticationLis
     }
 
     //check if device can use maps
-    public boolean isServicesOK(){
+    public boolean isServicesOK() {
         Log.d(TAG, "isServicesOK: checking google services version");
 
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
 
-        if(available == ConnectionResult.SUCCESS){
+        if (available == ConnectionResult.SUCCESS) {
             //user can make map requests
             Log.d(TAG, "isServicesOK: Google Play Services is working");
             return true;
-        }
-        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+        } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
             //resolvable error occured
             Log.d(TAG, "isServicesOK: a fixable error occured");
             Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, available, ERROR_DIALOG_REQUEST);
             dialog.show();
-        }
-        else{
+        } else {
             Toast.makeText(this, "You cant make map requests", Toast.LENGTH_SHORT).show();
         }
         return false;

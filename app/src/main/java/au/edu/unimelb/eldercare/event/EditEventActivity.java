@@ -6,30 +6,28 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-
+import au.edu.unimelb.eldercare.R;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 
 import java.sql.Timestamp;
 
-import au.edu.unimelb.eldercare.R;
+/**
+ * Provides UI services for editing events
+ */
+public class EditEventActivity extends AddEventActivity {
 
-public class EditEventActivity extends AddEventActivity{
+    Event event;
 
-    protected Event event;
+    TextView addEventText;
+    Button submitEventButton;
 
-    protected TextView addEventText;
-    protected Button submitEventButton;
-
-    protected ChildEventListener childEventListener = new registeredUserListener();
+    private ChildEventListener childEventListener = new registeredUserListener();
 
 
     @Override
@@ -66,7 +64,7 @@ public class EditEventActivity extends AddEventActivity{
         eventRef.child("registeredUserId").addChildEventListener(childEventListener);
     }
 
-    public class registeredUserListener implements ChildEventListener {
+    class registeredUserListener implements ChildEventListener {
         @Override
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             String registerState = dataSnapshot.getValue(String.class);

@@ -72,4 +72,9 @@
     <string name="friendAddButtonAlreadyFriends">Friends!</string>
     <string name="friendAddButtonRequested">Requested!</string>
     <string name="viewProfile">View Profile</string>
+    <string name="eventUnregister">Unregister</string>
+    <string name="eventJoin">Join</string>
+    <string name="eventButton">EVENT</string>
+    <string name="eventCreatedList">List of created event</string>
+    <string name="eventEditButton">Edit</string>
 </resources>

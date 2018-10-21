@@ -1,8 +1,6 @@
 package au.edu.unimelb.eldercare;
 
-import android.content.Context;
 import android.content.Intent;
-import android.drm.DrmStore;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,11 +15,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
-
+import au.edu.unimelb.eldercare.helpers.TimeUtil;
+import au.edu.unimelb.eldercare.messaging.Message;
+import au.edu.unimelb.eldercare.messaging.MessageViewHolder;
+import au.edu.unimelb.eldercare.messaging.ReceivedMessageViewHolder;
+import au.edu.unimelb.eldercare.messaging.SentMessageViewHolder;
+import au.edu.unimelb.eldercare.service.UserAccessor;
+import au.edu.unimelb.eldercare.service.UserService;
+import au.edu.unimelb.eldercare.user.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
@@ -30,11 +33,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.*;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -42,15 +41,6 @@ import com.google.firebase.storage.UploadTask;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import au.edu.unimelb.eldercare.helpers.TimeUtil;
-import au.edu.unimelb.eldercare.messaging.Message;
-import au.edu.unimelb.eldercare.messaging.MessageViewHolder;
-import au.edu.unimelb.eldercare.messaging.ReceivedMessageViewHolder;
-import au.edu.unimelb.eldercare.messaging.SentMessageViewHolder;
-import au.edu.unimelb.eldercare.service.UserService;
-import au.edu.unimelb.eldercare.user.User;
-import au.edu.unimelb.eldercare.usersearch.UserAccessor;
 
 public class MessagingActivity extends AppCompatActivity implements UserAccessor {
 
@@ -66,7 +56,6 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
     // Firebase instance variables
     private DatabaseReference mDatabaseReference;
     private FirebaseRecyclerAdapter<Message, MessageViewHolder> mFirebaseAdapter;
-    private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 
     // User instance variables
@@ -77,7 +66,6 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
 
     // UI instance variables
     private ImageButton mSendButton;
-    private ImageButton mAddImageButton;
     private RecyclerView mMessageRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     private EditText mMessageEditText;
@@ -91,7 +79,7 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
         String displayName = getIntent().getStringExtra("displayName");
 
         ActionBar actionBar = getSupportActionBar();
-        assert(actionBar != null);
+        assert (actionBar != null);
         actionBar.setTitle(displayName);
 
         /*
@@ -109,7 +97,7 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
         */
 
         // Initialise Firebase instance variables
-        mFirebaseAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -166,16 +154,15 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
         });
 
 
-
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
 
-        mMessageRecyclerView = (RecyclerView) findViewById(R.id.reyclerview_message_list);
+        mMessageRecyclerView = findViewById(R.id.reyclerview_message_list);
         mMessageRecyclerView.setHasFixedSize(false);
         mMessageRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         mSendButton = findViewById(R.id.button_chatbox_send);
-        mMessageEditText = (EditText) findViewById(R.id.edittext_chatbox);
+        mMessageEditText = findViewById(R.id.edittext_chatbox);
         mMessageEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -195,7 +182,7 @@ public class MessagingActivity extends AppCompatActivity implements UserAccessor
             }
         });
 
-        mAddImageButton = (ImageButton) findViewById(R.id.button_image_add);
+        ImageButton mAddImageButton = findViewById(R.id.button_image_add);
         mAddImageButton.setOnClickListener(new ImageButton.OnClickListener() {
             @Override
             public void onClick(View view) {

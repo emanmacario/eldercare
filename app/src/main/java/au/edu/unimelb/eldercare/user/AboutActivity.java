@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,19 +19,19 @@ import au.edu.unimelb.eldercare.R;
 public class AboutActivity extends AppCompatActivity {
 
     //Static Text Views
-    TextView AboutPageHeading;
-    TextView AboutNameStatic;
-    TextView AboutEmailStatic;
-    TextView AboutUserTypeStatic;
+    private TextView AboutPageHeading;
+    private TextView AboutNameStatic;
+    private TextView AboutEmailStatic;
+    private TextView AboutUserTypeStatic;
 
     //Variable Text Views
-    TextView AboutNameUser;
-    TextView AboutEmailUser;
-    TextView AboutUserTypeUser;
+    private TextView AboutNameUser;
+    private TextView AboutEmailUser;
+    private TextView AboutUserTypeUser;
 
     //Database and User references
-    FirebaseUser user;
-    DatabaseReference mDatabase;
+    private FirebaseUser user;
+    private DatabaseReference mDatabase;
 
 
     @Override

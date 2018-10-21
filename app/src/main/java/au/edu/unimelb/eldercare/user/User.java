@@ -16,7 +16,7 @@ public class User {
     private List<String> friends;
     private String userId;
 
-    public User(){
+    public User() {
         this.registeredEventId = new HashMap<>();
     }
 
@@ -49,20 +49,23 @@ public class User {
         return userType;
     }
 
-    public void setUserType(String userType) { this.userType = userType; }
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
     public HashMap<String, String> getRegisteredEventId() {
         return registeredEventId;
     }
 
-    public void setRegisteredEventId(HashMap<String, String> registeredEventId){
+    public void setRegisteredEventId(HashMap<String, String> registeredEventId) {
         this.registeredEventId = registeredEventId;
     }
 
-    public String registerEvent(String eventId, String registerState){
+    public String registerEvent(String eventId, String registerState) {
         return this.registeredEventId.put(eventId, registerState);
     }
 
-    public String unregisterEvent(String eventId){
+    public String unregisterEvent(String eventId) {
         return this.registeredEventId.remove(eventId);
     }
 

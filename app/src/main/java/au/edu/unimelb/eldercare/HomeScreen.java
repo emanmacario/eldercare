@@ -1,16 +1,12 @@
 package au.edu.unimelb.eldercare;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import au.edu.unimelb.eldercare.event.EventsUI;
 import au.edu.unimelb.eldercare.service.AuthenticationService;
-import au.edu.unimelb.eldercare.service.TraceLocationService;
 import au.edu.unimelb.eldercare.user.SettingsUI;
 import au.edu.unimelb.eldercare.user.UserProfileUI;
 import au.edu.unimelb.eldercare.user.UserSearchUI;
@@ -36,16 +32,16 @@ public class HomeScreen extends AppCompatActivity {
         String userId = AuthenticationService.getAuthenticationService().getUser().getUid();
         Intent intent = new Intent(HomeScreen.this, UserProfileUI.class);
         intent.putExtra("targetUser", userId);
-    	startActivity(intent);
+        startActivity(intent);
     }
 
-    public void openSettings(View view){
+    public void openSettings(View view) {
         Intent intent = new Intent(HomeScreen.this, SettingsUI.class);
         startActivity(intent);
     }
 
     //When Frequent Contacts button is clicked, this opens the frequent contacts page
-    public void openFrequentContacts(View view){
+    public void openFrequentContacts(View view) {
         //Intent intent = new Intent(HomeScreen.this, FrequentContactsUI.class);
         Intent intent = new Intent(HomeScreen.this, VoiceCallActivity.class);
         startActivity(intent);
@@ -62,12 +58,12 @@ public class HomeScreen extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void openMap(View view){
+    public void openMap(View view) {
         Intent intent = new Intent(HomeScreen.this, MapActivity.class);
         startActivity(intent);
     }
 
-    public void openVoiceCall(View view){
+    public void openVoiceCall(View view) {
         Intent intent = new Intent(HomeScreen.this, VoiceCallActivity.class);
         startActivity(intent);
     }

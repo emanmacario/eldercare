@@ -50,9 +50,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import au.edu.unimelb.eldercare.event.EventsUI;
+import au.edu.unimelb.eldercare.service.AuthenticationListener;
+import au.edu.unimelb.eldercare.service.AuthenticationService;
+import au.edu.unimelb.eldercare.service.UserService;
+import au.edu.unimelb.eldercare.user.OtherUserProfileActivity;
+import au.edu.unimelb.eldercare.service.TraceLocationService;
+import au.edu.unimelb.eldercare.user.SelectUserTypeActivity;
+import au.edu.unimelb.eldercare.user.SettingsUI;
+import au.edu.unimelb.eldercare.user.User;
+import au.edu.unimelb.eldercare.user.UserProfileUI;
+import au.edu.unimelb.eldercare.user.UserSearchUI;
+import au.edu.unimelb.eldercare.service.UserAccessor;
+
+
 import static au.edu.unimelb.eldercare.service.AuthenticationService.RC_SIGN_IN;
 
-public class HomeActivity extends AppCompatActivity implements AuthenticationListener, OnMapReadyCallback, RoutingListener {
+public class HomeActivity extends AppCompatActivity implements UserAccessor, AuthenticationListener, OnMapReadyCallback, RoutingListener {
 
     private EditText searchAddress = null;
     private LatLng eventLocation = null;
@@ -84,6 +98,7 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
     private final String longitude = "longitude";
     private final String connectedUser = "ConnectedUser";
     private final String location = "location";
+    private String ConnectedUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +167,7 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
         this.user = user;
         //Note, have to check if the user already exists so that their data doesn't get overridden
         //every time they login
-        DatabaseReference userRef = mDatabase.child("users").child(this.user.getUid());
+        DatabaseReference userRef = mDatabase.child(this.user.getUid());
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -175,6 +190,18 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
         // Create the Sinch Client for the current authenticated user
         VoiceCallService sinchService = VoiceCallService.getInstance();
         sinchService.buildSinchClient(this);
+
+        UserService.getInstance().getSpecificUser(this.user.getUid(), this);
+    }
+
+    @Override
+    public void userListLoaded(List<User> users) {
+
+    }
+
+    @Override
+    public void userLoaded(User value) {
+        ConnectedUser = value.getConnectedUser();
     }
 
     @Override
@@ -564,6 +591,15 @@ public class HomeActivity extends AppCompatActivity implements AuthenticationLis
 
             }
         });
+        /*
+        DatabaseReference mDatabaseUser = mDatabase.child(this.user.getUid());
+        DatabaseReference mDatabaseConnectedUser = mDatabaseUser.child("ConnectedUser");
+        String ConnectedUserID = mDatabaseConnectedUser.getKey();
+        */
+
+        Intent intent = new Intent(HomeActivity.this, OtherUserProfileActivity.class);
+        intent.putExtra("targetUser", ConnectedUser);
+        startActivity(intent);
     }
 
     public void openUserProfileUI(View view) {

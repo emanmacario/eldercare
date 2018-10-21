@@ -49,7 +49,7 @@ public class SettingsUI extends AppCompatActivity {
                 String email = user.getEmail();
                 currentEmailAddress.setText(email);
 
-                String connectedUser = user.getConnectedUserID();
+                String connectedUser = user.getConnectedUser();
                 currentConnectedUser.setText(connectedUser);
             }
 

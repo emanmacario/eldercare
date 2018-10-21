@@ -56,9 +56,9 @@ public class ChangeConnectedUserActivity extends AppCompatActivity {
                 //Gets the user object that is the current user
                 User user = dataSnapshot.getValue(User.class);
                 //Grabs the value of connected user from the database and sets it to the object
-                user.setConnectedUserID(dataSnapshot.child("ConnectedUser").getValue(String.class));
+                user.setConnectedUser(dataSnapshot.child("ConnectedUser").getValue(String.class));
                 //Uses this to set the value of the TextView
-                String ConnectedUserID = user.getConnectedUserID();
+                String ConnectedUserID = user.getConnectedUser();
                 currentConnectedUser.setText(ConnectedUserID);
                 //set the current user type
                 currentUserType = dataSnapshot.child("userType").getValue(String.class);

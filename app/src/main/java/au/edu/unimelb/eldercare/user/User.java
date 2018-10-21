@@ -10,7 +10,7 @@ public class User {
     private String displayPhoto;
     private String email;
     private String userType;
-    private String connectedUserID;
+    private String ConnectedUser;
     private String userBio;
     private HashMap<String, String> registeredEventId;
     private List<String> friends;
@@ -20,11 +20,11 @@ public class User {
         this.registeredEventId = new HashMap<>();
     }
 
-    public User(String displayName, String email, String userType, String connectedUserID) {
+    public User(String displayName, String email, String userType, String ConnectedUser){
         this.displayName = displayName;
         this.email = email;
         this.userType = userType;
-        this.connectedUserID = connectedUserID;
+        this.ConnectedUser = ConnectedUser;
         this.friends = new ArrayList<>();
         this.userBio = " ";
     }
@@ -69,12 +69,12 @@ public class User {
         return this.registeredEventId.remove(eventId);
     }
 
-    public String getConnectedUserID() {
-        return connectedUserID;
+    public String getConnectedUser() {
+        return ConnectedUser;
     }
 
-    public void setConnectedUserID(String connectedUserID) {
-        this.connectedUserID = connectedUserID;
+    public void setConnectedUser(String ConnectedUser) {
+        this.ConnectedUser = ConnectedUser;
     }
 
     public String getUserBio() {

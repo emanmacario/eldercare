@@ -67,7 +67,7 @@ public class OtherUserProfileActivity extends AppCompatActivity implements UserA
                     }
                     String callId = call.getCallId();
                     Intent intent = new Intent(getApplicationContext(), ActiveCallActivity.class);
-                    intent.putExtra("CALL_ID", callId);
+                    intent.putExtra(VoiceCallService.CALL_ID, callId);
                     startActivity(intent);
                 } catch (MissingPermissionException e) {
                     ActivityCompat.requestPermissions(OtherUserProfileActivity.this,

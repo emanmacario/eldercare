@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import au.edu.unimelb.eldercare.R;
-import au.edu.unimelb.eldercare.helpers.AudioPlayer;
 import au.edu.unimelb.eldercare.service.UserAccessor;
 import au.edu.unimelb.eldercare.service.UserService;
 import au.edu.unimelb.eldercare.service.VoiceCallService;
@@ -71,7 +70,7 @@ public class IncomingCallActivity extends AppCompatActivity implements UserAcces
         decline.setOnClickListener(mClickListener);
 
         mSinchService = VoiceCallService.getInstance();
-        mCallId = getIntent().getStringExtra("CALL_ID"); // TODO: refactor string into constant somewhere
+        mCallId = getIntent().getStringExtra(VoiceCallService.CALL_ID);
         Call call = mSinchService.getCall(mCallId);
         call.addCallListener(new SinchCallListener());
 
@@ -102,7 +101,7 @@ public class IncomingCallActivity extends AppCompatActivity implements UserAcces
             try {
                 call.answer();
                 Intent intent = new Intent(this, ActiveCallActivity.class);
-                intent.putExtra("CALL_ID", mCallId);
+                intent.putExtra(VoiceCallService.CALL_ID, mCallId);
                 startActivity(intent);
                 finish();
             } catch (MissingPermissionException e) {

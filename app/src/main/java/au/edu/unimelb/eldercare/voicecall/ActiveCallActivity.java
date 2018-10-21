@@ -57,7 +57,7 @@ public class ActiveCallActivity extends AppCompatActivity implements UserAccesso
         });
 
         mSinchService = VoiceCallService.getInstance();
-        mCallId = getIntent().getStringExtra("CALL_ID");
+        mCallId = getIntent().getStringExtra(VoiceCallService.CALL_ID);
         Call call = mSinchService.getCall(mCallId);
 
         if (call != null) {
@@ -112,31 +112,28 @@ public class ActiveCallActivity extends AppCompatActivity implements UserAccesso
 
         @Override
         public void onCallEstablished(Call establishedCall) {
+            Log.d(TAG, "onCallEstablished called");
+
             // Incoming call was picked up. Make volume buttons
             // control the volume of the phone call while connected
-            Log.d(TAG, "onCallEstablished called");
             mCallState.setText("CONNECTED");
             setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
 
             // Set timer to update call duration on a separate thread
             mCallDuration.setVisibility(TextView.VISIBLE);
             mTimer.schedule(new UpdateCallDurationTask(), 0, 600);
-
-            // TODO: If progress tone is played, it should be stopped here
         }
 
         @Override
         public void onCallProgressing(Call progressingCall) {
-            // Call is currently being made (i.e. ringing)
             Log.d(TAG, "onCallProgressing called");
-            mCallState.setText("CALLING");
 
-            // TODO: Add progress tone here to indicate outgoing call is being made
+            // Call is currently being made (i.e. ringing)
+            mCallState.setText("CALLING");
         }
 
         @Override
         public void onShouldSendPushNotification(Call call, List<PushPair> pushPairs) {
-            // Don't worry about this right now
             Log.d(TAG, "onShouldSendPushNotification called");
         }
     }

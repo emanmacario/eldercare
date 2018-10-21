@@ -61,7 +61,7 @@ import static au.edu.unimelb.eldercare.service.AuthenticationService.RC_SIGN_IN;
 public class HomeActivity extends AppCompatActivity implements UserAccessor, AuthenticationListener, OnMapReadyCallback, RoutingListener {
 
     // Class constants
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "HomeActivity";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;

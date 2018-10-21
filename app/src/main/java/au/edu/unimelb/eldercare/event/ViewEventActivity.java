@@ -6,7 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.view.View;
-import au.edu.unimelb.eldercare.MapActivity;
+
+import au.edu.unimelb.eldercare.HomeActivity;
 import au.edu.unimelb.eldercare.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -61,7 +62,7 @@ public class ViewEventActivity extends EditEventActivity {
      */
     @Override
     public void onClickLocation(View view) {
-        Intent intent = new Intent(this, MapActivity.class);
+        Intent intent = new Intent(this, HomeActivity.class);
         intent.putExtra("location", location);
         intent.putExtra("locationName", event.locationName);
         startActivity(intent);

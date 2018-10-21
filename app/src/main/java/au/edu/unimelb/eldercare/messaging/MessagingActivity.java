@@ -247,7 +247,6 @@ public class MessagingActivity extends AppCompatActivity {
                             new Message(mFirebaseUser.getUid(), mUsername, null, LOADING_IMAGE_URL,
                                     null, TimeUtil.getCurrentTime());
 
-                    // mDatabaseReference.child(MESSAGES_CHILD).push()
                     mDatabaseReference.child(MESSAGES).child(mCurrentUserId).child(mChatUserId).push()
                             .setValue(tempMessage, new DatabaseReference.CompletionListener() {
                                 @Override
